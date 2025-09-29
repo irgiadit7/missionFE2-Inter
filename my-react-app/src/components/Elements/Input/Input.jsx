@@ -6,6 +6,7 @@ const {type, placeholder, name} = props;
           className="text-sm border rounded-full w-full py-2 px-3 text-slate-700 placeholder:opacity-50"
           placeholder={placeholder}
           name={name}
+          id={name}
           />
     )
 }
