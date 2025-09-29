@@ -1,5 +1,6 @@
+import { Fragment } from "react"
 import CardProducts from "../components/Fragments/CardProducts"
-
+import Button from "../components/Elements/Button"
 
 const products = [
     {
@@ -31,16 +32,24 @@ const products = [
 
 ]
 
+const email = localStorage.getItem("email");
+
 
 const ProductsPages = () => {
-  return (
-    <div className="flex justify-center items-center h-screen bg-gray-900">
-
+    const handleLogout = () => {
+        localStorage.removeItem("email");
+        localStorage.removeItem("password");
+        window.location.href = "/login";
+    }
     
-
-
+  return (
+        <Fragment>
+            <div className="flex justify-end text-white items-center font-bold text-xl px-10 h-20 bg-blue-500">{email}
+                <Button className="ml-10 bg-black" onClick={handleLogout}>Logout</Button>
+            </div>
+            <div className="flex justify-center py-5">
     {products.map((product) => (
-        <CardProducts key={product.id}>
+                   <CardProducts key={product.id}>
             <CardProducts.Header images={product.images} />
             <CardProducts.Body name={product.name}>
                 {product.desc}
@@ -48,9 +57,10 @@ const ProductsPages = () => {
             <CardProducts.Footer price={product.price}/>
 
         </CardProducts>
-    ))}      
-
-    </div>
+         
+    ))}   
+       </div>
+        </Fragment>
   )
 }
 
