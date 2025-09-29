@@ -9,7 +9,7 @@ const FormLogin = () => {
         <InputForm label="Password" type="password" placeholder="********" name="password" />
      
       
-      <Button classname="bg-blue-600 w-full">Sign in</Button>
+        <Button className="bg-blue-600 w-full">Sign in</Button>
        </form>
     )
 }
