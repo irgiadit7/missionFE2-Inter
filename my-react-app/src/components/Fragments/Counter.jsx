@@ -14,11 +14,17 @@ class Counter extends React.Component {
         console.log("componentDidMount")
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate() { 
         console.log("componentDidUpdate")
-        if (this.state.count === 10)
-            this,state({ count: 0 })
     }
+
+    componentWillUnmount() {
+        console.log("componentWillUnmount")
+    }
+
+
+
+   
 
   render() {
     return(
