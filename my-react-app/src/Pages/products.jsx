@@ -1,6 +1,7 @@
 import { Fragment } from "react"
 import CardProducts from "../components/Fragments/CardProducts"
 import Button from "../components/Elements/Button"
+import Counter from "../components/Fragments/Counter"
 
 const products = [
     {
@@ -44,7 +45,7 @@ const ProductsPages = () => {
     
   return (
         <Fragment>
-            <div className="flex justify-end text-white items-center font-bold text-xl px-10 h-20 bg-blue-500">{email}
+            <div className="flex justify-end text-black items-center font-bold text-xl px-10 h-20 ">{email}
                 <Button className="ml-10 bg-black" onClick={handleLogout}>Logout</Button>
             </div>
             <div className="flex justify-center py-5">
@@ -59,6 +60,10 @@ const ProductsPages = () => {
         </CardProducts>
          
     ))}   
+       </div>
+
+       <div className="flex justify-center py-5">
+        <Counter></Counter>
        </div>
         </Fragment>
   )
