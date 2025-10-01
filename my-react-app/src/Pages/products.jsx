@@ -2,29 +2,22 @@ import { Fragment, useEffect, useState, useRef } from "react";
 import CardProducts from "../components/Fragments/CardProducts";
 import Button from "../components/Elements/Button";
 import Counter from "../components/Fragments/Counter";
-import { getProducts } from "../services/products.service";import { getUsername } from "../services/auth.service";
+import { getProducts } from "../services/products.service";
+import { useLogin } from "../hooks/useLogin";
 
 
 const ProductsPages = () => {
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [products, setProducts] = useState([]);
-  const [username, setUsername] = useState("");
+  const username = useLogin();
   
 
   useEffect(() => {
     setCart([...JSON.parse(localStorage.getItem("cart") || "[]")]);
   }, []);
 
-   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const user = getUsername(token);
-      setUsername(user);
-    } else {
-      window.location.href = "/login";
-    }
-  }, []);
+
 
   useEffect(() => {
     getProducts((data) => {
