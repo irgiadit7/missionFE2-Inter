@@ -96,7 +96,7 @@ useEffect(() => {
           {products.length > 0 && 
           products.map((product) => (
             <CardProducts key={product.id}>
-              <CardProducts.Header images={product.images} />
+              <CardProducts.Header images={product.images} id={product.id} />
               <CardProducts.Body name={product.title}>
                 {product.desc}
               </CardProducts.Body>
