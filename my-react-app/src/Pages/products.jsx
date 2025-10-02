@@ -7,7 +7,7 @@ import Navbar from "../components/Layouts/navbar";
 import { DarkMode } from "../context/DarkMode";
 
 const ProductsPages = () => {
-    const {isDarkMode, setIsDarkMode } = useContext(DarkMode);
+    const {isDarkMode } = useContext(DarkMode);
   const [products, setProducts] = useState([]);
    useLogin();
 
