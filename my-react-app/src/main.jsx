@@ -9,6 +9,9 @@ import ErrorPage from './Pages/404.jsx';
 import ProductsPages from './Pages/products.jsx';
 import ProfilePages from './Pages/profile.jsx';
 import DetailProductPages from './Pages/detailProduct.jsx';
+import {Provider} from "react-redux";
+import store from "./redux/store"
+import Navbar from './components/Layouts/navbar.jsx';
 
 const router = createBrowserRouter([
   {
@@ -40,6 +43,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <Provider store={store}>
+    <Navbar />
     <RouterProvider router={router}/>
+    </Provider>
   </React.StrictMode>
 );
