@@ -1,57 +1,55 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import './index.css';
-// Perubahan di baris ini
-import { createHashRouter, RouterProvider } from 'react-router-dom'; 
-import LoginPages from './Pages/login.jsx';
-import RegisterPages from './Pages/register.jsx';
-import ErrorPage from './Pages/404.jsx';
-import ProductsPages from './Pages/products.jsx';
-import ProfilePages from './Pages/profile.jsx';
-import DetailProductPages from './Pages/detailProduct.jsx';
-import {Provider} from "react-redux";
-import store from "./redux/store"
-import DarkModeContextProvider from './context/DarkMode.jsx';
-import { TotalPriceProvider } from './context/TotalPriceContext.jsx';
-import HomePage from './Pages/homePage.jsx';
+  import React from 'react';
+  import { createRoot } from 'react-dom/client';
+  import './index.css';
+  import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+  import LoginPages from './Pages/login.jsx';
+  import RegisterPages from './Pages/register.jsx';
+  import ErrorPage from './Pages/404.jsx';
+  import ProductsPages from './Pages/products.jsx';
+  import ProfilePages from './Pages/profile.jsx';
+  import DetailProductPages from './Pages/detailProduct.jsx';
+  import {Provider} from "react-redux";
+  import store from "./redux/store"
+  import DarkModeContextProvider from './context/DarkMode.jsx';
+  import { TotalPriceProvider } from './context/TotalPriceContext.jsx';
+  import HomePage from './Pages/homePage.jsx';
 
-// Perubahan di baris ini
-const router = createHashRouter([
-  {
-  path: "/",
-  element: <HomePage />,
-  errorElement: <ErrorPage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPages />,
-  },
-  {
-    path: "/register",
-    element: <RegisterPages />,
-  },
-  {
-    path: "/products",
-    element: <ProductsPages />,
-  },
-  {
-  path: "/profile",
-    element: <ProfilePages  />,
-  },
-  {
-   path: "/products/:id",
-   element: <DetailProductPages />,
-  }
-])
+  const router = createBrowserRouter([
+    {
+    path: "/",
+    element: <HomePage />,
+    errorElement: <ErrorPage />,
+    },
+    {
+      path: "/login",
+      element: <LoginPages />,
+    },
+    {
+      path: "/register",
+      element: <RegisterPages />,
+    },
+    {
+      path: "/products",
+      element: <ProductsPages />,
+    },
+    {
+    path: "/profile",
+      element: <ProfilePages  />,
+    },
+    {
+    path: "/products/:id",
+    element: <DetailProductPages />,
+    }
+  ])
 
-createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Provider store={store}>
-    <DarkModeContextProvider>
-    <TotalPriceProvider>
-          <RouterProvider router={router}/>
-    </TotalPriceProvider>
-    </DarkModeContextProvider>
-    </Provider>
-  </React.StrictMode>
-);
+  createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+      <Provider store={store}>
+      <DarkModeContextProvider>
+      <TotalPriceProvider>
+            <RouterProvider router={router}/>
+      </TotalPriceProvider>
+      </DarkModeContextProvider>
+      </Provider>
+    </React.StrictMode>
+  );
