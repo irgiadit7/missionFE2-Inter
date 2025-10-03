@@ -12,11 +12,12 @@ import {Provider} from "react-redux";
 import store from "./redux/store"
 import DarkModeContextProvider from './context/DarkMode.jsx';
 import { TotalPriceProvider } from './context/TotalPriceContext.jsx';
+import HomePage from './Pages/homePage.jsx';
 
 const router = createBrowserRouter([
   {
   path: "/",
-  element: <div>Hello World!</div>,
+  element: <HomePage />,
   errorElement: <ErrorPage />,
   },
   {
