@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import ThemeToggle from '../Elements/Toggle/ThemeToggle';
+import { DarkMode } from '../../context/DarkMode';
 
 const AuthLayouts = (props) => {
   const { children, title, subtitle, type } = props;
+  const { isDarkMode, setIsDarkMode } = useContext(DarkMode);
 
-  // Kode untuk animasi gradien logo
   const animationStyles = `
       .animate-gradient-flow {
           background: linear-gradient(90deg, #F64920, #FFBD3A, #F64920);
@@ -24,21 +26,23 @@ const AuthLayouts = (props) => {
   return (
     <>
       <style>{animationStyles}</style>
-      <div className="relative min-h-screen bg-[#FFFDF3]">
+      {/* Container utama dengan background off-white */}
+      <div className="min-h-screen bg-[#FFFDF3]">
         
-        {/* PERUBAHAN DI SINI: Navbar dengan background putih dan shadow */}
-        <header className="sticky top-0 z-50 bg-white shadow-md">
-          <div className="container mx-auto p-5">
+        {/* Navbar dengan Logo dan Toggle */}
+        <header className={`sticky top-0 z-50 shadow-md ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+          <div className="container mx-auto p-5 flex justify-between items-center">
             <Link to="/" className="text-2xl font-extrabold">
               <span className="animate-gradient-flow">
                   videobelajar
               </span>
             </Link>
+            <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
           </div>
         </header>
 
         {/* Konten Form di Tengah Halaman */}
-        <div className="flex flex-col items-center justify-center min-h-screen pt-20 p-4">
+        <div className="flex flex-col items-center justify-center pt-20 p-4">
           <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
             <div className="text-center mb-6">
               <h1 className="text-2xl font-bold text-gray-800">{title}</h1>

@@ -1,15 +1,16 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { DarkMode } from '../../context/DarkMode';
+import ThemeToggle from '../Elements/Toggle/ThemeToggle';
 
-const Header = () => {
+const Header = ({ simple = false }) => {
     const { isDarkMode, setIsDarkMode } = useContext(DarkMode);
     const [openMenu, setOpenMenu] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-    const profileTimeoutRef = useRef(null); // Ref untuk dropdown profil
-    const menuTimeoutRef = useRef(null); // Ref untuk mega menu
+    const profileTimeoutRef = useRef(null);
+    const menuTimeoutRef = useRef(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -29,27 +30,10 @@ const Header = () => {
         window.location.href = "/login";
     };
     
-    // Fungsi hover untuk dropdown profil
-    const handleProfileMouseEnter = () => {
-        clearTimeout(profileTimeoutRef.current);
-        setIsProfileDropdownOpen(true);
-    };
-    const handleProfileMouseLeave = () => {
-        profileTimeoutRef.current = setTimeout(() => {
-            setIsProfileDropdownOpen(false);
-        }, 200);
-    };
-    
-    // Fungsi hover untuk mega menu
-    const handleMenuMouseEnter = (menu) => {
-        clearTimeout(menuTimeoutRef.current);
-        setOpenMenu(menu);
-    };
-    const handleMenuMouseLeave = () => {
-        menuTimeoutRef.current = setTimeout(() => {
-            setOpenMenu(null);
-        }, 200);
-    };
+    const handleProfileMouseEnter = () => { clearTimeout(profileTimeoutRef.current); setIsProfileDropdownOpen(true); };
+    const handleProfileMouseLeave = () => { profileTimeoutRef.current = setTimeout(() => setIsProfileDropdownOpen(false), 200); };
+    const handleMenuMouseEnter = (menu) => { clearTimeout(menuTimeoutRef.current); setOpenMenu(menu); };
+    const handleMenuMouseLeave = () => { menuTimeoutRef.current = setTimeout(() => setOpenMenu(null), 200); };
 
     const programMenuData = { 'Pemasaran': [ { id: 2, title: 'Digital Marketing Fundamental' }, { id: 6, title: 'Social Media Marketing Strategy' } ], 'Desain': [ { id: 3, title: 'Manajemen Waktu Efektif' }, { id: 7, title: 'Design Fundamentals' } ], 'Pengembangan Diri': [ { id: 4, title: 'Public Speaking Mastery' }, { id: 8, title: 'Time Management Hacks' } ], 'Bisnis': [ { id: 1, title: 'Big 4 Auditor Financial Analyst' }, { id: 5, title: 'Financial Planning for Beginners' }, { id: 9, title: 'Entrepreneurship 101' } ] };
     const animationStyles = `
@@ -57,6 +41,24 @@ const Header = () => {
         @keyframes gradient-flow { from { background-position: 0% center; } to { background-position: -200% center; } }
     `;
 
+    // Versi header sederhana untuk halaman login/register
+    if (simple) {
+        return (
+            <>
+                <style>{animationStyles}</style>
+                <header className={`sticky top-0 z-50 shadow-md ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                    <div className="container mx-auto p-4 flex justify-between items-center">
+                        <Link to="/" className="text-2xl font-extrabold">
+                            <span className="animate-gradient-flow">videocourse</span>
+                        </Link>
+                        <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+                    </div>
+                </header>
+            </>
+        );
+    }
+
+    // Versi header lengkap untuk halaman utama
     return (
         <>
             <style>{animationStyles}</style>
@@ -98,18 +100,13 @@ const Header = () => {
                                     <Link to="/register" className="bg-yellow-500 text-black px-4 py-2 rounded-md font-semibold hover:bg-yellow-600">Daftar</Link>
                                 </>
                             )}
-                            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-full bg-gray-200 dark:bg-gray-700">{isDarkMode ? '🌞' : '🌜'}</button>
+                            <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
                         </div>
                     </div>
                 </div>
 
-                {/* KONTEN MEGA MENU YANG DIKEMBALIKAN */}
                 {openMenu && (
-                    <div 
-                        className={`absolute left-0 top-full w-full shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} 
-                        onMouseEnter={() => handleMenuMouseEnter(openMenu)} 
-                        onMouseLeave={handleMenuMouseLeave}
-                    >
+                    <div className={`absolute left-0 top-full w-full shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} onMouseEnter={() => handleMenuMouseEnter(openMenu)} onMouseLeave={handleMenuMouseLeave}>
                         <div className="container mx-auto p-8">
                             {openMenu === 'program' && (
                                <div className="grid grid-cols-1 md:grid-cols-4 gap-x-8">
@@ -119,9 +116,7 @@ const Header = () => {
                                            <ul>
                                                {courses.map(course => (
                                                    <li key={course.id} className="mb-2">
-                                                       <Link to={`/products/${course.id}`} className={`text-sm hover:text-yellow-500 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                                           {course.title}
-                                                       </Link>
+                                                       <Link to={`/products/${course.id}`} className={`text-sm hover:text-yellow-500 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{course.title}</Link>
                                                    </li>
                                                ))}
                                            </ul>
@@ -129,8 +124,8 @@ const Header = () => {
                                    ))}
                                </div>
                             )}
-                            {openMenu === 'corporate' && (<div><p>Informasi lebih lanjut mengenai program corporate.</p></div>)}
-                            {openMenu === 'about' && (<div><p>Informasi tentang kami.</p></div>)}
+                            {openMenu === 'corporate' && (<div><p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Informasi lebih lanjut mengenai program corporate.</p></div>)}
+                            {openMenu === 'about' && (<div><p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Informasi tentang kami.</p></div>)}
                         </div>
                     </div>
                 )}

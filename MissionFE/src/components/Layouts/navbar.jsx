@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
-import Button from "../Elements/Button";
 import { useSelector } from "react-redux";
 import { DarkMode } from "../../context/DarkMode";
 import { useTotalPrice } from "../../context/TotalPriceContext";
+import ThemeToggle from '../Elements/Toggle/ThemeToggle'; // Rute baru
 
 const Navbar = () => {
     const username = useLogin();
@@ -13,7 +13,7 @@ const Navbar = () => {
     const cart = useSelector((state) => state.cart.data);
     const { total } = useTotalPrice();
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-    const timeoutRef = useRef(null); // Ref untuk menyimpan timeout ID
+    const timeoutRef = useRef(null);
 
     useEffect(() => {
         const sum = cart.reduce((acc, item) => acc + item.qty, 0);
@@ -27,17 +27,15 @@ const Navbar = () => {
         window.location.href = "/login";
     };
 
-    // Fungsi untuk membuka dropdown
     const handleMouseEnter = () => {
         clearTimeout(timeoutRef.current);
         setIsProfileDropdownOpen(true);
     };
 
-    // Fungsi untuk menutup dropdown dengan delay
     const handleMouseLeave = () => {
         timeoutRef.current = setTimeout(() => {
             setIsProfileDropdownOpen(false);
-        }, 200); // Jeda 200ms
+        }, 200);
     };
 
     return (
@@ -64,9 +62,7 @@ const Navbar = () => {
                 )}
             </div>
             
-            <Button className="bg-blue-600 p-2 text-white rounded" onClick={() => setIsDarkMode(!isDarkMode)}>
-                {isDarkMode ? "Light" : "Dark"}
-            </Button>
+            <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
         </div>
     );
 };
