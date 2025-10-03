@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-// Data sementara untuk kursus, nanti bisa diganti dari API
+// Data kursus dengan deskripsi yang lebih detail
 const courseData = [
-    { id: 1, category: 'bisnis', title: 'Big 4 Auditor Financial Analyst', author: 'Jenna Ortega', rating: 5.0 ,price: 'Rp 300k', image: '/images/ProductsList/bisnis/Big 4 Auditor Financial Analyst.webp', desc:'Mulai transformasi dengan instruktur profesional, harga yang terjangkau, dan materi keuangan yang bisa diaplikasikan di dunia kerja nyata.' },
-    { id: 2, category: 'pemasaran', title: 'Digital Marketing Fundamental', author: 'John Doe', rating: 4.9, price: 'Rp 350k', image: '/images/ProductsList/pemasaran/Digital Marketing Fundamental.webp', desc:'Pelajari dasar-dasar digital marketing, mulai dari SEO, iklan online, hingga strategi konten untuk meningkatkan brand awareness.'  },
-    { id: 3, category: 'desain', title: 'Manajemen Waktu Efektif', author: 'Jane Smith', rating: 4.7, price: 'Rp 250k', image: '/images/ProductsList/desain/UI UX Design Basics.webp', desc: 'Kuasai prinsip dasar desain antarmuka dan pengalaman pengguna untuk menciptakan aplikasi dan website yang ramah pengguna.' },
-    { id: 4, category: 'pengembangan-diri', title: 'Public Speaking Mastery', author: 'Jenna Ortega', rating: 3.0, price: 'Rp 300k', image: '/images/ProductsList/pengembangan-diri/Public Speaking Mastery.webp', desc: 'Tingkatkan kemampuan berbicara di depan umum dengan teknik komunikasi efektif, gestur tubuh, dan kontrol rasa gugup.' },
-    { id: 5, category: 'bisnis', title: 'Financial Planning for Beginners', author: 'Mike Ross', rating: 5.0, price: 'Rp 280k', image: '/images/ProductsList/bisnis/Financial Planning for Beginners.webp', desc: 'Belajar mengatur keuangan pribadi, membuat anggaran, dan merencanakan investasi untuk masa depan yang lebih stabil.' },
-    { id: 6, category: 'pemasaran', title: 'Social Media Marketing Strategy', author: 'Emily White', rating: 4.6, price: 'Rp 275k', image: '/images/ProductsList/pemasaran/Social Media Marketing Strategy.webp', desc: 'Bangun strategi media sosial yang efektif untuk meningkatkan engagement, followers, dan penjualan bisnis Anda.' },
-    { id: 7, category: 'desain', title: 'Design Fundamentals', author: 'Chris Green', rating: 4.9, price: 'Rp 320k', image: '/images/ProductsList/desain/Design Fundamentals.webp', desc: 'Kuasai desain grafis untuk membuat konten visual yang menarik dengan cara mudah dan cepat' },
-    { id: 8, category: 'pengembangan-diri', title: 'Time Management Hacks', author: 'David Chen', rating: 3.3, price: 'Rp 310k', image: '/images/ProductsList/pengembangan-diri/Time Management Hacks.webp', desc: 'Maksimalkan produktivitas harian dengan teknik manajemen waktu, prioritas tugas, dan pengelolaan jadwal yang efektif.' },
-    { id: 9, category: 'bisnis', title: 'Entrepreneurship 101', author: 'David Chen', rating: 1.2, price: 'Rp 310k', image: '/images/ProductsList/bisnis/Entrepreneurship 101.webp', desc:'Pelajari langkah awal membangun bisnis, mulai dari ide, strategi pemasaran, hingga mengelola tim kecil.' },
+    { id: 1, category: 'bisnis', title: 'Big 4 Auditor Financial Analyst', author: 'Jenna Ortega', rating: 5.0, price: 'Rp 300k', image: '/images/ProductsList/bisnis/Big 4 Auditor Financial Analyst.webp', desc: 'Mulai transformasi karir Anda di bidang keuangan dengan kursus intensif ini. Anda akan mempelajari proses audit, analisis laporan keuangan, dan valuasi bisnis seperti yang diterapkan di firma audit Big Four. Cocok untuk mahasiswa akuntansi atau profesional muda yang ingin berkarir sebagai analis keuangan atau auditor ternama.' },
+    { id: 2, category: 'pemasaran', title: 'Digital Marketing Fundamental', author: 'John Doe', rating: 4.9, price: 'Rp 350k', image: '/images/ProductsList/pemasaran/Digital Marketing Fundamental.webp', desc: 'Kuasai dunia pemasaran digital dari nol. Kursus ini mencakup semua dasar-dasar penting, mulai dari Search Engine Optimization (SEO), Search Engine Marketing (SEM), media sosial, hingga email marketing. Pelajari cara membangun strategi yang efektif untuk meningkatkan brand awareness dan mendorong penjualan secara online.' },
+    { id: 3, category: 'desain', title: 'UI/UX Design Basics', author: 'Jane Smith', rating: 4.7, price: 'Rp 250k', image: '/images/ProductsList/desain/UI UX Design Basics.webp', desc: 'Masuki dunia desain produk digital dengan menguasai prinsip dasar UI (User Interface) dan UX (User Experience). Anda akan belajar proses desain dari riset pengguna, membuat wireframe, hingga prototipe interaktif menggunakan alat desain populer seperti Figma. Ciptakan aplikasi dan website yang tidak hanya indah, tetapi juga ramah pengguna.' },
+    { id: 4, category: 'pengembangan-diri', title: 'Public Speaking Mastery', author: 'Jenna Ortega', rating: 3.0, price: 'Rp 300k', image: '/images/ProductsList/pengembangan-diri/Public Speaking Mastery.webp', desc: 'Ubah rasa gugup menjadi kepercayaan diri saat berbicara di depan umum. Kursus ini akan membekali Anda dengan teknik komunikasi yang efektif, cara menyusun pidato yang memukau, mengontrol gestur tubuh, dan berinteraksi dengan audiens. Ideal untuk profesional, mahasiswa, atau siapa saja yang ingin lebih persuasif.' },
+    { id: 5, category: 'bisnis', title: 'Financial Planning for Beginners', author: 'Mike Ross', rating: 5.0, price: 'Rp 280k', image: '/images/ProductsList/bisnis/Financial Planning for Beginners.webp', desc: 'Ambil kendali atas masa depan keuangan Anda. Pelajari cara mengatur keuangan pribadi secara efektif, membuat anggaran bulanan yang realistis, merencanakan dana darurat, dan mulai berinvestasi untuk mencapai tujuan finansial jangka panjang, seperti membeli rumah atau mempersiapkan pensiun.' },
+    { id: 6, category: 'pemasaran', title: 'Social Media Marketing Strategy', author: 'Emily White', rating: 4.6, price: 'Rp 275k', image: '/images/ProductsList/pemasaran/Social Media Marketing Strategy.webp', desc: 'Manfaatkan kekuatan media sosial untuk bisnis Anda. Kursus ini akan mengajarkan cara membangun strategi konten yang menarik, menumbuhkan followers secara organik, menjalankan iklan berbayar yang efektif, dan menganalisis performa kampanye di berbagai platform seperti Instagram, Facebook, dan TikTok.' },
+    { id: 7, category: 'desain', title: 'Design Fundamentals', author: 'Chris Green', rating: 4.9, price: 'Rp 320k', image: '/images/ProductsList/desain/Design Fundamentals.webp', desc: 'Kuasai fondasi desain grafis untuk menciptakan visual yang berdampak. Materi mencakup teori warna, tipografi, komposisi, dan prinsip-prinsip desain lainnya. Dengan panduan praktis, Anda akan mampu membuat konten visual yang menarik untuk media sosial, presentasi, atau materi pemasaran lainnya.' },
+    { id: 8, category: 'pengembangan-diri', title: 'Time Management Hacks', author: 'David Chen', rating: 3.3, price: 'Rp 310k', image: '/images/ProductsList/pengembangan-diri/Time Management Hacks.webp', desc: 'Hentikan prokrastinasi dan maksimalkan produktivitas Anda setiap hari. Pelajari berbagai teknik manajemen waktu modern, cara memprioritaskan tugas menggunakan metode Eisenhower Matrix, mengelola jadwal secara efektif, dan membangun kebiasaan yang mendukung tujuan Anda.' },
+    { id: 9, category: 'bisnis', title: 'Entrepreneurship 101', author: 'David Chen', rating: 1.2, price: 'Rp 310k', image: '/images/ProductsList/bisnis/Entrepreneurship 101.webp', desc: 'Wujudkan ide bisnis Anda menjadi kenyataan. Kursus ini memberikan panduan langkah demi langkah untuk memulai bisnis, mulai dari validasi ide, riset pasar, menyusun model bisnis, strategi pemasaran awal, hingga dasar-dasar manajemen tim dan keuangan untuk para pendiri startup.' },
 ];
+
 
 const categories = ['semua', 'pemasaran', 'desain', 'pengembangan-diri', 'bisnis'];
 
@@ -43,21 +44,20 @@ const StarRating = ({ rating }) => {
 const CourseCard = ({ course }) => (
     <Link to={`/products/${course.id}`} className="course-card bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden flex flex-col transition-transform duration-300 hover:-translate-y-2 group">
         
-        {/* === PERUBAHAN DI BAWAH INI === */}
-        {/* 1. Container luar dibuat menjadi flexbox untuk menengahkan isinya */}
         <div className="w-full h-68 bg-white flex justify-center items-center p-4">
-            {/* 2. Gambar dengan sudut membulat */}
             <img src={course.image} alt={course.title} className="w-full h-full rounded-md object-cover" />
         </div>
-        {/* =============================== */}
 
-        <div className="p-4 flex flex-col flex-grow -mt-4"> {/* Margin negatif untuk menarik konten ke atas */}
+        <div className="p-4 flex flex-col flex-grow -mt-4">
             <h3 className="text-lg font-semibold mb-2 text-gray-800 group-hover:text-yellow-600 h-14">{course.title}</h3>
             <p className="text-sm text-gray-500 mb-2">
                 <img src="/images/avatar.png" alt="author" className="w-6 h-6 rounded-full inline-block mr-2" />
                 <span>{course.author}</span>
             </p>
-            <p className="text-sm text-gray-600 mb-3 flex-grow">{course.desc}</p>
+            {/* Deskripsi dipotong jika lebih dari 100 karakter */}
+            <p className="text-sm text-gray-600 mb-3 flex-grow">
+                {course.desc.length > 100 ? `${course.desc.substring(0, 100)}...` : course.desc}
+            </p>
             
             <div className="flex justify-between items-center mt-auto pt-2">
                 <div className="flex items-center">
@@ -71,7 +71,7 @@ const CourseCard = ({ course }) => (
 );
 
 
-// Komponen utama untuk menampilkan daftar kursus dan filter (TIDAK BERUBAH)
+// Komponen utama
 const CoursesSection = () => {
     const [activeFilter, setActiveFilter] = useState('semua');
 

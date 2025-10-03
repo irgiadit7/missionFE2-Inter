@@ -41,12 +41,12 @@ const Header = ({ simple = false }) => {
         @keyframes gradient-flow { from { background-position: 0% center; } to { background-position: -200% center; } }
     `;
 
-    // Versi header sederhana untuk halaman login/register
+    // Versi header sederhana
     if (simple) {
         return (
             <>
                 <style>{animationStyles}</style>
-                <header className={`sticky top-0 z-50 shadow-md ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                <header className={`sticky top-0 z-50 shadow-md ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
                     <div className="container mx-auto p-4 flex justify-between items-center">
                         <Link to="/" className="text-2xl font-extrabold">
                             <span className="animate-gradient-flow">videocourse</span>
@@ -58,11 +58,11 @@ const Header = ({ simple = false }) => {
         );
     }
 
-    // Versi header lengkap untuk halaman utama
+    // Versi header lengkap
     return (
         <>
             <style>{animationStyles}</style>
-            <header className={`sticky top-0 z-50 shadow-md ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
+            <header className={`sticky top-0 z-50 shadow-md ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
                 <div className="container mx-auto flex justify-between items-center p-4">
                     <Link to="/" className="text-2xl font-extrabold">
                         <span className="animate-gradient-flow">videobelajar</span>
@@ -85,7 +85,7 @@ const Header = ({ simple = false }) => {
                                         <span className="font-semibold text-sm">{username}</span>
                                     </div>
                                     {isProfileDropdownOpen && (
-                                        <div className={`absolute right-0 mt-2 w-48 ${isDarkMode ? 'bg-gray-700' : 'bg-white'} rounded-md shadow-lg py-1 text-sm`}>
+                                        <div className={`absolute right-0 mt-2 w-48 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-md shadow-lg py-1 text-sm`}>
                                             <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Profil</Link>
                                             <Link to="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Daftar Pembelian</Link>
                                             <Link to="/products" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Kelas Video Course</Link>
@@ -106,7 +106,7 @@ const Header = ({ simple = false }) => {
                 </div>
 
                 {openMenu && (
-                    <div className={`absolute left-0 top-full w-full shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} onMouseEnter={() => handleMenuMouseEnter(openMenu)} onMouseLeave={handleMenuMouseLeave}>
+                    <div className={`absolute left-0 top-full w-full shadow-lg ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`} onMouseEnter={() => handleMenuMouseEnter(openMenu)} onMouseLeave={handleMenuMouseLeave}>
                         <div className="container mx-auto p-8">
                             {openMenu === 'program' && (
                                <div className="grid grid-cols-1 md:grid-cols-4 gap-x-8">

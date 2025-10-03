@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
-    // Kode CSS untuk animasi gradien ditempatkan di sini
     const animationStyles = `
         .animate-gradient-flow {
             background: linear-gradient(90deg, #F64920, #FFBD3A, #F64920);
@@ -14,22 +13,17 @@ const Footer = () => {
         }
 
         @keyframes gradient-flow {
-            from {
-                background-position: 0% center;
-            }
-            to {
-                background-position: -200% center;
-            }
+            from { background-position: 0% center; }
+            to { background-position: -200% center; }
         }
     `;
 
     return (
         <>
-            {/* Tag <style> ini akan menerapkan animasi ke komponen */}
             <style>{animationStyles}</style>
             
             <footer 
-                className="bg-white text-gray-600 py-16 px-8 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"
+                className="bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 py-16 px-8 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_6px_-1px_rgba(255,255,255,0.05)]"
             >
                 <div className="container mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
@@ -41,47 +35,47 @@ const Footer = () => {
                                     videobelajar
                                  </span>
                             </Link>
-                            <p className="mb-4 font-semibold text-gray-800">Gali Potensi Anda Melalui Pembelajaran Video di harisenin.id!</p>
+                            <p className="mb-4 font-semibold text-gray-800 dark:text-white">Gali Potensi Anda Melalui Pembelajaran Video di harisenin.id!</p>
                             <p className="text-sm">Jl. Usman Effendi No. 50 Lowokwaru, Malang</p>
                             <p className="text-sm">+62-877-7123-1234</p>
                         </div>
 
                         {/* Kolom Kategori */}
                         <div>
-                            <h4 className="font-bold text-gray-900 mb-4">Kategori</h4>
+                            <h4 className="font-bold text-gray-900 dark:text-white mb-4">Kategori</h4>
                             <ul className="space-y-2 text-sm">
-                                <li><a href="#" className="hover:text-yellow-500">Digital & Teknologi</a></li>
-                                <li><a href="#" className="hover:text-yellow-500">Pemasaran</a></li>
-                                <li><a href="#" className="hover:text-yellow-500">Manajemen Bisnis</a></li>
-                                <li><a href="#" className="hover:text-yellow-500">Pengembangan Diri</a></li>
-                                <li><a href="#" className="hover:text-yellow-500">Desain</a></li>
+                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Digital & Teknologi</a></li>
+                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Pemasaran</a></li>
+                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Manajemen Bisnis</a></li>
+                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Pengembangan Diri</a></li>
+                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Desain</a></li>
                             </ul>
                         </div>
 
                         {/* Kolom Perusahaan */}
                         <div>
-                            <h4 className="font-bold text-gray-900 mb-4">Perusahaan</h4>
+                            <h4 className="font-bold text-gray-900 dark:text-white mb-4">Perusahaan</h4>
                             <ul className="space-y-2 text-sm">
-                                <li><a href="#" className="hover:text-yellow-500">Tentang Kami</a></li>
-                                <li><a href="#" className="hover:text-yellow-500">FAQ</a></li>
-                                <li><a href="#" className="hover:text-yellow-500">Kebijakan Privasi</a></li>
-                                <li><a href="#" className="hover:text-yellow-500">Bantuan</a></li>
+                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Tentang Kami</a></li>
+                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">FAQ</a></li>
+                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Kebijakan Privasi</a></li>
+                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Bantuan</a></li>
                             </ul>
                         </div>
                         
                         {/* Kolom Komunitas */}
                          <div>
-                            <h4 className="font-bold text-gray-900 mb-4">Komunitas</h4>
+                            <h4 className="font-bold text-gray-900 dark:text-white mb-4">Komunitas</h4>
                             <ul className="space-y-2 text-sm">
-                                 <li><a href="#" className="hover:text-yellow-500">Tipe Sukses</a></li>
-                                <li><a href="#" className="hover:text-yellow-500">Blog</a></li>
+                                 <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Tipe Sukses</a></li>
+                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Blog</a></li>
                             </ul>
                         </div>
 
                     </div>
 
                     {/* Footer Bawah */}
-                    <div className="border-t border-gray-200 pt-8 flex flex-col sm:flex-row justify-between items-center text-xl">
+                    <div className="border-t border-gray-200 dark:border-gray-700 pt-8 flex flex-col sm:flex-row justify-between items-center text-xl">
                         <p>&copy;2025 Irgi adit pratama</p>
                         
                         <div className="flex items-center space-x-4 mt-4 sm:mt-0">
@@ -90,7 +84,7 @@ const Footer = () => {
                                     <path fill="#0288D1" d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5V37z"></path><path fill="#FFF" d="M12 19H17V36H12zM14.485 17h-.028C12.965 17 12 15.888 12 14.499 12 13.08 12.995 12 14.514 12c1.521 0 2.458 1.08 2.486 2.499C17 15.887 16.035 17 14.485 17zM36 36h-5v-9.099c0-2.198-1.225-3.698-3.192-3.698-1.501 0-2.313 1.012-2.707 1.99C24.957 25.543 25 26.511 25 27v9h-5V19h5v2.616C25.721 20.5 26.85 19 29.738 19c3.578 0 6.261 2.25 6.261 7.274L36 36 36 36z"></path>
                                 </svg>
                             </a>
-                            <a href="https://github.com/irgiadit7" aria-label="Github" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-900">
+                            <a href="https://github.com/irgiadit7" aria-label="Github" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="38" height="38" viewBox="0 0 172 172">
                                     <g fillRule="nonzero" stroke="none" strokeWidth="1" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" strokeDasharray="" strokeDashoffset="0" fontFamily="none" fontWeight="none" fontSize="none" textAnchor="none" style={{ mixBlendMode: 'normal' }}>
                                         <path d="M0,172v-172h172v172z" fill="none"></path>
@@ -107,7 +101,7 @@ const Footer = () => {
                             </a>
                             <a href="https://mail.google.com/mail?view=cm&fs=1&to=codewithgiii@gmail.com&su=Hai&body=" aria-label="Gmail" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-red-600">
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="38" height="38" viewBox="0 0 48 48">
-                                    <path fill="#4caf50" d="M45,16.2l-5,2.75l-5,4.75L35,40h7c1.657,0,3-1.343,3-3V16.2z"></path><path fill="#1e88e5" d="M3,16.2l3.614,1.71L13,23.7V40H6c-1.657,0-3-1.343-3-3V16.2z"></path><polygon fill="#e53935" points="35,11.2 24,19.45 13,11.2 12,17 13,23.7 24,31.95 35,23.7 36,17"></polygon><path fill="#c62828" d="M3,12.298V16.2l10,7.5V11.2L9.876,8.859C9.132,8.301,8.228,8,7.298,8h0C4.924,8,3,9.924,3,12.298z"></path><path fill="#fbc02d" d="M45,12.298V16.2l-10,7.5V11.2l3.124-2.341C38.868,8.301,39.772,8,40.702,8h0 C43.076,8,45,9.924,45,12.298z"></path>
+                                    <path fill="#4caf50" d="M45,16.2l-5,2.75l-5,4.75L35,40h7c1.657,0,3-1.343,3-3V16.2z"></path><path fill="#1e88e5" d="M3,16.2l3.614,1.71L13,23.7V40H6c-1.657,0-3-1.343,3-3V16.2z"></path><polygon fill="#e53935" points="35,11.2 24,19.45 13,11.2 12,17 13,23.7 24,31.95 35,23.7 36,17"></polygon><path fill="#c62828" d="M3,12.298V16.2l10,7.5V11.2L9.876,8.859C9.132,8.301,8.228,8,7.298,8h0C4.924,8,3,9.924,3,12.298z"></path><path fill="#fbc02d" d="M45,12.298V16.2l-10,7.5V11.2l3.124-2.341C38.868,8.301,39.772,8,40.702,8h0 C43.076,8,45,9.924,45,12.298z"></path>
                                 </svg>
                             </a>
                         </div>
