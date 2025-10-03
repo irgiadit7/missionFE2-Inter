@@ -1,7 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+// Perubahan di baris ini
+import { createHashRouter, RouterProvider } from 'react-router-dom'; 
 import LoginPages from './Pages/login.jsx';
 import RegisterPages from './Pages/register.jsx';
 import ErrorPage from './Pages/404.jsx';
@@ -14,7 +15,8 @@ import DarkModeContextProvider from './context/DarkMode.jsx';
 import { TotalPriceProvider } from './context/TotalPriceContext.jsx';
 import HomePage from './Pages/homePage.jsx';
 
-const router = createBrowserRouter([
+// Perubahan di baris ini
+const router = createHashRouter([
   {
   path: "/",
   element: <HomePage />,
