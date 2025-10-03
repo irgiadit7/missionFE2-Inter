@@ -1,52 +1,79 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
-import { DarkMode } from "../../context/DarkMode";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const AuthLayouts = (props) => {
-  const { children, title, type } = props;
-  const {isDarkMode, setIsDarkMode } = useContext(DarkMode);
-  {
-    console.log(isDarkMode);
-  }
-  return (
-    <div className={`flex font-extrabold min-h-screen items-center justify-center ${isDarkMode && "bg-slate-900"}`}>
+  const { children, title, subtitle, type } = props;
 
-      <div className="w-full max-w-xs">
-        <button className="absolute right-2 top-2 bg-blue-600 p-2 text-white rounded" onClick={() => setIsDarkMode(!isDarkMode)}>
-              {isDarkMode ? "Ligth" : "Dark"}
-        </button>
-        <h1 className="text-3xl font-bold mb-2 text-blue-600">{title}</h1>
-        <p className="font-medium text-slate-500 mb-8">
-          welcome, please enter your details!
-        </p>
-        {children}
-        <Navigation type={type} />
+  // Kode untuk animasi gradien logo
+  const animationStyles = `
+      .animate-gradient-flow {
+          background: linear-gradient(90deg, #F64920, #FFBD3A, #F64920);
+          background-size: 200% auto;
+          color: transparent;
+          -webkit-background-clip: text;
+          background-clip: text;
+          animation: gradient-flow 6s linear infinite;
+      }
+
+      @keyframes gradient-flow {
+          from { background-position: 0% center; }
+          to { background-position: -200% center; }
+      }
+  `;
+
+  return (
+    <>
+      <style>{animationStyles}</style>
+      <div className="relative min-h-screen bg-[#FFFDF3]">
+        
+        {/* PERUBAHAN DI SINI: Navbar dengan background putih dan shadow */}
+        <header className="sticky top-0 z-50 bg-white shadow-md">
+          <div className="container mx-auto p-5">
+            <Link to="/" className="text-2xl font-extrabold">
+              <span className="animate-gradient-flow">
+                  videobelajar
+              </span>
+            </Link>
+          </div>
+        </header>
+
+        {/* Konten Form di Tengah Halaman */}
+        <div className="flex flex-col items-center justify-center min-h-screen pt-20 p-4">
+          <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+            <div className="text-center mb-6">
+              <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
+              <p className="text-gray-500">{subtitle}</p>
+            </div>
+            {children}
+          </div>
+          <Navigation type={type} />
+        </div>
+
       </div>
-      
-    </div>
+    </>
   );
 };
 
-const Navigation = ({type}) => {
+const Navigation = ({ type }) => {
   if (type === 'login') {
     return (
-     <p className="text-sm font-light mt-5 text-center">
-           Don't have an account?
-          <Link to="/register" className="text-blue-600 font-semibold hover:underline ml-1">
-              Register
-          </Link>
-        </p>
-    )
+      <p className="text-sm mt-6 text-center">
+        Belum punya akun?{' '}
+        <Link to="/register" className="font-semibold text-green-600 hover:underline">
+          Daftar
+        </Link>
+      </p>
+    );
   } else {
     return (
-      <p className="text-sm font-light mt-5 text-center">
-          Already have an account?
-          <Link to="/login" className="text-blue-600 font-semibold hover:underline ml-1">
-              Login
-          </Link>
-        </p>
-    )
+      <p className="text-sm mt-6 text-center">
+        Sudah punya akun?{' '}
+        <Link to="/login" className="font-semibold text-green-600 hover:underline">
+          Masuk
+        </Link>
+      </p>
+    );
   }
-}
+};
 
 export default AuthLayouts;

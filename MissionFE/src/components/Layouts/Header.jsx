@@ -1,102 +1,116 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { DarkMode } from '../../context/DarkMode';
 
 const Header = () => {
     const { isDarkMode, setIsDarkMode } = useContext(DarkMode);
     const [openMenu, setOpenMenu] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState('');
+    const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+    const profileTimeoutRef = useRef(null); // Ref untuk dropdown profil
+    const menuTimeoutRef = useRef(null); // Ref untuk mega menu
 
-    // Data menu program yang disesuaikan dengan courseData Anda
-    const programMenuData = {
-        'Pemasaran': [
-            { id: 2, title: 'Digital Marketing Fundamental' },
-            { id: 6, title: 'Social Media Marketing Strategy' }
-        ],
-        'Desain': [
-            { id: 3, title: 'Manajemen Waktu Efektif' }, // Sesuai data, kategori: desain
-            { id: 7, title: 'Design Fundamentals' }
-        ],
-        'Pengembangan Diri': [
-            { id: 4, title: 'Public Speaking Mastery' },
-            { id: 8, title: 'Time Management Hacks' }
-        ],
-        'Bisnis': [
-            { id: 1, title: 'Big 4 Auditor Financial Analyst' },
-            { id: 5, title: 'Financial Planning for Beginners' },
-            { id: 9, title: 'Entrepreneurship 101' }
-        ]
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            setIsLoggedIn(true);
+            const storedUser = localStorage.getItem("user");
+            if (storedUser) {
+                setUsername(storedUser);
+            }
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("password");
+        window.location.href = "/login";
+    };
+    
+    // Fungsi hover untuk dropdown profil
+    const handleProfileMouseEnter = () => {
+        clearTimeout(profileTimeoutRef.current);
+        setIsProfileDropdownOpen(true);
+    };
+    const handleProfileMouseLeave = () => {
+        profileTimeoutRef.current = setTimeout(() => {
+            setIsProfileDropdownOpen(false);
+        }, 200);
+    };
+    
+    // Fungsi hover untuk mega menu
+    const handleMenuMouseEnter = (menu) => {
+        clearTimeout(menuTimeoutRef.current);
+        setOpenMenu(menu);
+    };
+    const handleMenuMouseLeave = () => {
+        menuTimeoutRef.current = setTimeout(() => {
+            setOpenMenu(null);
+        }, 200);
     };
 
+    const programMenuData = { 'Pemasaran': [ { id: 2, title: 'Digital Marketing Fundamental' }, { id: 6, title: 'Social Media Marketing Strategy' } ], 'Desain': [ { id: 3, title: 'Manajemen Waktu Efektif' }, { id: 7, title: 'Design Fundamentals' } ], 'Pengembangan Diri': [ { id: 4, title: 'Public Speaking Mastery' }, { id: 8, title: 'Time Management Hacks' } ], 'Bisnis': [ { id: 1, title: 'Big 4 Auditor Financial Analyst' }, { id: 5, title: 'Financial Planning for Beginners' }, { id: 9, title: 'Entrepreneurship 101' } ] };
     const animationStyles = `
-        .animate-gradient-flow {
-            background: linear-gradient(90deg, #F64920, #FFBD3A, #F64920);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: gradient-flow 6s linear infinite;
-        }
-
-        @keyframes gradient-flow {
-            from {
-                background-position: 0% center;
-            }
-            to {
-                background-position: -200% center;
-            }
-        }
+        .animate-gradient-flow { background: linear-gradient(90deg, #F64920, #FFBD3A, #F64920); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: gradient-flow 6s linear infinite; }
+        @keyframes gradient-flow { from { background-position: 0% center; } to { background-position: -200% center; } }
     `;
 
     return (
         <>
             <style>{animationStyles}</style>
-            <header 
-                className={`sticky top-0 z-50 shadow-md ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
-                onMouseLeave={() => setOpenMenu(null)}
-            >
+            <header className={`sticky top-0 z-50 shadow-md ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
                 <div className="container mx-auto flex justify-between items-center p-4">
                     <Link to="/" className="text-2xl font-extrabold">
-                        <span className="animate-gradient-flow">
-                            videobelajar
-                        </span>
+                        <span className="animate-gradient-flow">videobelajar</span>
                     </Link>
 
                     <div className="hidden md:flex items-center space-x-6">
-                        <nav className="flex items-center space-x-6">
-                            <div onMouseEnter={() => setOpenMenu('program')}>
-                                <button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'program' ? 'text-yellow-500' : ''}`}>
-                                    Program
-                                </button>
-                            </div>
-                            <div onMouseEnter={() => setOpenMenu('corporate')}>
-                                <button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'corporate' ? 'text-yellow-500' : ''}`}>
-                                    Corporate
-                                </button>
-                            </div>
-                            <div onMouseEnter={() => setOpenMenu('about')}>
-                                <button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'about' ? 'text-yellow-500' : ''}`}>
-                                    About
-                                </button>
-                            </div>
+                        <nav className="flex items-center space-x-6" onMouseLeave={handleMenuMouseLeave}>
+                            <div onMouseEnter={() => handleMenuMouseEnter('program')}><button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'program' ? 'text-yellow-500' : ''}`}>Program</button></div>
+                            <div onMouseEnter={() => handleMenuMouseEnter('corporate')}><button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'corporate' ? 'text-yellow-500' : ''}`}>Corporate</button></div>
+                            <div onMouseEnter={() => handleMenuMouseEnter('about')}><button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'about' ? 'text-yellow-500' : ''}`}>About</button></div>
                         </nav>
+                        
                         <div className="flex items-center space-x-4">
-                            <Link to="/login" className="px-4 py-2 rounded-md font-semibold border border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black transition-colors">Masuk</Link>
-                            <Link to="/register" className="bg-yellow-500 text-black px-4 py-2 rounded-md font-semibold hover:bg-yellow-600">Daftar</Link>
-                            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
-                                {isDarkMode ? '🌞' : '🌜'}
-                            </button>
+                            {isLoggedIn ? (
+                                <div className="relative" onMouseEnter={handleProfileMouseEnter} onMouseLeave={handleProfileMouseLeave}>
+                                    <div className="flex items-center gap-3 cursor-pointer">
+                                        <div className="flex items-center justify-center w-8 h-8 bg-orange-500 rounded-full text-white font-bold text-sm">
+                                            {username && username.charAt(0).toUpperCase()}
+                                        </div>
+                                        <span className="font-semibold text-sm">{username}</span>
+                                    </div>
+                                    {isProfileDropdownOpen && (
+                                        <div className={`absolute right-0 mt-2 w-48 ${isDarkMode ? 'bg-gray-700' : 'bg-white'} rounded-md shadow-lg py-1 text-sm`}>
+                                            <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Profil</Link>
+                                            <Link to="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Daftar Pembelian</Link>
+                                            <Link to="/products" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Kelas Video Course</Link>
+                                            <div className="border-t my-1 dark:border-gray-600"></div>
+                                            <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Keluar</button>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <>
+                                    <Link to="/login" className="px-4 py-2 rounded-md font-semibold border border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black transition-colors">Masuk</Link>
+                                    <Link to="/register" className="bg-yellow-500 text-black px-4 py-2 rounded-md font-semibold hover:bg-yellow-600">Daftar</Link>
+                                </>
+                            )}
+                            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-full bg-gray-200 dark:bg-gray-700">{isDarkMode ? '🌞' : '🌜'}</button>
                         </div>
                     </div>
                 </div>
 
-                {/* === MEGA MENU DINAMIS (RELEVAN DENGAN KONTEN) === */}
+                {/* KONTEN MEGA MENU YANG DIKEMBALIKAN */}
                 {openMenu && (
                     <div 
-                        className={`absolute left-0 top-full w-full shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
-                        onMouseLeave={() => setOpenMenu(null)}
+                        className={`absolute left-0 top-full w-full shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} 
+                        onMouseEnter={() => handleMenuMouseEnter(openMenu)} 
+                        onMouseLeave={handleMenuMouseLeave}
                     >
                         <div className="container mx-auto p-8">
-                            {/* Konten untuk Menu Program */}
                             {openMenu === 'program' && (
                                <div className="grid grid-cols-1 md:grid-cols-4 gap-x-8">
                                    {Object.entries(programMenuData).map(([category, courses]) => (
@@ -105,7 +119,9 @@ const Header = () => {
                                            <ul>
                                                {courses.map(course => (
                                                    <li key={course.id} className="mb-2">
-                                                       <Link to={`/products/${course.id}`} className={`text-sm hover:text-yellow-500 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{course.title}</Link>
+                                                       <Link to={`/products/${course.id}`} className={`text-sm hover:text-yellow-500 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                           {course.title}
+                                                       </Link>
                                                    </li>
                                                ))}
                                            </ul>
@@ -113,34 +129,8 @@ const Header = () => {
                                    ))}
                                </div>
                             )}
-
-                            {/* Konten untuk Menu Corporate */}
-                            {openMenu === 'corporate' && (
-                                <div>
-                                    <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                                       Informasi lebih lanjut mengenai program corporate.
-                                    </p>
-                                </div>
-                            )}
-
-                            {/* Konten untuk Menu About */}
-                            {openMenu === 'about' && (
-                                 <div className="grid grid-cols-3 gap-8">
-                                     <div className="col-span-2 mt-2">
-                                         <h3 className={`font-bold text-lg mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>About</h3>
-                                         <p className={`font-semibold text-sm mt-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                                             Karena kesuksesan ialah hak setiap anak bangsa, kami berambisi
-                                             <span className="block font-semibold text-sm mb-8">
-                                                 untuk memberikan akses pendidikan yang berkualitas pada generasi muda Indonesia.
-                                             </span>
-                                         </p>
-                                     </div>
-                                     <div className="col-span-1 flex space-x-8 mt-10">
-                                         <Link to="/tentang-kami" className="font-semibold hover:text-yellow-500">Tentang Kami</Link>
-                                         <Link to="/alumni" className="font-semibold hover:text-yellow-500">Alumni</Link>
-                                     </div>
-                                 </div>
-                            )}
+                            {openMenu === 'corporate' && (<div><p>Informasi lebih lanjut mengenai program corporate.</p></div>)}
+                            {openMenu === 'about' && (<div><p>Informasi tentang kami.</p></div>)}
                         </div>
                     </div>
                 )}

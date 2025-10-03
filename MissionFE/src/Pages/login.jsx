@@ -3,9 +3,12 @@ import FormLogin from "../components/Fragments/FormLogin";
 
 const LoginPages = () => {
  return (
-    <AuthLayouts title="Login" type="login">
+    <AuthLayouts 
+      title="Masuk ke Akun" 
+      subtitle="Yuk, lanjut belajarmu di videobelajar" 
+      type="login"
+    >
         <FormLogin />
-        
     </AuthLayouts>
     )
 }

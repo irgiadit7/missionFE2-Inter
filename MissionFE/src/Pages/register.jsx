@@ -3,7 +3,11 @@ import FormRegister from "../components/Fragments/FormRegister";
 
 const RegisterPages = () => {
  return (
-    <AuthLayouts title="Register" type="register">
+    <AuthLayouts 
+      title="Pendaftaran Akun" 
+      subtitle="Yuk, daftarkan akunmu sekarang juga!" 
+      type="register"
+    >
         <FormRegister />
     </AuthLayouts>
     )
