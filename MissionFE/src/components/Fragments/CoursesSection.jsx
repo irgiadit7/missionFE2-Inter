@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { DarkMode } from '../../context/DarkMode';
 
-// Data kursus dengan deskripsi yang lebih detail
+
 const courseData = [
     { id: 1, category: 'bisnis', title: 'Big 4 Auditor Financial Analyst', author: 'Jenna Ortega', rating: 5.0, price: 'Rp 300k', image: '/images/ProductsList/bisnis/Big 4 Auditor Financial Analyst.webp', desc: 'Mulai transformasi karir Anda di bidang keuangan dengan kursus intensif ini. Anda akan mempelajari proses audit, analisis laporan keuangan, dan valuasi bisnis seperti yang diterapkan di firma audit Big Four. Cocok untuk mahasiswa akuntansi atau profesional muda yang ingin berkarir sebagai analis keuangan atau auditor ternama.' },
     { id: 2, category: 'pemasaran', title: 'Digital Marketing Fundamental', author: 'John Doe', rating: 4.9, price: 'Rp 350k', image: '/images/ProductsList/pemasaran/Digital Marketing Fundamental.webp', desc: 'Kuasai dunia pemasaran digital dari nol. Kursus ini mencakup semua dasar-dasar penting, mulai dari Search Engine Optimization (SEO), Search Engine Marketing (SEM), media sosial, hingga email marketing. Pelajari cara membangun strategi yang efektif untuk meningkatkan brand awareness dan mendorong penjualan secara online.' },
@@ -14,26 +15,14 @@ const courseData = [
     { id: 9, category: 'bisnis', title: 'Entrepreneurship 101', author: 'David Chen', rating: 1.2, price: 'Rp 310k', image: '/images/ProductsList/bisnis/Entrepreneurship 101.webp', desc: 'Wujudkan ide bisnis Anda menjadi kenyataan. Kursus ini memberikan panduan langkah demi langkah untuk memulai bisnis, mulai dari validasi ide, riset pasar, menyusun model bisnis, strategi pemasaran awal, hingga dasar-dasar manajemen tim dan keuangan untuk para pendiri startup.' },
 ];
 
-
 const categories = ['semua', 'pemasaran', 'desain', 'pengembangan-diri', 'bisnis'];
 
-// Komponen helper baru untuk menampilkan bintang
 const StarRating = ({ rating }) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
         if (i <= rating) {
-            // Bintang Penuh
             stars.push(<svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>);
-        } else if (i === Math.ceil(rating) && !Number.isInteger(rating)) {
-            // Bintang Setengah
-            stars.push(
-                <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                    <path d="M10 0v15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0z" fill="#FFFDF3"/>
-                </svg>
-            );
         } else {
-            // Bintang Kosong
             stars.push(<svg key={i} className="w-4 h-4 text-gray-300 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>);
         }
     }
@@ -41,38 +30,36 @@ const StarRating = ({ rating }) => {
 };
 
 
-const CourseCard = ({ course }) => (
-    <Link to={`/products/${course.id}`} className="course-card bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden flex flex-col transition-transform duration-300 hover:-translate-y-2 group">
-        
-        <div className="w-full h-68 bg-white flex justify-center items-center p-4">
-            <img src={course.image} alt={course.title} className="w-full h-full rounded-md object-cover" />
-        </div>
-
-        <div className="p-4 flex flex-col flex-grow -mt-4">
-            <h3 className="text-lg font-semibold mb-2 text-gray-800 group-hover:text-yellow-600 h-14">{course.title}</h3>
-            <p className="text-sm text-gray-500 mb-2">
-                <img src="/images/avatar.png" alt="author" className="w-6 h-6 rounded-full inline-block mr-2" />
-                <span>{course.author}</span>
-            </p>
-            {/* Deskripsi dipotong jika lebih dari 100 karakter */}
-            <p className="text-sm text-gray-600 mb-3 flex-grow">
-                {course.desc.length > 100 ? `${course.desc.substring(0, 100)}...` : course.desc}
-            </p>
-            
-            <div className="flex justify-between items-center mt-auto pt-2">
-                <div className="flex items-center">
-                    <StarRating rating={course.rating} />
-                    <span className="text-xs text-gray-500 ml-2">({course.rating})</span>
-                </div>
-                <span className="text-lg font-bold text-green-600">{course.price}</span>
+const CourseCard = ({ course }) => {
+    const { isDarkMode } = useContext(DarkMode);
+    return (
+        <Link to={`/products/${course.id}`} className={`course-card rounded-lg shadow-sm overflow-hidden flex flex-col transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
+            <div className={`w-full h-48 flex justify-center items-center p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                <img src={course.image} alt={course.title} className="w-full h-full rounded-md object-cover" />
             </div>
-        </div>
-    </Link>
-);
+            <div className="p-4 flex flex-col flex-grow">
+                <h3 className={`text-lg font-semibold mb-2 group-hover:text-yellow-500 h-14 overflow-hidden ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{course.title}</h3>
+                <p className={`text-sm mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <img src="/images/avatar.png" alt="author" className="w-6 h-6 rounded-full inline-block mr-2" />
+                    <span>{course.author}</span>
+                </p>
+                <p className={`text-sm mb-3 flex-grow ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    {course.desc.length > 100 ? `${course.desc.substring(0, 100)}...` : course.desc}
+                </p>
+                <div className={`flex justify-between items-center mt-auto pt-2 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-100'}`}>
+                    <div className="flex items-center">
+                        <StarRating rating={course.rating} />
+                        <span className={`text-xs ml-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>({course.rating})</span>
+                    </div>
+                    <span className="text-lg font-bold text-green-600">{course.price}</span>
+                </div>
+            </div>
+        </Link>
+    );
+};
 
-
-// Komponen utama
 const CoursesSection = () => {
+    const { isDarkMode } = useContext(DarkMode);
     const [activeFilter, setActiveFilter] = useState('semua');
 
     const filteredCourses = activeFilter === 'semua'
@@ -81,7 +68,7 @@ const CoursesSection = () => {
 
     return (
         <section className="courses-section py-12 px-4 container mx-auto">
-            <h2 className="text-3xl font-bold mb-4 text-center text-gray-800">Koleksi Video Pembelajaran Unggulan</h2>
+            <h2 className={`text-3xl font-bold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Koleksi Video Pembelajaran Unggulan</h2>
             <div className="flex justify-center flex-wrap gap-2 mb-8">
                 {categories.map(category => (
                     <button
@@ -89,8 +76,8 @@ const CoursesSection = () => {
                         onClick={() => setActiveFilter(category)}
                         className={`capitalize px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                             activeFilter === category
-                                ? 'bg-gray-800 text-white'
-                                : 'bg-white text-gray-700 hover:bg-gray-200'
+                                ? 'bg-gray-800 text-white dark:bg-yellow-500 dark:text-black'
+                                : `bg-white text-gray-700 hover:bg-gray-200 ${isDarkMode ? 'dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600' : ''}`
                         }`}
                     >
                         {category.replace('-', ' ')}
