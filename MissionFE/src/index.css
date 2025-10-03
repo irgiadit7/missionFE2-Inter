@@ -1,1 +1,25 @@
 @import "tailwindcss";
+
+.hero {
+    background: url('/path/to/your/background-image.webp') center center/cover no-repeat;
+}
+
+.cta-section {
+    background: url('/path/to/your/section3-image.webp') center center/cover no-repeat;
+}
+
+/* Tambahkan ini di paling bawah file src/index.css */
+
+.hero {
+    /* Ganti dengan path gambar yang benar di folder public Anda */
+    background-image: url('/images/backgorund.webp');
+    background-size: cover;
+    background-position: center;
+}
+
+.cta-section {
+    /* Ganti dengan path gambar yang benar di folder public Anda */
+    background-image: url('/images/section3.webp');
+    background-size: cover;
+    background-position: center;
+}
