@@ -1,4 +1,4 @@
-  import React from 'react';
+import React from 'react';
   import { createRoot } from 'react-dom/client';
   import './index.css';
   import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -13,6 +13,7 @@
   import DarkModeContextProvider from './context/DarkMode.jsx';
   import { TotalPriceProvider } from './context/TotalPriceContext.jsx';
   import HomePage from './Pages/homePage.jsx';
+  import PaymentPage from './Pages/PaymentPage.jsx';
 
   const router = createBrowserRouter([
     {
@@ -39,6 +40,10 @@
     {
     path: "/products/:id",
     element: <DetailProductPages />,
+    },
+    {
+    path: "/payment/:id",
+    element: <PaymentPage />,
     }
   ])
 
