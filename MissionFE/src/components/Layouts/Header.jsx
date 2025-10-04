@@ -41,7 +41,6 @@ const Header = ({ simple = false }) => {
         @keyframes gradient-flow { from { background-position: 0% center; } to { background-position: -200% center; } }
     `;
 
-    // Versi header sederhana
     if (simple) {
         return (
             <>
@@ -58,7 +57,6 @@ const Header = ({ simple = false }) => {
         );
     }
 
-    // Versi header lengkap
     return (
         <>
             <style>{animationStyles}</style>
@@ -85,12 +83,12 @@ const Header = ({ simple = false }) => {
                                         <span className="font-semibold text-sm">{username}</span>
                                     </div>
                                     {isProfileDropdownOpen && (
-                                        <div className={`absolute right-0 mt-2 w-48 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-md shadow-lg py-1 text-sm`}>
-                                            <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Profil</Link>
-                                            <Link to="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Daftar Pembelian</Link>
-                                            <Link to="/products" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Kelas Video Course</Link>
+                                        <div className={`absolute right-0 mt-2 w-48 ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-700'} rounded-md shadow-lg py-1 text-sm`}>
+                                            <Link to="/profile?tab=profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Profil</Link>
+                                            <Link to="/profile?tab=courses" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Kelas Video Course</Link>
+                                            <Link to="/profile?tab=orders" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Daftar Pembelian</Link>
                                             <div className="border-t my-1 dark:border-gray-600"></div>
-                                            <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Keluar</button>
+                                            <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Keluar</button>
                                         </div>
                                     )}
                                 </div>

@@ -4,7 +4,7 @@ import { useLogin } from "../../hooks/useLogin";
 import { useSelector } from "react-redux";
 import { DarkMode } from "../../context/DarkMode";
 import { useTotalPrice } from "../../context/TotalPriceContext";
-import ThemeToggle from '../Elements/Toggle/ThemeToggle'; // Rute baru
+import ThemeToggle from '../Elements/Toggle/ThemeToggle';
 
 const Navbar = () => {
     const username = useLogin();
@@ -53,11 +53,11 @@ const Navbar = () => {
                 </div>
                 {isProfileDropdownOpen && (
                     <div className={`absolute right-0 mt-2 w-48 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-800'} rounded-md shadow-lg py-1 text-sm z-20`}>
-                        <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Profil</Link>
-                        <Link to="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Daftar Pembelian</Link>
-                        <Link to="/products" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Kelas Video Course</Link>
+                        <Link to="/profile?tab=profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profil</Link>
+                        <Link to="/profile?tab=courses" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Kelas Video Course</Link>
+                        <Link to="/profile?tab=orders" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Daftar Pembelian</Link>
                         <div className="border-t my-1 dark:border-gray-600"></div>
-                        <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Keluar</button>
+                        <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Keluar</button>
                     </div>
                 )}
             </div>
