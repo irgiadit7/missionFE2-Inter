@@ -14,7 +14,8 @@ import React from 'react';
   import { TotalPriceProvider } from './context/TotalPriceContext.jsx';
   import HomePage from './Pages/homePage.jsx';
   import PaymentPage from './Pages/PaymentPage.jsx';
-  import CoursePlayerPage from './Pages/CoursePlayerPage.jsx'; // <-- Impor halaman baru
+  import CoursePlayerPage from './Pages/CoursePlayerPage.jsx';
+  import CertificatePage from './Pages/CertificatePage.jsx'; // <-- Impor halaman baru
 
   const router = createBrowserRouter([
     {
@@ -47,8 +48,12 @@ import React from 'react';
     element: <PaymentPage />,
     },
     {
-    path: "/learn/:id", // <-- Tambahkan rute baru di sini
+    path: "/learn/:id",
     element: <CoursePlayerPage />,
+    },
+    {
+    path: "/certificate/:id", // <-- Tambahkan rute baru untuk sertifikat
+    element: <CertificatePage />,
     }
   ])
 
