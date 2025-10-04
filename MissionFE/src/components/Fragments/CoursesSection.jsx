@@ -34,7 +34,7 @@ const CourseCard = ({ course }) => {
     const { isDarkMode } = useContext(DarkMode);
     return (
         <Link to={`/products/${course.id}`} className={`course-card rounded-lg shadow-sm overflow-hidden flex flex-col transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
-            <div className={`w-full h-48 flex justify-center items-center p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`w-full h-48 flex justify-center items-center p-4 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
                 <img src={course.image} alt={course.title} className="w-full h-full rounded-md object-cover" />
             </div>
             <div className="p-4 flex flex-col flex-grow">
