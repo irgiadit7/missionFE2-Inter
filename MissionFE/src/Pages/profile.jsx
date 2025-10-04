@@ -123,7 +123,7 @@ const MyCoursesContent = ({ isDarkMode }) => (
                     <div className="p-4">
                         <h3 className="font-bold h-12">{course.title}</h3>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">oleh {course.author}</p>
-                        <Link to={`/products/${course.id}`} className="block w-full text-center bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                        <Link to={`/learn/${course.id}`} className="block w-full text-center bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">
                             Masuk Kelas
                         </Link>
                     </div>
@@ -161,7 +161,7 @@ const ProfilePages = () => {
             <main className="container mx-auto px-4 py-8 md:py-12 flex-grow">
                 <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
                     {/* Sidebar */}
-                    <aside className="md:w-1/4 lg:w-1/5">
+                    <aside className="md:w-1-4 lg:w-1/5">
                         <div className={`p-4 rounded-lg shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
                             <nav className="space-y-2">
                                 <button onClick={() => handleTabClick('profile')} className={getTabClass('profile')}>
