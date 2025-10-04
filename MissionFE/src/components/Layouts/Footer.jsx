@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { DarkMode } from '../../context/DarkMode';
 
 const Footer = () => {
+    const { isDarkMode } = useContext(DarkMode);
+
     const animationStyles = `
         .animate-gradient-flow {
             background: linear-gradient(90deg, #F64920, #FFBD3A, #F64920);
@@ -18,13 +21,20 @@ const Footer = () => {
         }
     `;
 
+    // Mendefinisikan class secara kondisional
+    const footerClasses = isDarkMode 
+        ? 'bg-gray-900 text-gray-300 shadow-[0_-4px_6px_-1px_rgba(255,255,255,0.05)]' 
+        : 'bg-white text-gray-600 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]';
+    
+    const headingClasses = isDarkMode ? 'text-white' : 'text-gray-900';
+    const linkClasses = isDarkMode ? 'hover:text-yellow-400' : 'hover:text-yellow-500';
+    const borderClasses = isDarkMode ? 'border-gray-700' : 'border-gray-200';
+
     return (
         <>
             <style>{animationStyles}</style>
             
-            <footer 
-                className="bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 py-16 px-8 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_6px_-1px_rgba(255,255,255,0.05)]"
-            >
+            <footer className={`py-16 px-8 ${footerClasses}`}>
                 <div className="container mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
                         
@@ -35,47 +45,47 @@ const Footer = () => {
                                     videobelajar
                                  </span>
                             </Link>
-                            <p className="mb-4 font-semibold text-gray-800 dark:text-white">Gali Potensi Anda Melalui Pembelajaran Video di harisenin.id!</p>
+                            <p className={`mb-4 font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Gali Potensi Anda Melalui Pembelajaran Video di harisenin.id!</p>
                             <p className="text-sm">Jl. Usman Effendi No. 50 Lowokwaru, Malang</p>
                             <p className="text-sm">+62-877-7123-1234</p>
                         </div>
 
                         {/* Kolom Kategori */}
                         <div>
-                            <h4 className="font-bold text-gray-900 dark:text-white mb-4">Kategori</h4>
+                            <h4 className={`font-bold mb-4 ${headingClasses}`}>Kategori</h4>
                             <ul className="space-y-2 text-sm">
-                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Digital & Teknologi</a></li>
-                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Pemasaran</a></li>
-                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Manajemen Bisnis</a></li>
-                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Pengembangan Diri</a></li>
-                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Desain</a></li>
+                                <li><a href="#" className={linkClasses}>Digital & Teknologi</a></li>
+                                <li><a href="#" className={linkClasses}>Pemasaran</a></li>
+                                <li><a href="#" className={linkClasses}>Manajemen Bisnis</a></li>
+                                <li><a href="#" className={linkClasses}>Pengembangan Diri</a></li>
+                                <li><a href="#" className={linkClasses}>Desain</a></li>
                             </ul>
                         </div>
 
                         {/* Kolom Perusahaan */}
                         <div>
-                            <h4 className="font-bold text-gray-900 dark:text-white mb-4">Perusahaan</h4>
+                            <h4 className={`font-bold mb-4 ${headingClasses}`}>Perusahaan</h4>
                             <ul className="space-y-2 text-sm">
-                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Tentang Kami</a></li>
-                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">FAQ</a></li>
-                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Kebijakan Privasi</a></li>
-                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Bantuan</a></li>
+                                <li><a href="#" className={linkClasses}>Tentang Kami</a></li>
+                                <li><a href="#" className={linkClasses}>FAQ</a></li>
+                                <li><a href="#" className={linkClasses}>Kebijakan Privasi</a></li>
+                                <li><a href="#" className={linkClasses}>Bantuan</a></li>
                             </ul>
                         </div>
                         
                         {/* Kolom Komunitas */}
                          <div>
-                            <h4 className="font-bold text-gray-900 dark:text-white mb-4">Komunitas</h4>
+                            <h4 className={`font-bold mb-4 ${headingClasses}`}>Komunitas</h4>
                             <ul className="space-y-2 text-sm">
-                                 <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Tipe Sukses</a></li>
-                                <li><a href="#" className="hover:text-yellow-500 dark:hover:text-yellow-400">Blog</a></li>
+                                 <li><a href="#" className={linkClasses}>Tipe Sukses</a></li>
+                                <li><a href="#" className={linkClasses}>Blog</a></li>
                             </ul>
                         </div>
 
                     </div>
 
                     {/* Footer Bawah */}
-                    <div className="border-t border-gray-200 dark:border-gray-700 pt-8 flex flex-col sm:flex-row justify-between items-center text-xl">
+                    <div className={`border-t pt-8 flex flex-col sm:flex-row justify-between items-center text-xl ${borderClasses}`}>
                         <p>&copy;2025 Irgi adit pratama</p>
                         
                         <div className="flex items-center space-x-4 mt-4 sm:mt-0">
@@ -84,7 +94,7 @@ const Footer = () => {
                                     <path fill="#0288D1" d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5V37z"></path><path fill="#FFF" d="M12 19H17V36H12zM14.485 17h-.028C12.965 17 12 15.888 12 14.499 12 13.08 12.995 12 14.514 12c1.521 0 2.458 1.08 2.486 2.499C17 15.887 16.035 17 14.485 17zM36 36h-5v-9.099c0-2.198-1.225-3.698-3.192-3.698-1.501 0-2.313 1.012-2.707 1.99C24.957 25.543 25 26.511 25 27v9h-5V19h5v2.616C25.721 20.5 26.85 19 29.738 19c3.578 0 6.261 2.25 6.261 7.274L36 36 36 36z"></path>
                                 </svg>
                             </a>
-                            <a href="https://github.com/irgiadit7" aria-label="Github" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                            <a href="https://github.com/irgiadit7" aria-label="Github" target="_blank" rel="noopener noreferrer" className={`text-gray-500 ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="38" height="38" viewBox="0 0 172 172">
                                     <g fillRule="nonzero" stroke="none" strokeWidth="1" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" strokeDasharray="" strokeDashoffset="0" fontFamily="none" fontWeight="none" fontSize="none" textAnchor="none" style={{ mixBlendMode: 'normal' }}>
                                         <path d="M0,172v-172h172v172z" fill="none"></path>
