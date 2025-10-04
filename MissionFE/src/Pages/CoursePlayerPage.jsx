@@ -12,9 +12,9 @@ const allCoursesData = [
         modules: [
             { type: 'rules', title: 'Aturan & Pengenalan', duration: '5 Menit' },
             { type: 'video', title: 'Video: Intro to Auditing', duration: '22 Menit', videoUrl: 'https://www.youtube.com/embed/KIvWYWS3VUk' },
-            { 
-                type: 'quiz', 
-                title: 'Quiz: Auditing Fundamentals', 
+            {
+                type: 'quiz',
+                title: 'Quiz: Auditing Fundamentals',
                 duration: '5 Soal',
                 questions: [
                     { id: 1, text: "Apa tujuan utama dari audit laporan keuangan?", options: ["Menemukan semua penipuan (fraud)", "Memberikan opini atas kewajaran laporan keuangan", "Menjamin perusahaan akan profit", "Mengevaluasi kinerja CEO"], correctAnswer: "Memberikan opini atas kewajaran laporan keuangan" },
@@ -35,9 +35,9 @@ const allCoursesData = [
         modules: [
             { type: 'video', title: 'Video: Overcoming Stage Fright', duration: '18 Menit', videoUrl: 'https://www.youtube.com/embed/-QIncK5GDTA' },
             { type: 'video', title: 'Video: Structuring Your Speech', duration: '25 Menit', videoUrl: 'https://www.youtube.com/embed/Q4K0SnRlik0' },
-            { 
-                type: 'quiz', 
-                title: 'Quiz: Public Speaking Basics', 
+            {
+                type: 'quiz',
+                title: 'Quiz: Public Speaking Basics',
                 duration: '5 Soal',
                 questions: [
                     { id: 1, text: "Elemen kunci dari komunikasi yang efektif adalah...", options: ["Hanya berbicara", "Berbicara dan mendengarkan", "Menggunakan slide presentasi yang rumit", "Berbicara dengan cepat"], correctAnswer: "Berbicara dan mendengarkan" },
@@ -81,12 +81,16 @@ const VideoContent = ({ module, course }) => (
 
 const RulesContent = ({ module }) => (
     <div className="space-y-6">
-        <div className="aspect-video bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center"><h2 className="text-6xl md:text-8xl font-black tracking-wider">RULES</h2></div>
+        {/* Anda bisa mengatur tinggi gambar di sini dengan mengubah class `h-72`. Contoh: h-64, h-80, dll. */}
+        <div className="h-72 bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center overflow-hidden">
+            <img src="/images/learn/rules.webp" alt="Rules" className="w-full h-full object-cover"/>
+        </div>
         <h3 className="text-2xl font-bold">{module.title}</h3>
         <p>Kerjakan pre-test dengan sebaik mungkin untuk mengukur pemahaman awalmu. Jawablah materi yang sudah kamu pelajari dengan jujur dan sungguh-sungguh.</p>
         <button className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700">Mulai Pre-Test</button>
     </div>
 );
+
 
 // --- KOMPONEN KUIS BARU ---
 const QuizContent = ({ module, isDarkMode }) => {
@@ -151,11 +155,15 @@ const QuizContent = ({ module, isDarkMode }) => {
 
 const CongratsContent = ({ module }) => (
     <div className="text-center p-8">
-        <div className="aspect-video bg-green-200 dark:bg-green-900/50 rounded-lg flex items-center justify-center mb-6"><h2 className="text-6xl md:text-8xl font-black tracking-wider text-green-600">CONGRATS</h2></div>
+        {/* Anda bisa mengatur tinggi gambar di sini dengan mengubah class `h-72`. Contoh: h-64, h-80, dll. */}
+        <div className="h-72 bg-green-200 dark:bg-green-900/50 rounded-lg flex items-center justify-center mb-6 overflow-hidden">
+            <img src="/images/learn/congrats.webp" alt="Congratulations" className="w-full h-full object-cover"/>
+        </div>
         <p className="text-xl font-semibold">{module.title}</p>
         <p>Teruskan kerja bagusmu dan selesaikan semua modul untuk mendapatkan sertifikat!</p>
     </div>
 );
+
 
 // --- MAIN PAGE COMPONENT ---
 const CoursePlayerPage = () => {
@@ -173,7 +181,7 @@ const CoursePlayerPage = () => {
     if (!courseData) {
         return ( <div className={`min-h-screen flex flex-col items-center justify-center ${isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-50 text-gray-700'}`}><h1 className="text-2xl font-bold">Kursus Tidak Ditemukan</h1><Link to="/" className="mt-4 text-green-600 hover:underline">Kembali ke Beranda</Link></div>);
     }
-    
+
     const activeModule = courseData.modules[activeModuleIndex];
     const progressPercentage = ((activeModuleIndex + 1) / courseData.modules.length) * 100;
 
@@ -205,7 +213,7 @@ const CoursePlayerPage = () => {
                         </nav>
                     </div>
                 </aside>
-                <main className="flex-1 p-6 md:p-10 pb-24 md:h-[calc(100vh-64px)] md:overflow-y-auto">
+                <main className="flex-1 p-6 md:p-10 pb-32 md:h-[calc(100vh-64px)] md:overflow-y-auto">
                     {activeModule.type === 'video' && <VideoContent module={activeModule} course={courseData} />}
                     {activeModule.type === 'rules' && <RulesContent module={activeModule} />}
                     {activeModule.type === 'quiz' && <QuizContent module={activeModule} isDarkMode={isDarkMode} />}
