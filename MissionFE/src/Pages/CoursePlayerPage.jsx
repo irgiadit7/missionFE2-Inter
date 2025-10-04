@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom'; // Tambahkan useNavigate
+import { useParams, Link, useNavigate } from 'react-router-dom'; 
 import { DarkMode } from '../context/DarkMode';
+import ThemeToggle from '../components/Elements/Toggle/ThemeToggle'; // Import ThemeToggle
 
 // --- DATABASE KURSUS (DUMMY) DENGAN DATA KUIS ---
 const allCoursesData = [
@@ -298,14 +299,13 @@ const CongratsContent = ({ module, activeModuleIndex, courseModulesLength, cours
 // --- MAIN PAGE COMPONENT ---
 const CoursePlayerPage = () => {
     const { id } = useParams();
-    const { isDarkMode } = useContext(DarkMode);
+    const { isDarkMode, setIsDarkMode } = useContext(DarkMode); // Ambil setIsDarkMode
     const [activeModuleIndex, setActiveModuleIndex] = useState(0);
 
     const courseData = allCoursesData.find(course => course.id === parseInt(id));
-    const [quizCompleted, setQuizCompleted] = useState(false); // State untuk menandai kuis selesai (lulus)
+    const [quizCompleted, setQuizCompleted] = useState(false); 
 
     useEffect(() => {
-        // Reset state kuis ketika ID kursus berubah
         setQuizCompleted(false);
         setActiveModuleIndex(0);
         window.scrollTo(0, 0);
@@ -316,7 +316,6 @@ const CoursePlayerPage = () => {
             setQuizCompleted(true);
         } else {
              setQuizCompleted(false);
-             // Opsional: Tetap di modul kuis atau pindah ke modul lain
         }
     };
 
@@ -345,16 +344,30 @@ const CoursePlayerPage = () => {
 
     return (
         <div className={`min-h-screen flex flex-col ${isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-50 text-gray-700'}`}>
+            {/* Header dengan Theme Toggle */}
             <header className={`sticky top-0 z-20 shadow-sm ${isDarkMode ? 'bg-gray-900 border-b border-gray-700' : 'bg-white border-b'}`}>
                 <div className="container mx-auto px-4 flex justify-between items-center h-16">
-                    <Link to="/profile?tab=courses" className="flex items-center gap-2 font-semibold hover:text-green-500 transition-colors"><ArrowLeftIcon /><span className="hidden md:inline">{courseData.title}</span></Link>
+                    <Link to="/profile?tab=courses" className="flex items-center gap-2 font-semibold hover:text-green-500 transition-colors">
+                        <ArrowLeftIcon />
+                        <span className="hidden md:inline">{courseData.title}</span>
+                    </Link>
+                    
+                    {/* Progress Bar */}
                     <div className="flex-1 flex justify-center items-center gap-4 mx-4">
-                        <div className="w-full max-w-xs bg-gray-200 rounded-full h-2.5 dark:bg-gray-700"><div className="bg-yellow-400 h-2.5 rounded-full" style={{ width: `${progressPercentage}%` }}></div></div>
+                        <div className="w-full max-w-xs bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                            <div className="bg-yellow-400 h-2.5 rounded-full" style={{ width: `${progressPercentage}%` }}></div>
+                        </div>
                         <span className="text-sm font-semibold text-yellow-500">{Math.round(progressPercentage)}%</span>
                     </div>
-                    <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center font-bold text-white">J</div>
+                    
+                    {/* Theme Toggle dan Profil (posisi ditukar) */}
+                    <div className="flex items-center gap-4">
+                         <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center font-bold text-white">J</div>
+                         <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} /> 
+                    </div>
                 </div>
             </header>
+            
             <div className="container mx-auto flex flex-col md:flex-row flex-1">
                 <aside className={`w-full md:w-[350px] p-4 border-r ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white'}`}>
                     <div className="md:h-[calc(100vh-144px)] md:overflow-y-auto pr-2">

@@ -48,7 +48,7 @@ const Header = ({ simple = false }) => {
                 <header className={`sticky top-0 z-50 shadow-md ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
                     <div className="container mx-auto p-4 flex justify-between items-center">
                         <Link to="/" className="text-2xl font-extrabold">
-                            <span className="animate-gradient-flow">videocourse</span>
+                            <span className="animate-gradient-flow">videobelajar</span>
                         </Link>
                         <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
                     </div>
