@@ -32,6 +32,9 @@ const StarRating = ({ rating }) => {
 
 const CourseCard = ({ course }) => {
     const { isDarkMode } = useContext(DarkMode);
+    // Menggunakan ID kursus untuk menentukan path gambar tutor
+    const tutorImage = `/images/tutor/${course.id}.webp`;
+
     return (
         <Link to={`/products/${course.id}`} className={`course-card rounded-lg shadow-sm overflow-hidden flex flex-col transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
             <div className={`w-full h-48 flex justify-center items-center p-4 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
@@ -40,7 +43,8 @@ const CourseCard = ({ course }) => {
             <div className="p-4 flex flex-col flex-grow">
                 <h3 className={`text-lg font-semibold mb-2 group-hover:text-yellow-500 h-14 overflow-hidden ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{course.title}</h3>
                 <p className={`text-sm mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                    <img src="/images/avatar.png" alt="author" className="w-6 h-6 rounded-full inline-block mr-2" />
+                    {/* Mengganti avatar generik dengan gambar tutor bernomor */}
+                    <img src={tutorImage} alt="author" className="w-6 h-6 rounded-full inline-block mr-2" />
                     <span>{course.author}</span>
                 </p>
                 <p className={`text-sm mb-3 flex-grow ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>

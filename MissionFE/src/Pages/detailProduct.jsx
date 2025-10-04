@@ -52,33 +52,39 @@ const AccordionItem = ({ title, children, isOpen, onClick }) => (
     </div>
 );
 
-const CourseCard = ({ course, isDarkMode }) => (
-    <Link 
-        to={`/products/${course.id}`} 
-        className={`course-card rounded-lg shadow-sm border overflow-hidden flex flex-col transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group ${isDarkMode ? 'bg-slate-900 border-gray-700' : 'bg-white border-gray-200'}`}
-    >
-        <div className={`w-full h-48 flex justify-center items-center p-4 ${isDarkMode ? 'bg-slate-800' : 'bg-white'}`}>
-            <img src={course.image} alt={course.title} className="w-full h-full rounded-md object-cover" />
-        </div>
-        <div className="p-4 flex flex-col flex-grow">
-            <h3 className={`text-lg font-semibold mb-2 group-hover:text-yellow-500 h-14 overflow-hidden ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{course.title}</h3>
-            <p className={`text-sm mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                <img src="/images/avatar.png" alt="author" className="w-6 h-6 rounded-full inline-block mr-2" />
-                <span>{course.author}</span>
-            </p>
-            <p className={`text-sm mb-3 flex-grow ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                {course.desc.length > 100 ? `${course.desc.substring(0, 100)}...` : course.desc}
-            </p>
-            <div className={`flex justify-between items-center mt-auto pt-2 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-100'}`}>
-                <div className="flex items-center">
-                    <StarRating rating={course.rating} />
-                    <span className={`text-xs ml-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>({course.rating})</span>
-                </div>
-                <span className="text-lg font-bold text-green-500">{`Rp ${course.price}k`}</span>
+const CourseCard = ({ course, isDarkMode }) => {
+    // Menetapkan gambar tutor sesuai ID kursus
+    const tutorImage = `/images/tutor/${course.id}.webp`;
+    
+    return (
+        <Link 
+            to={`/products/${course.id}`} 
+            className={`course-card rounded-lg shadow-sm border overflow-hidden flex flex-col transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group ${isDarkMode ? 'bg-slate-900 border-gray-700' : 'bg-white border-gray-200'}`}
+        >
+            <div className={`w-full h-48 flex justify-center items-center p-4 ${isDarkMode ? 'bg-slate-800' : 'bg-white'}`}>
+                <img src={course.image} alt={course.title} className="w-full h-full rounded-md object-cover" />
             </div>
-        </div>
-    </Link>
-);
+            <div className="p-4 flex flex-col flex-grow">
+                <h3 className={`text-lg font-semibold mb-2 group-hover:text-yellow-500 h-14 overflow-hidden ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{course.title}</h3>
+                <p className={`text-sm mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    {/* Menggunakan gambar tutor bernomor */}
+                    <img src={tutorImage} alt="author" className="w-6 h-6 rounded-full inline-block mr-2" />
+                    <span>{course.author}</span>
+                </p>
+                <p className={`text-sm mb-3 flex-grow ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    {course.desc.length > 100 ? `${course.desc.substring(0, 100)}...` : course.desc}
+                </p>
+                <div className={`flex justify-between items-center mt-auto pt-2 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-100'}`}>
+                    <div className="flex items-center">
+                        <StarRating rating={course.rating} />
+                        <span className={`text-xs ml-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>({course.rating})</span>
+                    </div>
+                    <span className="text-lg font-bold text-green-500">{`Rp ${course.price}k`}</span>
+                </div>
+            </div>
+        </Link>
+    );
+};
 
 
 const DetailProductPage = () => {
@@ -95,9 +101,10 @@ const DetailProductPage = () => {
         { title: "Introduction to UX research", videos: [] },
     ];
     
+    // Avatar untuk Reviewers (menggunakan gambar tutor bernomor 2 dan 4)
     const reviews = [
-        { name: "Gregorius Edrik Lawanto", batch: "Alumni Batch 2", reviewText: "Berkarier di bidang HR selama lebih dari 3 tahun. Saat ini bekerja sebagai Senior Talent Acquisition Specialist di Wings Group Indonesia (Sayap Mas Utama) selama hampir 1 tahun.", avatar: "/images/avatar.png", rating: 3.5 },
-        { name: "Alexandra Daddario", batch: "Alumni Batch 4", reviewText: "Kursus ini sangat membantu saya dalam memahami fundamental desain. Materinya mudah diikuti dan instrukturnya sangat profesional. Sangat direkomendasikan!", avatar: "/images/avatar.png", rating: 4.5 },
+        { name: "Gregorius Edrik Lawanto", batch: "Alumni Batch 2", reviewText: "Berkarier di bidang HR selama lebih dari 3 tahun. Saat ini bekerja sebagai Senior Talent Acquisition Specialist di Wings Group Indonesia (Sayap Mas Utama) selama hampir 1 tahun.", avatar: "/images/tutor/2.webp", rating: 3.5 },
+        { name: "Alexandra Daddario", batch: "Alumni Batch 4", reviewText: "Kursus ini sangat membantu saya dalam memahami fundamental desain. Materinya mudah diikuti dan instrukturnya sangat profesional. Sangat direkomendasikan!", avatar: "/images/tutor/4.webp", rating: 4.5 },
     ];
 
     useEffect(() => {
@@ -130,19 +137,43 @@ const DetailProductPage = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2">
                         <div className="relative rounded-lg overflow-hidden mb-8 text-white shadow-lg min-h-[300px] bg-gray-800"><img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover opacity-40" /><div className="relative z-10 p-8 md:p-12 flex flex-col items-center justify-center text-center h-full min-h-[300px]"><h1 className="text-3xl md:text-4xl font-bold mb-3">{product.title}</h1><p className="text-base mb-4">Belajar bersama tutor profesional di Video Course. Kapanpun, di manapun.</p><div className="flex items-center justify-center"><StarRating rating={product.rating} size="w-5 h-5" /><span className="ml-2 text-sm">({product.rating})</span></div></div></div>
-                        <div className="space-y-10">
-                            <div><h2 className="text-2xl font-bold mb-3">Deskripsi</h2><p className="text-gray-600 dark:text-gray-300 leading-relaxed">{product.description}</p></div>
-                            <div>
-                                <h2 className="text-2xl font-bold mb-4">Belajar bersama Tutor Profesional</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className={`p-6 border rounded-lg ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'bg-white'}`}><div className="flex items-center gap-4"><img src="/images/avatar.png" alt={product.author} className="w-12 h-12 rounded-full" /><div><h3 className="font-bold text-lg">{product.author}</h3><p className="text-sm text-gray-500">Tutor di bidang {product.category}</p></div></div><p className="text-sm text-gray-600 dark:text-gray-400 mt-4">Berpengalaman lebih dari 5 tahun di industri dan telah membantu ratusan siswa mencapai impian karir mereka.</p></div>
-                                    <div className={`p-6 border rounded-lg ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'bg-white'}`}><div className="flex items-center gap-4"><img src="/images/avatar.png" alt="Jane Doe" className="w-12 h-12 rounded-full" /><div><h3 className="font-bold text-lg">Jane Doe</h3><p className="text-sm text-gray-500">Asisten Tutor</p></div></div><p className="text-sm text-gray-600 dark:text-gray-400 mt-4">Spesialis dalam memberikan feedback dan membantu siswa mengatasi kesulitan belajar.</p></div>
+                            <div className="space-y-10">
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-3">Deskripsi</h2>
+                                    {/* MODIFIKASI: Menambahkan 'font-semibold' di Light Mode */}
+                                    <p className={`dark:text-gray-300 leading-relaxed ${isDarkMode ? '' : 'text-gray-800 font-semibold'}`}>{product.description}</p>
                                 </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold mb-4">Belajar bersama Tutor Profesional</h2>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {/* Avatar untuk Tutor Utama (menggunakan gambar tutor bernomor 1) */}
+                                        <div className={`p-6 border rounded-lg ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'bg-white'}`}>
+                                            <div className="flex items-center gap-4">
+                                                <img src="/images/tutor/1.webp" alt={product.author} className="w-12 h-12 rounded-full" />
+                                                <div>
+                                                    <h3 className="font-bold text-lg">{product.author}</h3>
+                                                    <p className="text-sm text-gray-500">Tutor di bidang {product.category}</p>
+                                                </div>
+                                            </div>
+                                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-4">Berpengalaman lebih dari 5 tahun di industri dan telah membantu ratusan siswa mencapai impian karir mereka.</p>
+                                        </div>
+                                        {/* Avatar untuk Asisten Tutor (menggunakan gambar tutor bernomor 3) */}
+                                        <div className={`p-6 border rounded-lg ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'bg-white'}`}>
+                                            <div className="flex items-center gap-4">
+                                                <img src="/images/tutor/3.webp" alt="Jane Doe" className="w-12 h-12 rounded-full" />
+                                                <div>
+                                                    <h3 className="font-bold text-lg">Jane Doe</h3>
+                                                    <p className="text-sm text-gray-500">Asisten Tutor</p>
+                                                </div>
+                                            </div>
+                                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-4">Spesialis dalam memberikan feedback dan membantu siswa mengatasi kesulitan belajar.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div><h2 className="text-2xl font-bold mb-3">Kamu akan Mempelajari</h2><div className={`rounded-lg border p-4 ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'bg-white'}`}>{courseMaterials.map((item, index) => (<AccordionItem key={index} title={item.title} isOpen={openAccordion === index} onClick={() => setOpenAccordion(openAccordion === index ? null : index)}><div className="space-y-4">{item.videos.length > 0 ? (item.videos.map((video, videoIndex) => (<div key={videoIndex} className="flex justify-between items-center text-gray-600 dark:text-gray-400"><div className="flex items-center"><svg className="w-6 h-6 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span className="font-medium">{video.title}</span></div><span className="text-sm font-medium">{video.duration}</span></div>))) : (<p className="text-sm text-gray-400">Detail untuk bab ini akan segera tersedia.</p>)}</div></AccordionItem>))}</div></div>
+                                <div><h2 className="text-2xl font-bold mb-4">Rating dan Review</h2><div className={`p-6 border rounded-lg shadow-md ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'bg-white'}`}><div className="grid grid-cols-1 md:grid-cols-2 gap-8">{reviews.map((review, index) => (<div key={index} ><div className="flex items-center gap-4 mb-3"><img src={review.avatar} alt={review.name} className="w-12 h-12 rounded-full" /><div><h3 className="font-bold text-lg">{review.name}</h3><p className="text-sm text-gray-500">{review.batch}</p></div></div><p className="text-gray-600 dark:text-gray-400 my-4 text-sm">"{review.reviewText}"</p><div className="flex items-center gap-2"><StarRating rating={review.rating} /><span className="text-sm font-bold">{review.rating}</span></div></div>))}</div></div></div>
                             </div>
-                            <div><h2 className="text-2xl font-bold mb-3">Kamu akan Mempelajari</h2><div className={`rounded-lg border p-4 ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'bg-white'}`}>{courseMaterials.map((item, index) => (<AccordionItem key={index} title={item.title} isOpen={openAccordion === index} onClick={() => setOpenAccordion(openAccordion === index ? null : index)}><div className="space-y-4">{item.videos.length > 0 ? (item.videos.map((video, videoIndex) => (<div key={videoIndex} className="flex justify-between items-center text-gray-600 dark:text-gray-400"><div className="flex items-center"><svg className="w-6 h-6 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span className="font-medium">{video.title}</span></div><span className="text-sm font-medium">{video.duration}</span></div>))) : (<p className="text-sm text-gray-400">Detail untuk bab ini akan segera tersedia.</p>)}</div></AccordionItem>))}</div></div>
-                            <div><h2 className="text-2xl font-bold mb-4">Rating dan Review</h2><div className={`p-6 border rounded-lg shadow-md ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'bg-white'}`}><div className="grid grid-cols-1 md:grid-cols-2 gap-8">{reviews.map((review, index) => (<div key={index} ><div className="flex items-center gap-4 mb-3"><img src={review.avatar} alt={review.name} className="w-12 h-12 rounded-full" /><div><h3 className="font-bold text-lg">{review.name}</h3><p className="text-sm text-gray-500">{review.batch}</p></div></div><p className="text-gray-600 dark:text-gray-400 my-4 text-sm">"{review.reviewText}"</p><div className="flex items-center gap-2"><StarRating rating={review.rating} /><span className="text-sm font-bold">{review.rating}</span></div></div>))}</div></div></div>
                         </div>
-                    </div>
                     <div className="lg:col-span-1">
                          <div className="sticky top-24">
                             <div className={`border rounded-lg shadow-lg p-6 ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'bg-white'}`}>
