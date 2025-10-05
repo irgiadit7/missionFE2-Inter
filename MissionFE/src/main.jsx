@@ -5,7 +5,6 @@ import React from 'react';
   import LoginPages from './Pages/login.jsx';
   import RegisterPages from './Pages/register.jsx';
   import ErrorPage from './Pages/404.jsx';
-  import ProductsPages from './Pages/products.jsx';
   import ProfilePages from './Pages/profile.jsx';
   import DetailProductPages from './Pages/detailProduct.jsx';
   import {Provider} from "react-redux";
@@ -15,7 +14,7 @@ import React from 'react';
   import HomePage from './Pages/homePage.jsx';
   import PaymentPage from './Pages/PaymentPage.jsx';
   import CoursePlayerPage from './Pages/CoursePlayerPage.jsx';
-  import CertificatePage from './Pages/CertificatePage.jsx'; // <-- Impor halaman baru
+  import CertificatePage from './Pages/CertificatePage.jsx'; 
 
   const router = createBrowserRouter([
     {
@@ -30,10 +29,6 @@ import React from 'react';
     {
       path: "/register",
       element: <RegisterPages />,
-    },
-    {
-      path: "/products",
-      element: <ProductsPages />,
     },
     {
     path: "/profile",
@@ -52,10 +47,12 @@ import React from 'react';
     element: <CoursePlayerPage />,
     },
     {
-    path: "/certificate/:id", // <-- Tambahkan rute baru untuk sertifikat
+    path: "/certificate/:id",
     element: <CertificatePage />,
     }
   ])
+
+  // ... sisa kode ...
 
   createRoot(document.getElementById('root')).render(
     <React.StrictMode>
