@@ -32,7 +32,7 @@ const Header = ({ simple = false }) => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         localStorage.removeItem("password");
-        window.location.href = "/login";
+        window.location.href = "/";
     };
     
     // Handler untuk Desktop (Hover)
@@ -114,11 +114,11 @@ const Header = ({ simple = false }) => {
                                     </div>
                                     {isProfileDropdownOpen && (
                                         <div className={`absolute right-0 mt-2 w-48 ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-700'} rounded-md shadow-lg py-1 text-sm z-20`}>
-                                            <Link to="/profile?tab=profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Profil</Link>
-                                            <Link to="/profile?tab=courses" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Kelas Video Course</Link>
-                                            <Link to="/profile?tab=orders" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Daftar Pembelian</Link>
+                                            <Link to="/profile?tab=profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-400 dark:hover:text-white">Profil</Link>
+                                            <Link to="/profile?tab=courses" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-400 dark:hover:text-white">Kelas Video Course</Link>
+                                            <Link to="/profile?tab=orders" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-400 dark:hover:text-white">Daftar Pembelian</Link>
                                             <div className="border-t my-1 dark:border-gray-600"></div>
-                                            <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Keluar</button>
+                                            <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-400 dark:hover:text-red-600">Keluar</button>
                                         </div>
                                     )}
                                 </div>
