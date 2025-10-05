@@ -5,16 +5,13 @@ import ThemeToggle from '../Elements/Toggle/ThemeToggle';
 
 const Header = ({ simple = false }) => {
     const { isDarkMode, setIsDarkMode } = useContext(DarkMode);
-    // openMenu digunakan untuk dropdown desktop (hover) dan menu bertingkat mobile (click)
     const [openMenu, setOpenMenu] = useState(null); 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
-    // isProfileDropdownOpen hanya untuk hover desktop
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false); 
     const profileTimeoutRef = useRef(null);
     const menuTimeoutRef = useRef(null);
     
-    // STATE BARU untuk mengelola menu mobile
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
 
     useEffect(() => {
@@ -35,16 +32,13 @@ const Header = ({ simple = false }) => {
         window.location.href = "/";
     };
     
-    // Handler untuk Desktop (Hover)
     const handleProfileMouseEnter = () => { clearTimeout(profileTimeoutRef.current); setIsProfileDropdownOpen(true); };
     const handleProfileMouseLeave = () => { profileTimeoutRef.current = setTimeout(() => setIsProfileDropdownOpen(false), 200); };
     const handleMenuMouseEnter = (menu) => { clearTimeout(menuTimeoutRef.current); setOpenMenu(menu); };
     const handleMenuMouseLeave = () => { menuTimeoutRef.current = setTimeout(() => setOpenMenu(null), 200); };
     
-    // Handler untuk Mobile (Click)
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(prev => !prev);
-        // Reset nested menu saat menu utama ditutup/dibuka
         setOpenMenu(null); 
     };
 
@@ -53,7 +47,6 @@ const Header = ({ simple = false }) => {
     };
 
     const handleLinkClick = () => {
-        // Otomatis menutup menu mobile saat navigasi terjadi
         setIsMobileMenuOpen(false);
     };
 
@@ -63,9 +56,26 @@ const Header = ({ simple = false }) => {
         @keyframes gradient-flow { from { background-position: 0% center; } to { background-position: -200% center; } }
     `;
 
-    // Icon Hamburger dan Close
     const MenuIcon = (props) => <svg {...props} className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>;
     const CloseIcon = (props) => <svg {...props} className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>;
+    const SunIcon = (props) => (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+    );
+    const MoonIcon = (props) => (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    );
 
     if (simple) {
         return (
@@ -76,7 +86,11 @@ const Header = ({ simple = false }) => {
                         <Link to="/" className="text-2xl font-extrabold">
                             <span className="animate-gradient-flow">videobelajar</span>
                         </Link>
-                        <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+                        <div className="flex items-center gap-2">
+                            <SunIcon className={`w-6 h-6 ${isDarkMode ? 'text-gray-500' : 'text-yellow-500'}`} />
+                            <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+                            <MoonIcon className={`w-6 h-6 ${isDarkMode ? 'text-blue-500' : 'text-gray-400'}`} />
+                        </div>
                     </div>
                 </header>
             </>
@@ -128,7 +142,11 @@ const Header = ({ simple = false }) => {
                                     <Link to="/register" className="bg-yellow-500 text-black px-4 py-2 rounded-md font-semibold hover:bg-yellow-600">Daftar</Link>
                                 </>
                             )}
-                            <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+                            <div className="flex items-center gap-2">
+                                <SunIcon className={`w-6 h-6 ${isDarkMode ? 'text-gray-500' : 'text-yellow-500'}`} />
+                                <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+                                <MoonIcon className={`w-6 h-6 ${isDarkMode ? 'text-blue-500' : 'text-gray-400'}`} />
+                            </div>
                         </div>
                     </div>
 
@@ -160,8 +178,8 @@ const Header = ({ simple = false }) => {
                                    ))}
                                </div>
                             )}
-                            {openMenu === 'corporate' && (<div><p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Informasi lebih lanjut mengenai program corporate.</p></div>)}
-                            {openMenu === 'about' && (<div><p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Informasi tentang kami.</p></div>)}
+                            {openMenu === 'corporate' && (<div><p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Tingkatkan keahlian tim Anda dengan program pembelajaran fleksibel yang dirancang khusus untuk kebutuhan perusahaan. Hubungi kami untuk solusi corporate.</p></div>)}
+                            {openMenu === 'about' && (<div><p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Videobelajar adalah platform revolusioner yang didedikasikan untuk menyediakan pembelajaran video interaktif berkualitas tinggi. Kami percaya bahwa setiap orang berhak mendapatkan akses ke pendidikan terbaik, kapan pun dan di mana pun. Misi kami adalah memberdayakan individu untuk mencapai potensi penuh mereka melalui kursus yang relevan dengan industri, dipandu oleh para ahli di bidangnya.</p></div>)}
                         </div>
                     </div>
                 )}
@@ -171,22 +189,23 @@ const Header = ({ simple = false }) => {
                     className={`md:hidden absolute top-full left-0 w-full shadow-lg transition-all duration-300 ease-in-out z-40 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} ${isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}
                 >
                     <div className={`p-4 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
-                        <nav className="space-y-2 mb-4" onClick={handleLinkClick}>
+                        <nav className="space-y-2 mb-4">
                             {/* Program Menu - Clickable toggle */}
                             <div className={`border rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                                <button onClick={() => toggleNestedMenu('program')} className="w-full flex justify-between items-center p-3 text-left font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                                {/* PERBAIKAN: Efek hover untuk light mode dihilangkan */}
+                                <button onClick={(e) => { e.stopPropagation(); toggleNestedMenu('program'); }} className="w-full flex justify-between items-center p-3 text-left font-semibold  rounded-lg transition-colors">
                                     <span>Program</span>
                                     <svg className={`w-4 h-4 transform transition-transform ${openMenu === 'program' ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
                                 {openMenu === 'program' && (
-                                    <div className="p-3 bg-gray-50 dark:bg-gray-800 space-y-3 transition-all duration-300 ease-in-out">
+                                    <div className={`p-3 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} space-y-3 transition-all duration-300 ease-in-out`} onClick={handleLinkClick}>
                                         {Object.entries(programMenuData).map(([category, courses]) => (
                                             <div key={category} className='pt-2'>
                                                 <h3 className="font-bold text-sm text-gray-500 mb-2">{category}</h3>
                                                 <ul className='space-y-1'>
                                                     {courses.map(course => (
                                                         <li key={course.id}>
-                                                            <Link to={`/products/${course.id}`} className={`text-sm block py-1 px-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{course.title}</Link>
+                                                            <Link to={`/products/${course.id}`} className={`text-sm block py-1 px-2 rounded  ${isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-slate-200'}`}>{course.title}</Link>
                                                         </li>
                                                     ))}
                                                 </ul>
@@ -196,11 +215,37 @@ const Header = ({ simple = false }) => {
                                 )}
                             </div>
 
-                            {/* Corporate Link */}
-                            <Link to="#" className="block p-3 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">Corporate</Link>
+                            {/* Corporate Menu - Clickable toggle */}
+                            <div className={`border rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                                {/* PERBAIKAN: Efek hover untuk light mode dihilangkan */}
+                                <button onClick={(e) => { e.stopPropagation(); toggleNestedMenu('corporate'); }} className="w-full flex justify-between items-center p-3 text-left font-semibold rounded-lg transition-colors">
+                                    <span>Corporate</span>
+                                    <svg className={`w-4 h-4 transform transition-transform ${openMenu === 'corporate' ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                {openMenu === 'corporate' && (
+                                    <div className="p-3  transition-all duration-300 ease-in-out">
+                                        <p className="text-sm ">
+                                            Tingkatkan keahlian tim Anda dengan program pembelajaran fleksibel yang dirancang khusus untuk kebutuhan perusahaan. Hubungi kami untuk solusi corporate.
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
 
-                            {/* About Link */}
-                            <Link to="#" className="block p-3 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">About</Link>
+                            {/* About Menu - Clickable toggle */}
+                            <div className={`border rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                                {/* PERBAIKAN: Efek hover untuk light mode dihilangkan */}
+                                <button onClick={(e) => { e.stopPropagation(); toggleNestedMenu('about'); }} className="w-full flex justify-between items-center p-3 text-left font-semibold  rounded-lg transition-colors">
+                                    <span>About</span>
+                                    <svg className={`w-4 h-4 transform transition-transform ${openMenu === 'about' ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                {openMenu === 'about' && (
+                                    <div className="p-3 transition-all duration-300 ease-in-out">
+                                        <p className="text-sm ">
+                                            Videobelajar adalah platform revolusioner yang didedikasikan untuk menyediakan pembelajaran video interaktif berkualitas tinggi. Misi kami adalah memberdayakan individu untuk mencapai potensi penuh mereka.
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
                         </nav>
                         
                         {/* Auth / Profile Section in Mobile Menu */}
@@ -217,12 +262,12 @@ const Header = ({ simple = false }) => {
                                          <svg className={`w-4 h-4 transform transition-transform ${openMenu === 'profile' ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
                                     {openMenu === 'profile' && (
-                                        <div className="mt-3 space-y-1 border-t pt-3 dark:border-gray-700 transition-all duration-300 ease-in-out">
-                                            <Link to="/profile?tab=profile" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">Profil</Link>
-                                            <Link to="/profile?tab=courses" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">Kelas Video Course</Link>
-                                            <Link to="/profile?tab=orders" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">Daftar Pembelian</Link>
-                                            {/* Menggunakan handleLogout di sini untuk memastikan penutupan menu setelah log out */}
-                                            <button onClick={() => { handleLogout(); handleLinkClick(); }} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md text-red-500">Keluar</button>
+                                        <div className="mt-3 space-y-1 border-t pt-3  transition-all duration-300 ease-in-out">
+                                            {/* PERBAIKAN: Efek hover untuk light mode dihilangkan */}
+                                            <Link to="/profile?tab=profile" className={`block px-4 py-2 text-smrounded-md ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Profil</Link>
+                                            <Link to="/profile?tab=courses" className={`block px-4 py-2 text-smrounded-md ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Kelas Video Course</Link>
+                                            <Link to="/profile?tab=orders" className={`block px-4 py-2 text-smrounded-md ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Daftar Pembelian</Link>
+                                            <button onClick={() => { handleLogout(); handleLinkClick(); }} className={`w-full text-left px-4 py-2 text-sm rounded-md text-red-500  ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Keluar</button>
                                         </div>
                                     )}
                                 </div>
@@ -236,7 +281,11 @@ const Header = ({ simple = false }) => {
                             {/* Theme Toggle in Mobile Menu */}
                             <div className={`flex justify-between items-center p-3 rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
                                 <span className='font-semibold'>Tema</span>
-                                <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+                                <div className="flex items-center gap-2">
+                                    <SunIcon className={`w-5 h-5 ${isDarkMode ? 'text-gray-500' : 'text-yellow-500'}`} />
+                                    <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+                                    <MoonIcon className={`w-5 h-5 ${isDarkMode ? 'text-blue-500' : 'text-gray-400'}`} />
+                                </div>
                             </div>
                         </div>
                     </div>
