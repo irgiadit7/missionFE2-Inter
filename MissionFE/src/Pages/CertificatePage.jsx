@@ -13,7 +13,7 @@ const allCoursesData = [
 const CertificatePage = () => {
     const { id } = useParams();
     const { isDarkMode } = useContext(DarkMode);
-    const username = useLogin(); // Mengambil username dari custom hook useLogin
+    const username = useLogin();
     const [certificateData, setCertificateData] = useState(null);
 
     useEffect(() => {
@@ -43,43 +43,43 @@ const CertificatePage = () => {
         );
     }
     
-    // Nama yang akan ditampilkan di sertifikat (gunakan huruf kapital)
     const displayName = username.toUpperCase() || "PESERTA VIDEO COURSE";
 
     return (
-        <div className={`min-h-screen ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} p-8 print:p-0`}>
+        // Padding utama diperkecil di mobile
+        <div className={`min-h-screen ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} p-4 md:p-8 print:p-0`}>
             
             <div className='max-w-4xl mx-auto'>
                 {/* Tombol Aksi - Sembunyikan saat mencetak */}
-                <div className="flex justify-end space-x-4 mb-6 print:hidden">
-                    <button onClick={handlePrint} className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Cetak Sertifikat</button>
-                    <Link to={`/learn/${id}`} className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600">Kembali ke Kelas</Link>
+                <div className="flex justify-end space-x-2 md:space-x-4 mb-6 print:hidden">
+                    <button onClick={handlePrint} className="bg-blue-600 text-white py-2 px-3 md:px-4 rounded-lg hover:bg-blue-700 text-sm md:text-base">Cetak</button>
+                    <Link to={`/learn/${id}`} className="bg-gray-500 text-white py-2 px-3 md:px-4 rounded-lg hover:bg-gray-600 text-sm md:text-base">Kembali</Link>
                 </div>
 
-                {/* Sertifikat Card */}
-                <div id="certificate" className="bg-white border-8 border-yellow-500 shadow-2xl p-10 md:p-20 text-center landscape:h-[700px]">
-                    <h1 className="text-3xl font-serif font-bold text-yellow-600 mb-2">SERTIFIKAT PENCAPAIAN</h1>
-                    <p className="text-lg mb-6">Diberikan kepada</p>
+                {/* Sertifikat Card - Padding dan ukuran font disesuaikan */}
+                <div id="certificate" className={`bg-white border-8 border-yellow-500 shadow-2xl p-6 md:p-12 text-center`}>
+                    <h1 className="text-2xl md:text-3xl font-serif font-bold text-yellow-600 mb-2">SERTIFIKAT PENCAPAIAN</h1>
+                    <p className="text-base md:text-lg mb-4 md:mb-6">Diberikan kepada</p>
                     
-                    <h2 className="text-5xl md:text-6xl font-extrabold text-green-700 mb-8 font-serif uppercase">{displayName}</h2>
+                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-green-700 mb-6 md:mb-8 font-serif uppercase">{displayName}</h2>
                     
-                    <p className="text-xl mb-4">Atas keberhasilan menyelesaikan kursus video interaktif</p>
+                    <p className="text-base md:text-xl mb-4">Atas keberhasilan menyelesaikan kursus video interaktif</p>
                     
-                    <h3 className="text-3xl font-bold mb-10 text-gray-800 italic">"{certificateData.title}"</h3>
+                    <h3 className="text-xl md:text-3xl font-bold mb-8 md:mb-10 text-gray-800 italic">"{certificateData.title}"</h3>
                     
-                    <div className="flex justify-around items-end">
+                    <div className="flex justify-around items-end mt-4">
                         <div className="text-center">
-                            <p className="font-semibold mb-2">Diberikan pada</p>
-                            <p className="text-lg italic">{formatDate()}</p>
+                            <p className="font-semibold mb-2 text-sm md:text-base">Diberikan pada</p>
+                            <p className="text-sm md:text-lg italic">{formatDate()}</p>
                         </div>
                         <div className="text-center">
-                            <p className="font-semibold mb-10">Instruktur</p>
-                            <div className="w-32 h-1 bg-gray-400 mx-auto"></div>
-                            <p className="font-bold text-lg mt-2">{certificateData.author}</p>
+                            <p className="font-semibold mb-6 md:mb-10 text-sm md:text-base">Instruktur</p>
+                            <div className="w-24 md:w-32 h-0.5 md:h-1 bg-gray-400 mx-auto"></div>
+                            <p className="font-bold text-sm md:text-lg mt-2">{certificateData.author}</p>
                         </div>
                     </div>
 
-                    <p className="text-xs mt-10 text-gray-400">ID Sertifikat: VC-{id}-{new Date().getFullYear()}{new Date().getMonth() + 1}</p>
+                    <p className="text-xs mt-8 md:mt-10 text-gray-400">ID Sertifikat: VC-{id}-{new Date().getFullYear()}{new Date().getMonth() + 1}</p>
                 </div>
             </div>
             

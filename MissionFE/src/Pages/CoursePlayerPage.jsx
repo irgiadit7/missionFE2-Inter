@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom'; 
 import { DarkMode } from '../context/DarkMode';
-import ThemeToggle from '../components/Elements/Toggle/ThemeToggle'; // Import ThemeToggle
+import ThemeToggle from '../components/Elements/Toggle/ThemeToggle';
 
-// --- DATABASE KURSUS (DUMMY) DENGAN DATA KUIS ---
+// --- DATABASE KURSUS (DUMMY) ---
 const allCoursesData = [
     {
         id: 1,
@@ -23,7 +23,6 @@ const allCoursesData = [
                     { id: 3, text: "Siapakah yang bertanggung jawab atas penyusunan laporan keuangan?", options: ["Auditor Eksternal", "Pemerintah", "Manajemen Perusahaan", "Investor"], correctAnswer: "Manajemen Perusahaan" },
                     { id: 4, text: "Apa yang dimaksud dengan 'materialitas' dalam konteks audit?", options: ["Semua kesalahan, sekecil apapun", "Informasi yang jika salah saji dapat memengaruhi keputusan pengguna laporan", "Jumlah total aset perusahaan", "Pendapatan bersih perusahaan"], correctAnswer: "Informasi yang jika salah saji dapat memengaruhi keputusan pengguna laporan" },
                     { id: 5, text: "Bukti audit yang paling andal biasanya berasal dari...", options: ["Manajemen internal", "Pihak ketiga yang independen", "Perhitungan ulang oleh auditor", "Observasi langsung oleh auditor"], correctAnswer: "Pihak ketiga yang independen" },
-                    // Soal tambahan untuk mencapai 10
                     { id: 6, text: "Standar yang digunakan auditor di Indonesia adalah...", options: ["IFRS", "SA (Standar Audit)", "GAAP", "PSAK"], correctAnswer: "SA (Standar Audit)" },
                     { id: 7, text: "Tujuan utama pengujian substantif adalah untuk mendeteksi...", options: ["Kesalahan dalam pengendalian internal", "Kekurangan kompetensi staff", "Salah saji material pada saldo akun", "Prosedur akuntansi yang tidak efisien"], correctAnswer: "Salah saji material pada saldo akun" },
                     { id: 8, text: "Pengendalian internal yang kuat dapat mengurangi...", options: ["Jumlah staf akuntansi", "Biaya pemasaran", "Risiko audit", "Jumlah penjualan"], correctAnswer: "Risiko audit" },
@@ -59,21 +58,17 @@ const allCoursesData = [
     }
 ];
 
-
-// --- ICON COMPONENTS (Tetap sama) ---
 const PlayIcon = ({ className }) => <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>;
 const CheckCircleIcon = ({ className }) => <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>;
 const DocumentTextIcon = ({ className }) => <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>;
 const ArrowLeftIcon = () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>;
 const ArrowRightIcon = () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>;
 
-// --- HELPER COMPONENTS (Tetap sama) ---
 const StarRating = ({ rating }) => {
     const fullStars = Math.floor(rating);
     return <div className="flex items-center">{[...Array(fullStars)].map((_, i) => <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>)}</div>;
 };
 
-// --- LEARNING CONTENT COMPONENTS ---
 const VideoContent = ({ module, course }) => (
     <div className="space-y-4">
         <div className="aspect-video w-full"><iframe className="w-full h-full rounded-lg" src={module.videoUrl} title={module.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe></div>
@@ -88,19 +83,15 @@ const VideoContent = ({ module, course }) => (
 
 const RulesContent = ({ module, handleNextModule }) => (
     <div className="space-y-6">
-        {/* Anda bisa mengatur tinggi gambar di sini dengan mengubah class `h-72`. Contoh: h-64, h-80, dll. */}
-        <div className="h-72 bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center overflow-hidden">
+        <div className="h-48 md:h-64 rounded-lg flex items-center justify-center overflow-hidden">
             <img src="/images/learn/rules.webp" alt="Rules" className="w-full h-full object-cover"/>
         </div>
         <h3 className="text-2xl font-bold">{module.title}</h3>
         <p>Kerjakan pre-test dengan sebaik mungkin untuk mengukur pemahaman awalmu. Jawablah materi yang sudah kamu pelajari dengan jujur dan sungguh-sungguh.</p>
-        {/* Tambahkan tombol untuk langsung ke modul berikutnya jika perlu */}
         <button onClick={handleNextModule} className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700">Mulai Modul Pertama</button>
     </div>
 );
 
-
-// --- KOMPONEN KUIS BARU ---
 const QuizContent = ({ module, isDarkMode, handleQuizComplete, courseId }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswers, setUserAnswers] = useState({});
@@ -116,14 +107,11 @@ const QuizContent = ({ module, isDarkMode, handleQuizComplete, courseId }) => {
                 correctCount++;
             }
         });
-
         setShowResult(true);
-
-        // Logic kelulusan: minimal 7 benar
         if (correctCount >= 7) {
-            handleQuizComplete(true); // Tandai kuis selesai berhasil
+            handleQuizComplete(true);
         } else {
-            handleQuizComplete(false); // Tandai kuis selesai gagal (misalnya, harus mengulang)
+            handleQuizComplete(false);
         }
     };
 
@@ -150,10 +138,8 @@ const QuizContent = ({ module, isDarkMode, handleQuizComplete, courseId }) => {
             });
 
             if (correctCount >= 7) {
-                // Navigasi ke halaman sertifikat
                 navigate(`/certificate/${courseId}`);
             } else {
-                // Reset kuis untuk mengulang
                 setShowResult(false);
                 setUserAnswers({});
                 setCurrentQuestionIndex(0);
@@ -163,7 +149,6 @@ const QuizContent = ({ module, isDarkMode, handleQuizComplete, courseId }) => {
              handleNavigateQuestion(1);
         }
     };
-
 
     const currentQuestion = module.questions[currentQuestionIndex];
     const selectedAnswer = userAnswers[currentQuestion.id];
@@ -179,7 +164,6 @@ const QuizContent = ({ module, isDarkMode, handleQuizComplete, courseId }) => {
                 : `dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`;
         }
         
-        // Mode hasil
         if (isCorrect) {
             return 'border-green-500 bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200';
         } else if (isSelected && !isCorrect) {
@@ -213,12 +197,10 @@ const QuizContent = ({ module, isDarkMode, handleQuizComplete, courseId }) => {
         );
     }
     
-    // Tampilan Kuis
     return (
         <div>
             <h2 className="text-2xl font-bold mb-6">{module.title}</h2>
             <div className="flex flex-col md:flex-row gap-8">
-                {/* Question Navigator */}
                 <div className="w-full md:w-1/4">
                     <h3 className="font-bold mb-2">List Soal</h3>
                     <div className="grid grid-cols-5 gap-2">
@@ -241,7 +223,6 @@ const QuizContent = ({ module, isDarkMode, handleQuizComplete, courseId }) => {
                      <p className="text-sm mt-4 text-gray-500 dark:text-gray-400">Total Soal: {module.questions.length}</p>
                 </div>
 
-                {/* Question and Answers */}
                 <div className="w-full md:w-3/4">
                     <h3 className="font-bold">Pertanyaan {currentQuestionIndex + 1}</h3>
                     <p className="mt-2 mb-4">{currentQuestion.text}</p>
@@ -270,11 +251,9 @@ const QuizContent = ({ module, isDarkMode, handleQuizComplete, courseId }) => {
     );
 };
 
-
 const CongratsContent = ({ module, activeModuleIndex, courseModulesLength, courseId }) => {
     const navigate = useNavigate();
     const handleNext = () => {
-        // Logika untuk navigasi ke Sertifikat jika ini modul terakhir
         if (activeModuleIndex === courseModulesLength - 1) {
             navigate(`/certificate/${courseId}`);
         }
@@ -282,9 +261,8 @@ const CongratsContent = ({ module, activeModuleIndex, courseModulesLength, cours
     
     return (
         <div className="text-center p-8">
-            {/* Anda bisa mengatur tinggi gambar di sini dengan mengubah class `h-72`. Contoh: h-64, h-80, dll. */}
-            <div className="h-72 bg-green-200 dark:bg-green-900/50 rounded-lg flex items-center justify-center mb-6 overflow-hidden">
-                <img src="/images/learn/congrats.webp" alt="Congratulations" className="w-full h-full object-cover"/>
+            <div className="h-60 md:h-64 rounded-lg flex items-center justify-center mb-6 overflow-hidden">
+                <img src="/images/learn/congrats.webp" alt="Congratulations" className="w-full h-full object-contain"/>
             </div>
             <p className="text-xl font-semibold">{module.title}</p>
             <p className="mb-4">Teruskan kerja bagusmu dan selesaikan semua modul untuk mendapatkan sertifikat!</p>
@@ -295,11 +273,9 @@ const CongratsContent = ({ module, activeModuleIndex, courseModulesLength, cours
     );
 };
 
-
-// --- MAIN PAGE COMPONENT ---
 const CoursePlayerPage = () => {
     const { id } = useParams();
-    const { isDarkMode, setIsDarkMode } = useContext(DarkMode); // Ambil setIsDarkMode
+    const { isDarkMode, setIsDarkMode } = useContext(DarkMode);
     const [activeModuleIndex, setActiveModuleIndex] = useState(0);
 
     const courseData = allCoursesData.find(course => course.id === parseInt(id));
@@ -319,7 +295,6 @@ const CoursePlayerPage = () => {
         }
     };
 
-
     if (!courseData) {
         return ( <div className={`min-h-screen flex flex-col items-center justify-center ${isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-50 text-gray-700'}`}><h1 className="text-2xl font-bold">Kursus Tidak Ditemukan</h1><Link to="/" className="mt-4 text-green-600 hover:underline">Kembali ke Beranda</Link></div>);
     }
@@ -330,7 +305,6 @@ const CoursePlayerPage = () => {
     const handleSelectModule = (index) => setActiveModuleIndex(index);
     
     const handleNextModule = () => {
-         // Cek apakah kuis di modul sebelumnya sudah selesai/lulus
         const prevModule = courseData.modules[activeModuleIndex];
         
         if (prevModule.type === 'quiz' && !quizCompleted) {
@@ -341,10 +315,8 @@ const CoursePlayerPage = () => {
         setActiveModuleIndex(Math.min(courseData.modules.length - 1, activeModuleIndex + 1));
     };
 
-
     return (
         <div className={`min-h-screen flex flex-col ${isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-50 text-gray-700'}`}>
-            {/* Header dengan Theme Toggle */}
             <header className={`sticky top-0 z-20 shadow-sm ${isDarkMode ? 'bg-gray-900 border-b border-gray-700' : 'bg-white border-b'}`}>
                 <div className="container mx-auto px-4 flex justify-between items-center h-16">
                     <Link to="/profile?tab=courses" className="flex items-center gap-2 font-semibold hover:text-green-500 transition-colors">
@@ -352,7 +324,6 @@ const CoursePlayerPage = () => {
                         <span className="hidden md:inline">{courseData.title}</span>
                     </Link>
                     
-                    {/* Progress Bar */}
                     <div className="flex-1 flex justify-center items-center gap-4 mx-4">
                         <div className="w-full max-w-xs bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
                             <div className="bg-yellow-400 h-2.5 rounded-full" style={{ width: `${progressPercentage}%` }}></div>
@@ -360,7 +331,6 @@ const CoursePlayerPage = () => {
                         <span className="text-sm font-semibold text-yellow-500">{Math.round(progressPercentage)}%</span>
                     </div>
                     
-                    {/* Theme Toggle dan Profil (posisi ditukar) */}
                     <div className="flex items-center gap-4">
                          <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center font-bold text-white">J</div>
                          <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} /> 
