@@ -17,15 +17,33 @@ const courseData = [
 ];
 
 const paymentOptions = {
-    bank: [{ name: 'Bank BCA' }, { name: 'Bank BNI' }, { name: 'Bank BRI' }, { name: 'Bank Mandiri' }],
-    ewallet: [{ name: 'DANA' }, { name: 'OVO' }, { name: 'LinkAja' }, { name: 'Shopee Pay'}],
-    card: [{ name: 'Kartu Kredit / Debit' }]
+    bank: [
+        { name: 'Bank BCA', image: '/images/payment/bank/bca.webp' },
+        { name: 'Bank BNI', image: '/images/payment/bank/bni.webp' },
+        { name: 'Bank BRI', image: '/images/payment/bank/bri.webp' },
+        { name: 'Bank Mandiri', image: '/images/payment/bank/mandiri.webp' }
+    ],
+    ewallet: [
+        { name: 'DANA', image: '/images/payment/e-wallet/dana.webp' },
+        { name: 'OVO', image: '/images/payment/e-wallet/ovo.webp' },
+        { name: 'LinkAja', image: '/images/payment/e-wallet/linkAja.webp' },
+        { name: 'Shopee Pay', image: '/images/payment/e-wallet/shoppe.webp'}
+    ],
+    card: [{ images: ['/images/payment/visa1.webp', '/images/payment/visa2.webp', '/images/payment/visa3.webp'] }]
 };
+
 
 // --- ICON COMPONENTS ---
 const CheckIcon = () => <svg className="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
 const DocumentIcon = () => <svg className="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>;
 const LanguageIcon = () => <svg className="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m4 13l4-16M11 21L7 5m12 16a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const GreenCheckCircleIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="11.5" fill="white" stroke="#16A34A"/>
+        <path d="M17.3337 8.5L10.0003 15.8333L6.66699 12.5" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+);
+
 
 // --- HELPER COMPONENTS ---
 const CountdownTimer = ({ isDarkMode }) => {
@@ -122,7 +140,7 @@ const PaymentPage = () => {
 
     // --- RENDER ---
     return (
-        <div className={isDarkMode ? 'bg-gray-900' : 'bg-[#FFFDF3]'}>
+        <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-[#FFFDF3]'}`}>
             <Header simple={true} />
             <main className="container mx-auto px-4 py-12">
                 {view === 'instruction' && (
@@ -144,12 +162,23 @@ const PaymentPage = () => {
                                         {Object.entries(paymentOptions).map(([key, options]) => (
                                             <Accordion key={key} title={key.replace(/^\w/, c => c.toUpperCase()).replace('ewallet', 'E-Wallet')} isOpen={openAccordion === key} onClick={() => setOpenAccordion(openAccordion === key ? null : key)} isDarkMode={isDarkMode}>
                                                 {options.map(opt => (
-                                                    <div key={opt.name} onClick={() => setSelectedPayment(opt.name)} className={`p-3 flex items-center justify-between border rounded-lg cursor-pointer transition-colors ${selectedPayment === opt.name ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : isDarkMode ? 'border-gray-600 hover:bg-gray-700' : 'border-gray-200 hover:bg-gray-50'}`}>
+                                                    <div key={opt.name} onClick={() => setSelectedPayment(opt.name)} className={`p-4 flex items-center justify-between border rounded-lg cursor-pointer transition-colors ${selectedPayment === opt.name ? 'border-green-500' : isDarkMode ? 'border-gray-700 hover:bg-gray-800' : 'border-gray-200 hover:bg-gray-50'}`}>
                                                         <div className="flex items-center">
-                                                            <div className={`w-16 h-8 rounded mr-4 flex items-center justify-center text-xs ${isDarkMode ? 'bg-gray-700 text-gray-400' : 'bg-gray-200 text-gray-500'}`}>Logo</div>
+                                                            {/* Conditional rendering for images based on 'card' type */}
+                                                            {key === 'card' && opt.images ? (
+                                                                <div className="flex items-center space-x-2 mr-4">
+                                                                    {opt.images.map((imgSrc, idx) => (
+                                                                        <img key={idx} src={imgSrc} alt={`${opt.name} ${idx + 1}`} className="max-h-4 object-contain" />
+                                                                    ))}
+                                                                </div>
+                                                            ) : opt.image && (
+                                                                <div className="w-10 flex items-center justify-center mr-4">
+                                                                     <img src={opt.image} alt={opt.name} className="max-h-4 object-contain" />
+                                                                </div>
+                                                            )}
                                                             <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>{opt.name}</span>
                                                         </div>
-                                                        <input type="radio" name="payment" readOnly checked={selectedPayment === opt.name} className="form-radio text-green-500 focus:ring-green-500" />
+                                                        {selectedPayment === opt.name && <GreenCheckCircleIcon />}
                                                     </div>
                                                 ))}
                                             </Accordion>
