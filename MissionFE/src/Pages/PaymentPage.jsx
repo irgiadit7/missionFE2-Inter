@@ -17,8 +17,8 @@ const courseData = [
 ];
 
 const paymentOptions = {
-    bank: [{ name: 'Bank BCA' }, { name: 'Bank Mandiri' }, { name: 'Bank BRI' }],
-    ewallet: [{ name: 'Gopay' }, { name: 'OVO' }, { name: 'DANA' }, { name: 'LinkAja' }, { name: 'Shopee Pay'}],
+    bank: [{ name: 'Bank BCA' }, { name: 'Bank BNI' }, { name: 'Bank BRI' }, { name: 'Bank Mandiri' }],
+    ewallet: [{ name: 'DANA' }, { name: 'OVO' }, { name: 'LinkAja' }, { name: 'Shopee Pay'}],
     card: [{ name: 'Kartu Kredit / Debit' }]
 };
 
