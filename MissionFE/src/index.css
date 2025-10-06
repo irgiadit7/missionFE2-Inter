@@ -1,3 +1,36 @@
+/* == Styling Scrollbar Kustom (Final & Adaptif) == */
+
+/* Pengaturan dasar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+/* Secara eksplisit menghilangkan track di SEMUA mode */
+::-webkit-scrollbar-track {
+  background: transparent;
+  background-color: transparent !important; /* Memaksa track untuk transparan */
+  border: none;
+}
+
+/* Handle untuk Light Mode (Default) */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Handle khusus untuk Dark Mode */
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+
 @import "tailwindcss";
 
 .hero {
@@ -8,18 +41,33 @@
     background: url('/path/to/your/section3-image.webp') center center/cover no-repeat;
 }
 
-/* Tambahkan ini di paling bawah file src/index.css */
-
+/* Path gambar yang benar di folder public Anda */
 .hero {
-    /* Ganti dengan path gambar yang benar di folder public Anda */
-    background-image: url('/images/backgorund.webp');
+    background-image: url('/images/HeroImage.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .cta-section {
-    /* Ganti dengan path gambar yang benar di folder public Anda */
-    background-image: url('/images/section3.webp');
+    background-image: url('/images/CTA.webp');
     background-size: cover;
     background-position: center;
+}
+
+/* Styling Scrollbar Kustom untuk Chat AI */
+.chat-body-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-body-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-body-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #6b7280;
+  border-radius: 10px;
+}
+
+.dark .chat-body-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #4b5563;
 }

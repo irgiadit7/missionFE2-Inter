@@ -115,7 +115,7 @@ const ChatAssistant = () => {
                         </button>
                     </div>
 
-                    <div ref={chatBodyRef} className="flex-1 p-4 overflow-y-auto">
+                   <div ref={chatBodyRef} className="flex-1 p-4 overflow-y-auto chat-body-scrollbar">
                         {messages.map((msg, index) => (
                             <div key={index} className={`mb-3 flex ${msg.from === 'bot' ? 'justify-start' : 'justify-end'}`}>
                                 <div className={`inline-block py-2 px-3 rounded-lg max-w-[85%] ${msg.from === 'bot' ? ' text-white' : 'bg-green-200 dark:bg-green-900'}`}>
