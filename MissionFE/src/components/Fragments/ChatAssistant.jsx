@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { DarkMode } from '../../context/DarkMode';
 
-// Data untuk tombol opsi pertanyaan awal
 const quickReplies = [
     { label: 'Tentang videobelajar', value: 'Boleh jelaskan tentang website videobelajar?' },
     { label: 'Siapa pembuatnya?', value: 'Siapa pembuat website ini?' },
@@ -8,8 +8,8 @@ const quickReplies = [
     { label: 'Apa benefitnya?', value: 'Apa saja benefit belajar di sini?' },
 ];
 
-
-const ChatAssistant = () => {
+const ChatAssistant = ({ isMobileMenuOpen }) => { 
+    const { isDarkMode } = useContext(DarkMode);
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
         { from: 'bot', text: 'Halo! Saya asisten AI dari videobelajar. Pilih salah satu opsi di bawah atau ketik pertanyaanmu.' }
@@ -20,23 +20,18 @@ const ChatAssistant = () => {
     const chatBodyRef = useRef(null);
 
     useEffect(() => {
+        if (isMobileMenuOpen && isOpen) {
+            setIsOpen(false);
+        }
+    }, [isMobileMenuOpen, isOpen]);
+
+    useEffect(() => {
         if (chatBodyRef.current) {
             chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
         }
     }, [messages]);
 
-    // --- FUNGSI UNTUK MENGHUBUNGI API GEMINI (MELALUI BACKEND ANDA) ---
     const getGeminiResponse = async (prompt) => {
-        // TANDA: Ganti bagian ini dengan panggilan ke backend Anda yang terhubung ke Gemini
-        // try {
-        //     const response = await fetch('https://url-backend-anda.com/api/chat', { /* ... */ });
-        //     const data = await response.json();
-        //     return data.reply;
-        // } catch (error) {
-        //     return "Maaf, terjadi kesalahan saat menghubungi asisten AI.";
-        // }
-
-        // Kode simulasi (HAPUS JIKA SUDAH TERHUBUNG KE BACKEND)
         return new Promise(resolve => {
             setTimeout(() => {
                 const lowerCasePrompt = prompt.toLowerCase();
@@ -75,8 +70,6 @@ const ChatAssistant = () => {
         });
 
         setIsLoading(false);
-        // --- PERUBAHAN LOGIKA DI SINI ---
-        // Tampilkan kembali tombol opsi setelah bot selesai menjawab
         setShowQuickReplies(true);
     };
 
@@ -94,20 +87,19 @@ const ChatAssistant = () => {
 
     return (
         <>
-            {/* Tombol Chat Responsif */}
+            {/* Tombol Chat Utama */}
             <button
                 onClick={toggleChat}
-                className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-green-600 text-white p-4 md:p-5 rounded-full shadow-xl hover:bg-green-700 transition-all duration-300 transform hover:scale-110 z-50"
+                className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-green-500 text-white p-4 md:p-5 rounded-full shadow-xl hover:bg-green-600 transition-all duration-300 transform hover:scale-110 z-50"
                 aria-label="Buka Chat"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
             </button>
 
-            {/* Jendela Chat */}
             {isOpen && (
-                <div className="fixed bottom-24 right-6 w-80 h-[450px] bg-white dark:bg-gray-800 rounded-xl shadow-2xl flex flex-col z-50 transition-all duration-300">
+                // Latar Belakang Utama Jendela Chat (Gaya WhatsApp)
+                <div className={`fixed bottom-24 right-6 w-80 h-[450px] rounded-xl shadow-2xl flex flex-col z-50 transition-all duration-300 ${isDarkMode ? 'bg-[#0b141a]' : 'bg-[#E0E0E0]'}`}>
+                    {/* Header Chat */}
                     <div className="bg-green-600 text-white p-3 flex justify-between items-center rounded-t-xl">
                         <h3 className="font-semibold">AI Assistant</h3>
                         <button onClick={toggleChat} className="hover:opacity-75">
@@ -115,40 +107,57 @@ const ChatAssistant = () => {
                         </button>
                     </div>
 
-                   <div ref={chatBodyRef} className="flex-1 p-4 overflow-y-auto chat-body-scrollbar">
+                    {/* Area Pesan */}
+                    <div ref={chatBodyRef} className="flex-1 p-3 overflow-y-auto chat-body-scrollbar">
                         {messages.map((msg, index) => (
-                            <div key={index} className={`mb-3 flex ${msg.from === 'bot' ? 'justify-start' : 'justify-end'}`}>
-                                <div className={`inline-block py-2 px-3 rounded-lg max-w-[85%] ${msg.from === 'bot' ? ' text-white' : 'bg-green-200 dark:bg-green-900'}`}>
-                                    <p className={`text-sm leading-relaxed ${msg.from === 'bot' ? 'text-white' : 'text-gray-800 dark:text-gray-200'}`}>{msg.text}</p>
+                            <div key={index} className={`mb-2 flex ${msg.from === 'bot' ? 'justify-start' : 'justify-end'}`}>
+                                {/* Gelembung Chat (Gaya WhatsApp) */}
+                                <div className={`relative py-2 px-3 rounded-lg max-w-[85%] shadow-sm ${msg.from === 'bot' 
+                                    ? (isDarkMode ? 'bg-[#2a3942]' : 'bg-white') 
+                                    : (isDarkMode ? 'bg-[#005c4b]' : 'bg-[#dcf8c6]')
+                                }`}>
+                                    {/* Teks di dalam Chat */}
+                                    <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>{msg.text}</p>
                                 </div>
                             </div>
                         ))}
                          {showQuickReplies && !isLoading && (
-                            <div className="mt-4 flex flex-col items-start space-y-2">
-                                {quickReplies.map((reply) => (
-                                    <button
-                                        key={reply.label}
-                                        onClick={() => handleQuickReplyClick(reply.value)}
-                                        className="text-sm text-green-600 dark:text-green-400 bg-white dark:bg-gray-700 border border-green-500 dark:border-green-600 py-1.5 px-3 rounded-full hover:bg-green-50 dark:hover:bg-gray-600 transition-colors"
-                                    >
-                                        {reply.label}
-                                    </button>
-                                ))}
+                            // Tombol Opsi Pertanyaan (Gaya WhatsApp)
+                            <div className={`mt-4 p-2 rounded-lg ${isDarkMode ? 'bg-[#2a3942]' : 'bg-white'}`}>
+                                <p className={`text-sm mb-2 px-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Saran untuk Anda:</p>
+                                <div className="flex flex-col items-start space-y-1">
+                                    {quickReplies.map((reply) => (
+                                        <button
+                                            key={reply.label}
+                                            onClick={() => handleQuickReplyClick(reply.value)}
+                                            className={`w-full text-left text-sm p-2 rounded transition-colors ${isDarkMode 
+                                                ? 'text-blue-300 hover:bg-gray-700'
+                                                : 'text-blue-600 hover:bg-gray-100'
+                                            }`}
+                                        >
+                                            {reply.label}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                         )}
                     </div>
 
-                    <div className="p-2 border-t dark:border-gray-700 flex">
+                    {/* Area Input (Gaya WhatsApp) */}
+                    <div className={`p-2 flex items-center ${isDarkMode ? 'bg-transparent' : 'bg-transparent'}`}>
                         <input
                             type="text"
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && handleFormSubmit()}
-                            placeholder={isLoading ? 'Menunggu balasan...' : 'Ketik pesan...'}
+                            placeholder={'Ketik pesan...'}
                             disabled={isLoading}
-                            className="flex-1 p-2 border rounded-l-md focus:outline-none focus:ring-1 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white disabled:opacity-50"
+                            className={`flex-1 p-2 border-none rounded-full focus:outline-none disabled:opacity-50 ${isDarkMode 
+                                ? 'bg-[#2a3942] text-white' 
+                                : 'bg-white text-black'
+                            }`}
                         />
-                        <button onClick={handleFormSubmit} disabled={isLoading} className="bg-green-600 text-white px-4 rounded-r-md hover:bg-green-700 disabled:opacity-50">
+                        <button onClick={handleFormSubmit} disabled={isLoading} className="bg-green-500 text-white w-10 h-10 ml-2 rounded-full flex items-center justify-center hover:bg-green-600 disabled:opacity-50">
                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
                         </button>
                     </div>

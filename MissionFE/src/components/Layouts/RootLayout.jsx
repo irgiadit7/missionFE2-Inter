@@ -1,23 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import ChatAssistant from '../Fragments/ChatAssistant';
 
 const RootLayout = () => {
   const location = useLocation();
+  // State untuk status menu mobile sekarang ada di sini
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Daftar path di mana tombol chat akan disembunyikan
   const hiddenPaths = ['/learn', '/certificate'];
-
-  // Cek apakah path saat ini diawali dengan salah satu path yang harus disembunyikan
   const isChatHidden = hiddenPaths.some(path => location.pathname.startsWith(path));
 
   return (
     <>
-      {/* Outlet akan merender komponen halaman yang sesuai dengan URL */}
-      <Outlet />
+      {/* Outlet sekarang meneruskan state & setter-nya ke semua halaman (termasuk Header) */}
+      <Outlet context={{ isMobileMenuOpen, setIsMobileMenuOpen }} />
       
-      {/* Tampilkan ChatAssistant hanya jika tidak berada di halaman yang disembunyikan */}
-      {!isChatHidden && <ChatAssistant />}
+      {/* ChatAssistant menerima status menu mobile sebagai prop */}
+      {!isChatHidden && <ChatAssistant isMobileMenuOpen={isMobileMenuOpen} />}
     </>
   );
 };

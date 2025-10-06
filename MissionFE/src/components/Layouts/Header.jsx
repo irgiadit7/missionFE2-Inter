@@ -1,19 +1,20 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom'; // Import useOutletContext
 import { DarkMode } from '../../context/DarkMode';
 import ThemeToggle from '../Elements/Toggle/ThemeToggle';
 
 const Header = ({ simple = false }) => {
+    // State isMobileMenuOpen sekarang diambil dari RootLayout
+    const { isMobileMenuOpen, setIsMobileMenuOpen } = useOutletContext(); 
+    
     const { isDarkMode, setIsDarkMode } = useContext(DarkMode);
-    const [openMenu, setOpenMenu] = useState(null); 
+    const [openMenu, setOpenMenu] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
-    const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false); 
+    const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const profileTimeoutRef = useRef(null);
     const menuTimeoutRef = useRef(null);
     
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
-
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -37,6 +38,7 @@ const Header = ({ simple = false }) => {
     const handleMenuMouseEnter = (menu) => { clearTimeout(menuTimeoutRef.current); setOpenMenu(menu); };
     const handleMenuMouseLeave = () => { menuTimeoutRef.current = setTimeout(() => setOpenMenu(null), 200); };
     
+    // Fungsi ini sekarang menggunakan setIsMobileMenuOpen dari context
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(prev => !prev);
         setOpenMenu(null); 
@@ -50,6 +52,7 @@ const Header = ({ simple = false }) => {
         setIsMobileMenuOpen(false);
     };
 
+    // ... (sisa kode komponen Header Anda tidak perlu diubah, biarkan sama)
     const programMenuData = { 'Pemasaran': [ { id: 2, title: 'Digital Marketing Fundamental' }, { id: 6, title: 'Social Media Marketing Strategy' } ], 'Desain': [ { id: 3, title: 'Manajemen Waktu Efektif' }, { id: 7, title: 'Design Fundamentals' } ], 'Pengembangan Diri': [ { id: 4, title: 'Public Speaking Mastery' }, { id: 8, title: 'Time Management Hacks' } ], 'Bisnis': [ { id: 1, title: 'Big 4 Auditor Financial Analyst' }, { id: 5, title: 'Financial Planning for Beginners' }, { id: 9, title: 'Entrepreneurship 101' } ] };
     const animationStyles = `
         .animate-gradient-flow { background: linear-gradient(90deg, #F64920, #FFBD3A, #F64920); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: gradient-flow 6s linear infinite; }
