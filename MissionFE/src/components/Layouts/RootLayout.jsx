@@ -4,19 +4,41 @@ import ChatAssistant from '../Fragments/ChatAssistant';
 
 const RootLayout = () => {
   const location = useLocation();
-  // State untuk status menu mobile sekarang ada di sini
+  
+  // State untuk navbar dan chat sekarang dikelola di sini
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  // Fungsi untuk membuka/menutup navbar
+  const handleToggleMobileMenu = () => {
+    const newMenuState = !isMobileMenuOpen;
+    setIsMobileMenuOpen(newMenuState);
+    // Jika navbar akan dibuka, pastikan chat tertutup
+    if (newMenuState) {
+      setIsChatOpen(false);
+    }
+  };
+
+  // Fungsi untuk membuka/menutup chat
+  const handleToggleChat = () => {
+    const newChatState = !isChatOpen;
+    setIsChatOpen(newChatState);
+    // Jika chat akan dibuka, pastikan navbar mobile tertutup
+    if (newChatState) {
+      setIsMobileMenuOpen(false);
+    }
+  };
 
   const hiddenPaths = ['/learn', '/certificate'];
   const isChatHidden = hiddenPaths.some(path => location.pathname.startsWith(path));
 
   return (
     <>
-      {/* Outlet sekarang meneruskan state & setter-nya ke semua halaman (termasuk Header) */}
-      <Outlet context={{ isMobileMenuOpen, setIsMobileMenuOpen }} />
+      {/* Outlet meneruskan state navbar dan fungsi handlernya */}
+      <Outlet context={{ isMobileMenuOpen, handleToggleMobileMenu }} />
       
-      {/* ChatAssistant menerima status menu mobile sebagai prop */}
-      {!isChatHidden && <ChatAssistant isMobileMenuOpen={isMobileMenuOpen} />}
+      {/* ChatAssistant menerima state chat dan fungsi handlernya */}
+      {!isChatHidden && <ChatAssistant isChatOpen={isChatOpen} handleToggleChat={handleToggleChat} />}
     </>
   );
 };
