@@ -5,26 +5,38 @@ import { useEffect, useRef, useState, useContext } from "react";
 import { Link } from 'react-router-dom';
 import { DarkMode } from "../../context/DarkMode";
 
-const FormLogin = () => { 
+const FormLogin = () => {
     const [loginFailed, setLoginFailed] = useState("");
     const { isDarkMode } = useContext(DarkMode);
 
     const handleLogin = (event) => {
         event.preventDefault();
-        const data = {
-            username: event.target.username.value,
-            password: event.target.password.value
-        };
+        const username = event.target.username.value;
+        const password = event.target.password.value;
+
+        // --- LOGIKA AUTENTIKASI ADMIN ---
+        if (username === 'IrgiAdit' && password === 'IrgiAdit7') {
+            localStorage.setItem('token', 'admin-fake-token'); // Buat token palsu untuk admin
+            localStorage.setItem('user', username);
+            localStorage.setItem('role', 'admin'); // Set peran sebagai 'admin'
+            window.location.href = "/admin/products"; // Arahkan ke dasbor admin
+            return; // Hentikan eksekusi lebih lanjut
+        }
+        
+        // --- LOGIKA UNTUK CUSTOMER ---
+        const data = { username, password };
         login(data, (success, res) => {
             if (success) {
                 localStorage.setItem("user", data.username);
                 localStorage.setItem("token", res);
+                localStorage.setItem("role", "customer"); // Set peran sebagai 'customer'
                 window.location.href = "/";
             } else {
                 setLoginFailed("Login gagal. Periksa kembali username dan password Anda.");
             }
         });
     }
+
 
     const usernameRef = useRef(null);
 

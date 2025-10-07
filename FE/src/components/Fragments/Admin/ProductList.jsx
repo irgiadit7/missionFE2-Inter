@@ -8,10 +8,17 @@ const ProductList = () => {
     const { isDarkMode } = useContext(DarkMode);
 
     const handleDelete = (id) => {
-        if (window.confirm('Apakah Anda yakin ingin menghapus kursus ini?')) {
-            // Logika untuk menghapus (saat ini hanya di state)
-            setCourses(courses.filter(course => course.id !== id));
-            // Nanti, ini akan menjadi panggilan API ke backend
+        // 1. Munculkan dialog konfirmasi
+        if (window.confirm('Apakah Anda yakin ingin menghapus kursus ini? Tindakan ini tidak dapat dibatalkan.')) {
+            
+            // 2. Filter state untuk menghapus item yang dipilih
+            setCourses(currentCourses => currentCourses.filter(course => course.id !== id));
+            
+            // --- SIMULASI PENGHAPUSAN DATA ---
+            // Di aplikasi nyata, di sinilah Anda akan mengirim request DELETE ke API
+            // Contoh: axios.delete(`/api/products/${id}`);
+            console.log(`Produk dengan ID: ${id} telah dihapus.`);
+            alert(`Produk dengan ID: ${id} telah dihapus.`);
         }
     };
 
@@ -28,15 +35,7 @@ const ProductList = () => {
             </div>
             <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
-                    <thead className={`border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-                        <tr>
-                            <th className="p-4">ID</th>
-                            <th className="p-4">Judul</th>
-                            <th className="p-4">Kategori</th>
-                            <th className="p-4">Harga</th>
-                            <th className="p-4">Aksi</th>
-                        </tr>
-                    </thead>
+                    {/* ... thead ... */}
                     <tbody>
                         {courses.map(course => (
                             <tr key={course.id} className={`border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -45,7 +44,10 @@ const ProductList = () => {
                                 <td className="p-4 capitalize">{course.category}</td>
                                 <td className="p-4">Rp {course.price}k</td>
                                 <td className="p-4 flex gap-2">
-                                    <button className="text-blue-500 hover:underline">Ubah</button>
+                                    <Link to={`/admin/products/edit/${course.id}`} className="text-blue-500 hover:underline">
+                                        Ubah
+                                    </Link>
+                                    {/* Tombol ini sudah terhubung dengan fungsi handleDelete */}
                                     <button onClick={() => handleDelete(course.id)} className="text-red-500 hover:underline">Hapus</button>
                                 </td>
                             </tr>

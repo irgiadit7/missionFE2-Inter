@@ -17,6 +17,9 @@ import CoursePlayerPage from './Pages/CoursePlayerPage.jsx';
 import CertificatePage from './Pages/CertificatePage.jsx';
 import RootLayout from './components/Layouts/RootLayout.jsx';
 import DashboardPage from './Pages/admin/DashboardPage.jsx';
+import AdminProtectedRoute from './components/Layouts/AdminProtectedRoute.jsx';
+import AddNewProductPage from './Pages/admin/AddNewProductPage.jsx';
+import EditProductPage from './Pages/admin/EditProductPage.jsx'; 
 
 const router = createBrowserRouter([
   {
@@ -59,8 +62,28 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/products",
-        element: <DashboardPage />,
+        element: (
+          <AdminProtectedRoute>
+            <DashboardPage />
+          </AdminProtectedRoute>
+        ),
       },
+            {
+        path: "/admin/products/new",
+        element: (
+          <AdminProtectedRoute>
+            <AddNewProductPage />
+          </AdminProtectedRoute>
+        ),
+      },
+         {
+        path: "/admin/products/edit/:id",
+        element: (
+          <AdminProtectedRoute>
+            <EditProductPage />
+          </AdminProtectedRoute>
+        ),
+      }
     ]
   }
 ]);
