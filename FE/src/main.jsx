@@ -20,6 +20,7 @@ import DashboardPage from './Pages/admin/DashboardPage.jsx';
 import AdminProtectedRoute from './components/Layouts/AdminProtectedRoute.jsx';
 import AddNewProductPage from './Pages/admin/AddNewProductPage.jsx';
 import EditProductPage from './Pages/admin/EditProductPage.jsx'; 
+import CartPage from './Pages/CartPage';
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "/certificate/:id",
         element: <CertificatePage />,
+      },
+       {
+        path: "/cart", 
+        element: <CartPage />,
       },
       {
         path: "/admin/products",

@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
+import { useSelector } from 'react-redux'; // <-- Import useSelector
 import { DarkMode } from '../../context/DarkMode';
 import ThemeToggle from '../Elements/Toggle/ThemeToggle';
 
@@ -14,6 +15,10 @@ const Header = ({ simple = false }) => {
     const profileTimeoutRef = useRef(null);
     const menuTimeoutRef = useRef(null);
     
+    // Ambil data dari Redux store
+    const cartItems = useSelector((state) => state.cart.data);
+    const totalItemsInCart = cartItems.length; // Hitung item unik di keranjang
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -29,7 +34,7 @@ const Header = ({ simple = false }) => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         localStorage.removeItem("password");
-        localStorage.removeItem("role");
+        localStorage.removeItem("role"); 
         window.location.href = "/";
     };
     
@@ -43,7 +48,6 @@ const Header = ({ simple = false }) => {
     };
 
     const handleLinkClick = () => {
-        // Panggil handleToggleMobileMenu untuk menutup navbar saat link diklik
         if(isMobileMenuOpen) {
             handleToggleMobileMenu();
         }
@@ -57,16 +61,8 @@ const Header = ({ simple = false }) => {
 
     const MenuIcon = (props) => <svg {...props} className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>;
     const CloseIcon = (props) => <svg {...props} className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>;
-    const SunIcon = (props) => (
-        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-    );
-    const MoonIcon = (props) => (
-        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-    );
+    const SunIcon = (props) => ( <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> );
+    const MoonIcon = (props) => ( <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> );
 
     if (simple) {
         return (
@@ -99,6 +95,14 @@ const Header = ({ simple = false }) => {
                             <div onMouseEnter={() => handleMenuMouseEnter('about')}><button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'about' ? 'text-yellow-500' : ''}`}>About</button></div>
                         </nav>
                         <div className="flex items-center space-x-4">
+                            <Link to="/cart" className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                                {totalItemsInCart > 0 && (
+                                    <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                        {totalItemsInCart}
+                                    </span>
+                                )}
+                            </Link>
                             {isLoggedIn ? (
                                 <div className="relative" onMouseEnter={handleProfileMouseEnter} onMouseLeave={handleProfileMouseLeave}>
                                     <div className="flex items-center gap-3 cursor-pointer">
@@ -129,6 +133,14 @@ const Header = ({ simple = false }) => {
                         </div>
                     </div>
                     <div className="flex items-center md:hidden">
+                        <Link to="/cart" className="relative p-2 mr-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                            {totalItemsInCart > 0 && (
+                                <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                    {totalItemsInCart}
+                                </span>
+                            )}
+                        </Link>
                         <button onClick={handleToggleMobileMenu} className={`p-2 rounded-md ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-800 hover:bg-gray-100'}`}>
                             {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
                         </button>
