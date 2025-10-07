@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux'; // <-- Impor useSelector untuk mengambil data dari Redux
 import { DarkMode } from '../../context/DarkMode';
-import { courseData } from '../../data/courses'; 
 
 const categories = ['semua', 'pemasaran', 'desain', 'pengembangan-diri', 'bisnis'];
 
@@ -51,6 +51,9 @@ const CourseCard = ({ course }) => {
 const CoursesSection = () => {
     const { isDarkMode } = useContext(DarkMode);
     const [activeFilter, setActiveFilter] = useState('semua');
+
+    // Mengambil data produk dari Redux store, bukan dari import file lagi
+    const courseData = useSelector((state) => state.products.data);
 
     const filteredCourses = activeFilter === 'semua'
         ? courseData

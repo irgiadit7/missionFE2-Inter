@@ -1,20 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux'; // <-- Import useDispatch
+import { addProduct, updateProduct } from '../../../redux/slices/productsSlice'; // <-- Import aksi-aksi
 import { DarkMode } from '../../../context/DarkMode';
 
 const ProductForm = ({ isEditMode = false, productToEdit = null }) => {
     const { isDarkMode } = useContext(DarkMode);
     const navigate = useNavigate();
+    const dispatch = useDispatch(); // Hook untuk mengirim aksi
 
     const [formData, setFormData] = useState({
-        title: '',
-        category: 'bisnis',
-        author: '',
-        price: '',
-        desc: ''
+        title: '', category: 'bisnis', author: '', price: '', desc: ''
     });
 
-       useEffect(() => {
+    useEffect(() => {
         if (isEditMode && productToEdit) {
             setFormData({
                 title: productToEdit.title,
@@ -24,7 +23,6 @@ const ProductForm = ({ isEditMode = false, productToEdit = null }) => {
                 desc: productToEdit.desc
             });
         }
-
     }, [isEditMode, productToEdit]);
 
     const handleChange = (e) => {
@@ -32,44 +30,34 @@ const ProductForm = ({ isEditMode = false, productToEdit = null }) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    
-
     const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Logika ini akan berjalan jika form dalam mode "Edit"
-    if (isEditMode) {
-        // Gabungkan data lama (seperti ID) dengan data baru dari form
-        const updatedCourse = {
-            ...productToEdit,
-            ...formData,
-            price: parseInt(formData.price) // Pastikan harga adalah angka
-        };
+        e.preventDefault();
+        
+        if (isEditMode) {
+            const updatedCourse = {
+                ...productToEdit,
+                ...formData,
+                price: parseInt(formData.price)
+            };
+            // Kirim aksi 'updateProduct' ke Redux
+            dispatch(updateProduct(updatedCourse));
+            alert("Produk berhasil di-update!");
 
-        // --- SIMULASI UPDATE DATA ---
-        // Di aplikasi nyata, Anda akan mengirim request UPDATE/PUT ke API di sini
-        console.log("Data produk yang akan di-update:", updatedCourse);
-        alert("Produk berhasil di-update! (Lihat console untuk detail)");
+        } else {
+            const newCourse = {
+                ...formData,
+                id: Date.now(),
+                price: parseInt(formData.price),
+                rating: 0,
+                image: '/images/ProductsList/bisnis/default.webp'
+            };
+            // Kirim aksi 'addProduct' ke Redux
+            dispatch(addProduct(newCourse));
+            alert("Produk baru telah ditambahkan!");
+        }
 
-    } else {
-        // Logika ini akan berjalan jika form dalam mode "Tambah Baru"
-        const newCourse = {
-            ...formData,
-            id: Date.now(), // ID unik sederhana berdasarkan waktu
-            price: parseInt(formData.price), // Ubah harga menjadi angka
-            rating: 0, // Default rating untuk produk baru
-            image: '/images/ProductsList/bisnis/default.webp' // Gambar default
-        };
-
-        // --- SIMULASI PENYIMPANAN DATA ---
-        // Di aplikasi nyata, Anda akan mengirim request CREATE/POST ke API di sini
-        console.log("Data produk baru yang akan dikirim:", newCourse);
-        alert("Produk baru telah ditambahkan! (Lihat console untuk detail)");
-    }
-
-    // Setelah selesai, arahkan admin kembali ke halaman daftar produk
-    navigate('/admin/products');
-};
+        navigate('/admin/products');
+    };
 
     const inputClass = `w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-300'}`;
     const labelClass = `block font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`;
