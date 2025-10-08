@@ -18,7 +18,9 @@ const cartSlice = createSlice({
     },
     // Reducers: fungsi-fungsi yang mendefinisikan bagaimana state dapat berubah
     reducers: {
-        // Menambah item ke keranjang
+    
+
+          // Menambah item ke keranjang
         addToCart(state, action) {
             const itemInCart = state.data.find((item) => item.id === action.payload.id);
             if (itemInCart) {
@@ -61,10 +63,14 @@ const cartSlice = createSlice({
             state.data = [];
             updateLocalStorage(state.data);
         },
+             // Menghapus beberapa item sekaligus berdasarkan array ID
+        removeItems(state, action) {
+            const idsToRemove = action.payload; // payload akan berupa [1, 3, 5]
+            state.data = state.data.filter(item => !idsToRemove.includes(item.id));
+            updateLocalStorage(state.data);
+        },
     },
 });
 
-// Ekspor semua aksi agar bisa digunakan di komponen lain
-export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity, clearCart } = cartSlice.actions;
-// Ekspor reducer untuk store
+export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity, clearCart, removeItems } = cartSlice.actions;
 export default cartSlice.reducer;

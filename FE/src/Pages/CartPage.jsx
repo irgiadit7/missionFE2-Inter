@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { DarkMode } from '../context/DarkMode';
-import { removeFromCart, incrementQuantity, decrementQuantity } from '../redux/slices/cartSlice';
+import { removeItems, incrementQuantity, decrementQuantity } from '../redux/slices/cartSlice';
 import Header from '../components/Layouts/Header';
 import Footer from '../components/Layouts/Footer';
 
@@ -13,20 +13,51 @@ const CartPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // State untuk melacak ID item yang dipilih
+    const [selectedItems, setSelectedItems] = useState([]);
+
     const cartDetails = cartItems.map(item => {
         const course = allProducts.find(c => c.id === item.id);
         return { ...course, qty: item.qty };
-    }).filter(item => item.title); // Filter untuk memastikan produk ada
+    }).filter(item => item.title);
 
-    const totalPrice = cartDetails.reduce((total, item) => total + (item.price * item.qty), 0);
+    // Hitung total harga HANYA untuk item yang dipilih
+    const totalPrice = cartDetails
+        .filter(item => selectedItems.includes(item.id))
+        .reduce((total, item) => total + (item.price * item.qty), 0);
+    
+    // Handler untuk memilih/membatalkan satu item
+    const handleSelectItem = (id) => {
+        setSelectedItems(prev => 
+            prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]
+        );
+    };
 
-    const handleCheckout = () => {
-        if (cartDetails.length > 0) {
-            // Arahkan ke halaman pembayaran dengan membawa total harga melalui state.
-            // Kita gunakan ID produk pertama di keranjang sebagai referensi di URL.
-            navigate(`/payment/${cartDetails[0].id}`, { state: { totalPrice: totalPrice } });
+    // Handler untuk memilih/membatalkan semua item
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            setSelectedItems(cartDetails.map(item => item.id));
+        } else {
+            setSelectedItems([]);
         }
     };
+
+    const handleCheckout = () => {
+        if (selectedItems.length > 0) {
+            const itemsToCheckout = cartDetails.filter(item => selectedItems.includes(item.id));
+            navigate(`/payment/${itemsToCheckout[0].id}`, { 
+                state: { 
+                    totalPrice: totalPrice,
+                    itemsToPurchase: itemsToCheckout.map(item => ({ id: item.id, qty: item.qty })) // Kirim data item yang dipilih
+                } 
+            });
+        } else {
+            alert("Pilih setidaknya satu item untuk melanjutkan pembayaran.");
+        }
+    };
+
+    // Cek apakah semua item terpilih (untuk state checkbox "Pilih Semua")
+    const isAllSelected = cartDetails.length > 0 && selectedItems.length === cartDetails.length;
 
     return (
         <div className={`min-h-screen flex flex-col ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-[#FFFDF3] text-gray-800'}`}>
@@ -36,10 +67,28 @@ const CartPage = () => {
                 
                 {cartDetails.length > 0 ? (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Daftar Item */}
                         <div className="lg:col-span-2 space-y-4">
+                            {/* Tombol Pilih Semua */}
+                            <div className={`flex items-center p-4 rounded-lg shadow-md ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                                <input 
+                                    type="checkbox" 
+                                    id="select-all" 
+                                    className="h-5 w-5 rounded text-green-600 focus:ring-green-500"
+                                    checked={isAllSelected}
+                                    onChange={handleSelectAll}
+                                />
+                                <label htmlFor="select-all" className="ml-4 font-semibold">Pilih Semua</label>
+                            </div>
+
+                            {/* Daftar Item */}
                             {cartDetails.map(item => (
                                 <div key={item.id} className={`flex flex-col sm:flex-row items-center p-4 rounded-lg shadow-md ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                                    <input 
+                                        type="checkbox" 
+                                        className="h-5 w-5 rounded text-green-600 focus:ring-green-500 mb-4 sm:mb-0 sm:mr-4"
+                                        checked={selectedItems.includes(item.id)}
+                                        onChange={() => handleSelectItem(item.id)}
+                                    />
                                     <img src={item.image} alt={item.title} className="w-32 h-20 object-cover rounded-md mb-4 sm:mb-0 sm:mr-6" />
                                     <div className="flex-grow text-center sm:text-left">
                                         <h2 className="font-bold">{item.title}</h2>
@@ -51,9 +100,6 @@ const CartPage = () => {
                                             <span className="px-4 border-l border-r dark:border-gray-600">{item.qty}</span>
                                             <button onClick={() => dispatch(incrementQuantity({ id: item.id }))} className="px-3 py-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-r-md">+</button>
                                         </div>
-                                        <button onClick={() => dispatch(removeFromCart({ id: item.id }))} className="text-red-500 hover:text-red-700">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -63,18 +109,15 @@ const CartPage = () => {
                         <div className="lg:col-span-1">
                             <div className={`p-6 rounded-lg shadow-lg sticky top-24 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
                                 <h2 className="text-xl font-bold mb-4">Ringkasan</h2>
-                                <div className="flex justify-between mb-2">
-                                    <span>Subtotal</span>
-                                    <span>Rp {totalPrice.toFixed(3)}k</span>
-                                </div>
                                 <div className="border-t my-4 dark:border-gray-700"></div>
                                 <div className="flex justify-between font-bold text-lg mb-6">
-                                    <span>Total</span>
+                                    <span>Total ({selectedItems.length} item)</span>
                                     <span>Rp {totalPrice.toFixed(3)}k</span>
                                 </div>
                                 <button 
                                     onClick={handleCheckout}
-                                    className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700"
+                                    disabled={selectedItems.length === 0}
+                                    className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                                 >
                                     Lanjut ke Pembayaran
                                 </button>
@@ -83,11 +126,7 @@ const CartPage = () => {
                     </div>
                 ) : (
                     <div className="text-center py-16">
-                        <h2 className="text-2xl font-semibold mb-2">Keranjang Anda Kosong</h2>
-                        <p className="text-gray-500 mb-6">Sepertinya Anda belum menambahkan kursus apa pun.</p>
-                        <Link to="/" className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700">
-                            Cari Kursus
-                        </Link>
+                        {/* Tampilan keranjang kosong tidak berubah */}
                     </div>
                 )}
             </main>

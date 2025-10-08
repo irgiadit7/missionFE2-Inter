@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Header from '../components/Layouts/Header';
 import { DarkMode } from '../context/DarkMode';
+import { addCourses } from '../redux/slices/myCoursesSlice';
+import { removeItems } from '../redux/slices/cartSlice';
 
 // --- DATA (DUMMY) ---
 const paymentOptions = {
@@ -86,6 +88,8 @@ const Accordion = ({ title, children, isOpen, onClick, isDarkMode }) => (
 const PaymentPage = () => {
     const { id } = useParams();
     const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { isDarkMode } = useContext(DarkMode);
     const [selectedPayment, setSelectedPayment] = useState('');
     const [openAccordion, setOpenAccordion] = useState('bank');
@@ -103,6 +107,30 @@ const PaymentPage = () => {
             setCopySuccess('Disalin!');
             setTimeout(() => setCopySuccess(''), 2000);
         });
+    };
+
+    const handleConfirmPayment = () => {
+        const itemsToPurchase = location.state?.itemsToPurchase;
+
+        if (itemsToPurchase && itemsToPurchase.length > 0) {
+            // Jika checkout dari keranjang
+            dispatch(addCourses(itemsToPurchase));
+            const idsToRemove = itemsToPurchase.map(item => item.id);
+            dispatch(removeItems(idsToRemove));
+            alert("Pembayaran berhasil! Kursus telah ditambahkan ke profil Anda.");
+            navigate('/profile?tab=courses');
+        } else if (product) {
+            // Jika checkout dari halaman detail produk
+            const singleItem = [{ id: product.id, qty: 1 }];
+            dispatch(addCourses(singleItem));
+            // Hapus item ini dari keranjang jika ada
+            dispatch(removeItems([product.id]));
+            alert("Pembayaran berhasil! Kursus telah ditambahkan ke profil Anda.");
+            navigate('/profile?tab=courses');
+        } else {
+            alert("Terjadi kesalahan. Tidak ada produk untuk dibeli.");
+            navigate('/cart');
+        }
     };
 
     if (!product) {
@@ -155,7 +183,7 @@ const PaymentPage = () => {
                                     <h2 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Ringkasan Pesanan</h2>
                                     <div className={`space-y-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                                         {cartTotalPrice !== undefined ? (
-                                            <div className="flex justify-between"><p>Total Belanja dari Keranjang</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(basePrice * 1000)}</p></div>
+                                            <div className="flex justify-between"><p>Total Belanja</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(basePrice * 1000)}</p></div>
                                         ) : (
                                             <div className="flex justify-between items-start"><p className="w-3/4">{product.title}</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(basePrice * 1000)}</p></div>
                                         )}
@@ -176,7 +204,7 @@ const PaymentPage = () => {
                                 <h2 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Ringkasan Pesanan</h2>
                                 <div className={`space-y-3 mb-8 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                                     {cartTotalPrice !== undefined ? (
-                                        <div className="flex justify-between"><p>Total Belanja dari Keranjang</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(basePrice * 1000)}</p></div>
+                                        <div className="flex justify-between"><p>Total Belanja</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(basePrice * 1000)}</p></div>
                                     ) : (
                                         <div className="flex justify-between items-start"><p className="w-3/4">{product.title}</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(basePrice * 1000)}</p></div>
                                     )}
@@ -185,7 +213,7 @@ const PaymentPage = () => {
                                 </div>
                                 <div className="flex space-x-4">
                                     <button onClick={() => setView('selection')} className={`w-full py-3 rounded-full font-semibold border transition-colors ${isDarkMode ? 'border-green-500 text-green-500 hover:bg-green-500/10' : 'border-green-600 text-green-600 hover:bg-green-50'}`}>Ganti Metode Pembayaran</button>
-                                    <button className="w-full bg-green-600 text-white py-3 rounded-full font-semibold hover:bg-green-700">Cek Status Pembayaran</button>
+                                    <button onClick={handleConfirmPayment} className="w-full bg-green-600 text-white py-3 rounded-full font-semibold hover:bg-green-700">Konfirmasi Pembayaran</button>
                                 </div>
                                 <div className="mt-8">
                                     <Accordion title="Tata Cara Pembayaran" isOpen={true} isDarkMode={isDarkMode}>
