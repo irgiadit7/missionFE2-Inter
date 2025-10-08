@@ -1,20 +1,19 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'; // <-- Import hooks Redux
-import { deleteProduct } from '../../../redux/slices/productsSlice'; // <-- Import aksi delete
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteProduct } from '../../../redux/slices/productsSlice';
 import { DarkMode } from '../../../context/DarkMode';
+import toast from 'react-hot-toast';
 
 const ProductList = () => {
-    // Ambil data dari Redux store, bukan lagi dari state lokal
     const courses = useSelector((state) => state.products.data);
-    const dispatch = useDispatch(); // Hook untuk mengirim aksi ke Redux
+    const dispatch = useDispatch();
     const { isDarkMode } = useContext(DarkMode);
 
-    const handleDelete = (id) => {
+    const handleDelete = (id, title) => {
         if (window.confirm('Apakah Anda yakin ingin menghapus kursus ini?')) {
-            // Kirim aksi 'deleteProduct' ke Redux dengan membawa payload ID
             dispatch(deleteProduct({ id: id }));
-            alert(`Produk dengan ID: ${id} telah dihapus.`);
+            toast.success(`'${title}' berhasil dihapus.`);
         }
     };
 
@@ -51,7 +50,9 @@ const ProductList = () => {
                                     <Link to={`/admin/products/edit/${course.id}`} className="text-blue-500 hover:underline">
                                         Ubah
                                     </Link>
-                                    <button onClick={() => handleDelete(course.id)} className="text-red-500 hover:underline">Hapus</button>
+                                    <button onClick={() => handleDelete(course.id, course.title)} className="text-red-500 hover:underline">
+                                        Hapus
+                                    </button>
                                 </td>
                             </tr>
                         ))}

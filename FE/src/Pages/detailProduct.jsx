@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import toast from 'react-hot-toast';
+import { addToCart } from "../redux/slices/cartSlice";
 import Header from "../components/Layouts/Header";
 import Footer from "../components/Layouts/Footer";
 import { DarkMode } from "../context/DarkMode";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/slices/cartSlice";
-import { courseData } from "../data/courses";
 
 const StarRating = ({ rating, size = "w-4 h-4" }) => {
     const stars = [];
@@ -43,7 +43,6 @@ const AccordionItem = ({ title, children, isOpen, onClick }) => (
 
 const CourseCard = ({ course, isDarkMode }) => {
     const tutorImage = `/images/tutor/${course.id}.webp`;
-    
     return (
         <Link 
             to={`/products/${course.id}`} 
@@ -73,13 +72,13 @@ const CourseCard = ({ course, isDarkMode }) => {
     );
 };
 
-
 const DetailProductPage = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const { isDarkMode } = useContext(DarkMode);
     const [openAccordion, setOpenAccordion] = useState(0);
     const dispatch = useDispatch();
+    const products = useSelector((state) => state.products.data);
 
     const courseMaterials = [
         { title: "Introduction to Course 1: Foundations of User Experience Design", videos: [{ title: "The basics of user experience design", duration: "12 Menit" }, { title: "Jobs in the field of user experience", duration: "12 Menit" }, { title: "The product development life cycle", duration: "12 Menit" }] },
@@ -95,21 +94,22 @@ const DetailProductPage = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        const productData = courseData.find((p) => p.id === parseInt(id));
+        const productData = products.find((p) => p.id === parseInt(id));
         if (productData) {
             setProduct({ ...productData, description: productData.desc });
         }
-    }, [id]);
+    }, [id, products]);
 
     const handleAddToCart = () => {
         dispatch(addToCart({ id: product.id, qty: 1 }));
+        toast.success(`${product.title} berhasil ditambahkan ke keranjang!`);
     };
 
     if (!product) {
         return <div className={`flex justify-center items-center min-h-screen ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-[#FFFDF3] text-gray-800'}`}>Loading...</div>;
     }
 
-    const relatedProducts = courseData.filter(p => p.id !== product.id).sort(() => 0.5 - Math.random()).slice(0, 3);
+    const relatedProducts = products.filter(p => p.id !== product.id).sort(() => 0.5 - Math.random()).slice(0, 3);
 
     return (
         <div className={isDarkMode ? 'bg-gray-900 text-white' : 'bg-[#FFFDF3] text-gray-800'}>

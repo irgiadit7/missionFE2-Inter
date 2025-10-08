@@ -1,16 +1,21 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux'; // <-- Import useDispatch
-import { addProduct, updateProduct } from '../../../redux/slices/productsSlice'; // <-- Import aksi-aksi
+import { useDispatch } from 'react-redux';
+import { addProduct, updateProduct } from '../../../redux/slices/productsSlice';
 import { DarkMode } from '../../../context/DarkMode';
+import toast from 'react-hot-toast';
 
 const ProductForm = ({ isEditMode = false, productToEdit = null }) => {
     const { isDarkMode } = useContext(DarkMode);
     const navigate = useNavigate();
-    const dispatch = useDispatch(); // Hook untuk mengirim aksi
+    const dispatch = useDispatch();
 
     const [formData, setFormData] = useState({
-        title: '', category: 'bisnis', author: '', price: '', desc: ''
+        title: '',
+        category: 'bisnis',
+        author: '',
+        price: '',
+        desc: ''
     });
 
     useEffect(() => {
@@ -39,9 +44,8 @@ const ProductForm = ({ isEditMode = false, productToEdit = null }) => {
                 ...formData,
                 price: parseInt(formData.price)
             };
-            // Kirim aksi 'updateProduct' ke Redux
             dispatch(updateProduct(updatedCourse));
-            alert("Produk berhasil di-update!");
+            toast.success("Produk berhasil di-update!");
 
         } else {
             const newCourse = {
@@ -51,9 +55,8 @@ const ProductForm = ({ isEditMode = false, productToEdit = null }) => {
                 rating: 0,
                 image: '/images/ProductsList/bisnis/default.webp'
             };
-            // Kirim aksi 'addProduct' ke Redux
             dispatch(addProduct(newCourse));
-            alert("Produk baru telah ditambahkan!");
+            toast.success("Produk baru telah ditambahkan!");
         }
 
         navigate('/admin/products');
