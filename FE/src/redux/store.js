@@ -1,19 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from "./slices/cartSlice";
-import productsReducer from "./slices/productsSlice"; // <-- 1. Impor slice produk yang baru dibuat
+import productsReducer from "./slices/productsSlice";
+import myCoursesReducer from "./slices/myCoursesSlice"; // <-- 1. IMPORT SLICE BARU
 
 const store = configureStore ({
-    // Daftarkan semua reducer di sini
     reducer: { 
         cart: cartReducer,
-        products: productsReducer, // <-- 2. Tambahkan reducer produk ke dalam store
+        products: productsReducer,
+        myCourses: myCoursesReducer, // <-- 2. TAMBAHKAN REDUCER BARU
     },
 });
 
-console.log("oncreate store : ", store.getState());
+// ... sisa kode tidak berubah
 
-store.subscribe (() => {
-    console.log("STORE CHANGE : ", store.getState());
-})  
-    
 export default store;

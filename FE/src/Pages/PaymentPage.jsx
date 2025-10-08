@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Header from '../components/Layouts/Header';
 import { DarkMode } from '../context/DarkMode';
-import { courseData } from '../data/courses';
 
+// --- DATA (DUMMY) ---
 const paymentOptions = {
     bank: [
         { name: 'Bank BCA', image: '/images/payment/bank/bca.webp' },
@@ -17,41 +18,30 @@ const paymentOptions = {
         { name: 'LinkAja', image: '/images/payment/e-wallet/linkAja.webp' },
         { name: 'Shopee Pay', image: '/images/payment/e-wallet/shoppe.webp'}
     ],
-    card: [{ images: ['/images/payment/visa1.webp', '/images/payment/visa2.webp', '/images/payment/visa3.webp'] }]
+    card: [{ name: 'Kartu Kredit/Debit', images: ['/images/payment/visa1.webp', '/images/payment/visa2.webp', '/images/payment/visa3.webp'] }]
 };
-
 
 // --- ICON COMPONENTS ---
 const CheckIcon = () => <svg className="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
 const DocumentIcon = () => <svg className="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>;
 const LanguageIcon = () => <svg className="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m4 13l4-16M11 21L7 5m12 16a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
-const GreenCheckCircleIcon = () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="11.5" fill="white" stroke="#16A34A"/>
-        <path d="M17.3337 8.5L10.0003 15.8333L6.66699 12.5" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-);
-
+const GreenCheckCircleIcon = () => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11.5" fill="white" stroke="#16A34A"/><path d="M17.3337 8.5L10.0003 15.8333L6.66699 12.5" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> );
 
 // --- HELPER COMPONENTS ---
 const CountdownTimer = ({ isDarkMode }) => {
     const [timeLeft, setTimeLeft] = useState(24 * 60 * 60);
-
     useEffect(() => {
         if (timeLeft <= 0) return;
-        const intervalId = setInterval(() => {
-            setTimeLeft(prevTime => prevTime - 1);
-        }, 1000);
+        const intervalId = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
         return () => clearInterval(intervalId);
     }, [timeLeft]);
 
     const formatTime = () => {
-        const hours = Math.floor(timeLeft / 3600);
-        const minutes = Math.floor((timeLeft % 3600) / 60);
-        const seconds = timeLeft % 60;
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        const h = Math.floor(timeLeft / 3600).toString().padStart(2, '0');
+        const m = Math.floor((timeLeft % 3600) / 60).toString().padStart(2, '0');
+        const s = (timeLeft % 60).toString().padStart(2, '0');
+        return `${h}:${m}:${s}`;
     };
-
     return <span className={`font-bold ${isDarkMode ? 'text-red-400' : 'text-red-500'}`}>{formatTime()}</span>;
 };
 
@@ -84,9 +74,7 @@ const Accordion = ({ title, children, isOpen, onClick, isDarkMode }) => (
     <div className={`border rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
         <button onClick={onClick} className="w-full flex justify-between items-center p-4 text-left font-semibold">
             <span className={isDarkMode ? 'text-white' : 'text-gray-800'}>{title}</span>
-            <svg className={`w-5 h-5 transform transition-transform ${isOpen ? "rotate-180" : ""} ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
+            <svg className={`w-5 h-5 transform transition-transform ${isOpen ? "rotate-180" : ""} ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
         <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen' : 'max-h-0'}`}>
             <div className={`p-4 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} space-y-3`}>{children}</div>
@@ -97,20 +85,18 @@ const Accordion = ({ title, children, isOpen, onClick, isDarkMode }) => (
 // --- MAIN PAGE COMPONENT ---
 const PaymentPage = () => {
     const { id } = useParams();
-    const [product, setProduct] = useState(null);
+    const location = useLocation();
     const { isDarkMode } = useContext(DarkMode);
     const [selectedPayment, setSelectedPayment] = useState('');
     const [openAccordion, setOpenAccordion] = useState('bank');
     const [view, setView] = useState('selection');
     const [copySuccess, setCopySuccess] = useState('');
 
-    const vaNumber = "8708-0403-1458-7890";
+    const allProducts = useSelector(state => state.products.data);
+    const product = allProducts.find((p) => p.id === parseInt(id));
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-        const productData = courseData.find((p) => p.id === parseInt(id));
-        setProduct(productData);
-    }, [id]);
+    const cartTotalPrice = location.state?.totalPrice;
+    const vaNumber = "8708-0403-1458-7890";
 
     const handleCopyToClipboard = () => {
         navigator.clipboard.writeText(vaNumber.replace(/-/g, '')).then(() => {
@@ -124,23 +110,20 @@ const PaymentPage = () => {
     }
     
     const adminFee = 7.000;
-    const totalPrice = product.price + adminFee;
+    const basePrice = cartTotalPrice !== undefined ? cartTotalPrice : product.price;
+    const totalPrice = basePrice + adminFee;
 
-    // --- RENDER ---
     return (
         <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-[#FFFDF3]'}`}>
             <Header simple={true} />
             <main className="container mx-auto px-4 py-12">
                 {view === 'instruction' && (
                      <div className={`p-4 rounded-lg shadow-md mb-8 flex justify-between items-center ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-                        <p className={isDarkMode ? 'text-gray-200' : 'text-gray-700'}>
-                            Selesaikan pembayaran dalam <CountdownTimer isDarkMode={isDarkMode} />
-                        </p>
+                        <p className={isDarkMode ? 'text-gray-200' : 'text-gray-700'}>Selesaikan pembayaran dalam <CountdownTimer isDarkMode={isDarkMode} /></p>
                         <button onClick={() => setView('selection')} className={`font-semibold ${isDarkMode ? 'text-red-400 hover:text-red-500' : 'text-red-500 hover:text-red-700'}`}>Batal</button>
                     </div>
                 )}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* --- Left Column --- */}
                     <div className="lg:col-span-2 space-y-8">
                         {view === 'selection' ? (
                             <>
@@ -152,17 +135,12 @@ const PaymentPage = () => {
                                                 {options.map(opt => (
                                                     <div key={opt.name} onClick={() => setSelectedPayment(opt.name)} className={`p-4 flex items-center justify-between border rounded-lg cursor-pointer transition-colors ${selectedPayment === opt.name ? 'border-green-500' : isDarkMode ? 'border-gray-700 hover:bg-gray-800' : 'border-gray-200 hover:bg-gray-50'}`}>
                                                         <div className="flex items-center">
-                                                            {/* Conditional rendering for images based on 'card' type */}
                                                             {key === 'card' && opt.images ? (
                                                                 <div className="flex items-center space-x-2 mr-4">
-                                                                    {opt.images.map((imgSrc, idx) => (
-                                                                        <img key={idx} src={imgSrc} alt={`${opt.name} ${idx + 1}`} className="max-h-4 object-contain" />
-                                                                    ))}
+                                                                    {opt.images.map((imgSrc, idx) => (<img key={idx} src={imgSrc} alt={`${opt.name} ${idx + 1}`} className="max-h-4 object-contain" />))}
                                                                 </div>
                                                             ) : opt.image && (
-                                                                <div className="w-10 flex items-center justify-center mr-4">
-                                                                     <img src={opt.image} alt={opt.name} className="max-h-4 object-contain" />
-                                                                </div>
+                                                                <div className="w-10 flex items-center justify-center mr-4"><img src={opt.image} alt={opt.name} className="max-h-4 object-contain" /></div>
                                                             )}
                                                             <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>{opt.name}</span>
                                                         </div>
@@ -176,11 +154,15 @@ const PaymentPage = () => {
                                 <div className={`p-8 rounded-lg shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
                                     <h2 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Ringkasan Pesanan</h2>
                                     <div className={`space-y-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                        <div className="flex justify-between items-start"><p className="w-3/4">{product.title}</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(product.price * 1000)}</p></div>
+                                        {cartTotalPrice !== undefined ? (
+                                            <div className="flex justify-between"><p>Total Belanja dari Keranjang</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(basePrice * 1000)}</p></div>
+                                        ) : (
+                                            <div className="flex justify-between items-start"><p className="w-3/4">{product.title}</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(basePrice * 1000)}</p></div>
+                                        )}
                                         <div className="flex justify-between"><p>Biaya Admin</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(adminFee * 1000)}</p></div>
                                         <div className={`border-t pt-4 mt-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}><div className={`flex justify-between font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`}><p>Total Pembayaran</p><p>Rp{new Intl.NumberFormat('id-ID').format(totalPrice * 1000)}</p></div></div>
                                     </div>
-                                    <button onClick={() => setView('instruction')} className="mt-6 w-full bg-green-600 text-white py-3 rounded-full font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-400" disabled={!selectedPayment}>Beli Sekarang</button>
+                                    <button onClick={() => setView('instruction')} className="mt-6 w-full bg-green-600 text-white py-3 rounded-full font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-400" disabled={!selectedPayment}>Bayar Sekarang</button>
                                 </div>
                             </>
                         ) : (
@@ -193,7 +175,11 @@ const PaymentPage = () => {
                                 <div className={`border-t my-8 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}></div>
                                 <h2 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Ringkasan Pesanan</h2>
                                 <div className={`space-y-3 mb-8 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    <div className="flex justify-between items-start"><p className="w-3/4">{product.title}</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(product.price * 1000)}</p></div>
+                                    {cartTotalPrice !== undefined ? (
+                                        <div className="flex justify-between"><p>Total Belanja dari Keranjang</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(basePrice * 1000)}</p></div>
+                                    ) : (
+                                        <div className="flex justify-between items-start"><p className="w-3/4">{product.title}</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(basePrice * 1000)}</p></div>
+                                    )}
                                     <div className="flex justify-between"><p>Biaya Admin</p><p className="font-semibold">Rp{new Intl.NumberFormat('id-ID').format(adminFee * 1000)}</p></div>
                                     <div className={`border-t pt-4 mt-2 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}><div className={`flex justify-between font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`}><p>Total Pembayaran</p><p>Rp{new Intl.NumberFormat('id-ID').format(totalPrice * 1000)}</p></div></div>
                                 </div>
@@ -214,7 +200,6 @@ const PaymentPage = () => {
                             </div>
                         )}
                     </div>
-                    {/* --- Right Column --- */}
                     <div className="lg:col-span-1">
                         <div className="sticky top-24">
                            <CourseSummaryCard course={product} isDarkMode={isDarkMode} />

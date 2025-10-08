@@ -4,7 +4,8 @@ import Footer from '../components/Layouts/Footer';
 import { useLogin } from '../hooks/useLogin';
 import { DarkMode } from '../context/DarkMode';
 import { Link, useSearchParams } from 'react-router-dom';
-import { dummyOrders, dummyCourses } from '../data/courses';
+import { useSelector } from 'react-redux';
+import { dummyOrders } from '../data/courses'; // Data pesanan masih statis untuk saat ini
 
 // --- ICONS (Simple SVG components for demonstration) ---
 const UserIcon = () => (
@@ -18,6 +19,7 @@ const AcademicCapIcon = () => (
 );
 
 
+// --- SUB-COMPONENTS ---
 const ProfileContent = ({ user, isDarkMode }) => (
     <div className={`p-6 md:p-8 rounded-lg shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
         <div className="flex items-center mb-8">
@@ -101,25 +103,41 @@ const OrderHistoryContent = ({ isDarkMode }) => {
     );
 };
 
-const MyCoursesContent = ({ isDarkMode }) => (
-    <div className={`p-6 md:p-8 rounded-lg shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-        <h2 className="text-xl font-bold mb-6">Kelas Saya</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {dummyCourses.map(course => (
-                <div key={course.id} className={`rounded-lg overflow-hidden border ${isDarkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200'}`}>
-                    <img src={course.image} alt={course.title} className="w-full h-40 object-cover" />
-                    <div className="p-4">
-                        <h3 className="font-bold h-12">{course.title}</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">oleh {course.author}</p>
-                        <Link to={`/learn/${course.id}`} className="block w-full text-center bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">
-                            Masuk Kelas
-                        </Link>
-                    </div>
+const MyCoursesContent = ({ isDarkMode }) => {
+    // Ambil data kursus yang dimiliki pengguna dari Redux
+    const myCourseIds = useSelector((state) => state.myCourses.data);
+    // Ambil data semua produk untuk mendapatkan detail lengkap (judul, gambar, dll.)
+    const allProducts = useSelector((state) => state.products.data);
+
+    // Cocokkan ID dari myCoursesSlice dengan data dari productsSlice
+    const myCourses = myCourseIds.map(myCourse => 
+        allProducts.find(product => product.id === myCourse.id)
+    ).filter(Boolean); // Hapus hasil yang mungkin 'undefined' jika produk tidak ditemukan
+
+    return (
+        <div className={`p-6 md:p-8 rounded-lg shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <h2 className="text-xl font-bold mb-6">Kelas Saya</h2>
+            {myCourses.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {myCourses.map(course => (
+                        <div key={course.id} className={`rounded-lg overflow-hidden border ${isDarkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200'}`}>
+                            <img src={course.image} alt={course.title} className="w-full h-40 object-cover" />
+                            <div className="p-4">
+                                <h3 className="font-bold h-12">{course.title}</h3>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">oleh {course.author}</p>
+                                <Link to={`/learn/${course.id}`} className="block w-full text-center bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                                    Masuk Kelas
+                                </Link>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            ))}
+            ) : (
+                <p className="text-center text-gray-500 py-8">Anda belum memiliki kursus.</p>
+            )}
         </div>
-    </div>
-);
+    );
+};
 
 
 // --- MAIN PAGE COMPONENT ---
@@ -144,7 +162,7 @@ const ProfilePages = () => {
     };
 
     return (
-        <div className={isDarkMode ? 'bg-gray-900 text-white' : 'bg-[#FFFDF3] text-gray-800 min-h-screen flex flex-col'}>
+        <div className={`${isDarkMode ? 'bg-gray-900 text-white' : 'bg-[#FFFDF3] text-gray-800'} min-h-screen flex flex-col`}>
             <Header />
             <main className="container mx-auto px-4 py-8 md:py-12 flex-grow">
                 <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
