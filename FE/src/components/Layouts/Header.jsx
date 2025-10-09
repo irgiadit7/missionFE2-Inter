@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // <-- Import useSelector
+import { useSelector } from 'react-redux';
 import { DarkMode } from '../../context/DarkMode';
 import ThemeToggle from '../Elements/Toggle/ThemeToggle';
 
@@ -15,9 +15,8 @@ const Header = ({ simple = false }) => {
     const profileTimeoutRef = useRef(null);
     const menuTimeoutRef = useRef(null);
     
-    // Ambil data dari Redux store
     const cartItems = useSelector((state) => state.cart.data);
-    const totalItemsInCart = cartItems.length; // Hitung item unik di keranjang
+    const totalItemsInCart = cartItems.length; 
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -95,14 +94,16 @@ const Header = ({ simple = false }) => {
                             <div onMouseEnter={() => handleMenuMouseEnter('about')}><button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'about' ? 'text-yellow-500' : ''}`}>About</button></div>
                         </nav>
                         <div className="flex items-center space-x-4">
-                            <Link to="/cart" className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                                {totalItemsInCart > 0 && (
-                                    <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                                        {totalItemsInCart}
-                                    </span>
-                                )}
-                            </Link>
+                            {isLoggedIn && (
+                                <Link to="/cart" className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                                    {totalItemsInCart > 0 && (
+                                        <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                            {totalItemsInCart}
+                                        </span>
+                                    )}
+                                </Link>
+                            )}
                             {isLoggedIn ? (
                                 <div className="relative" onMouseEnter={handleProfileMouseEnter} onMouseLeave={handleProfileMouseLeave}>
                                     <div className="flex items-center gap-3 cursor-pointer">
@@ -133,14 +134,16 @@ const Header = ({ simple = false }) => {
                         </div>
                     </div>
                     <div className="flex items-center md:hidden">
-                        <Link to="/cart" className="relative p-2 mr-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                            {totalItemsInCart > 0 && (
-                                <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                                    {totalItemsInCart}
-                                </span>
-                            )}
-                        </Link>
+                        {isLoggedIn && (
+                            <Link to="/cart" className="relative p-2 mr-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                                {totalItemsInCart > 0 && (
+                                    <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                        {totalItemsInCart}
+                                    </span>
+                                )}
+                            </Link>
+                        )}
                         <button onClick={handleToggleMobileMenu} className={`p-2 rounded-md ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-800 hover:bg-gray-100'}`}>
                             {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
                         </button>
