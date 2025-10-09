@@ -21,6 +21,7 @@ import AdminProtectedRoute from './components/Layouts/AdminProtectedRoute.jsx';
 import AddNewProductPage from './Pages/admin/AddNewProductPage.jsx';
 import EditProductPage from './Pages/admin/EditProductPage.jsx'; 
 import CartPage from './Pages/CartPage';
+import { Toaster } from 'react-hot-toast';
 
 const router = createBrowserRouter([
   {
@@ -97,9 +98,25 @@ createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
     <DarkModeContextProvider>
-    <TotalPriceProvider>
+       <Toaster
+          position="top-center"
+          reverseOrder={false}
+          toastOptions={{
+            duration: 2000,
+            style: {
+              background: '#363636',
+              color: '#fff',
+            },
+            success: {
+              duration: 2000,
+              theme: {
+                primary: 'green',
+                secondary: 'black',
+              },
+            },
+          }}
+        />
           <RouterProvider router={router}/>
-    </TotalPriceProvider>
     </DarkModeContextProvider>
     </Provider>
   </React.StrictMode>

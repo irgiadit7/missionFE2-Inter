@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import toast from 'react-hot-toast';
 import Header from '../components/Layouts/Header';
 import { DarkMode } from '../context/DarkMode';
 import { addCourses } from '../redux/slices/myCoursesSlice';
@@ -91,6 +92,7 @@ const PaymentPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { isDarkMode } = useContext(DarkMode);
+    
     const [selectedPayment, setSelectedPayment] = useState('');
     const [openAccordion, setOpenAccordion] = useState('bank');
     const [view, setView] = useState('selection');
@@ -112,23 +114,57 @@ const PaymentPage = () => {
     const handleConfirmPayment = () => {
         const itemsToPurchase = location.state?.itemsToPurchase;
 
+        const showSuccessToast = () => {
+            toast.custom((t) => (
+                <div
+                  className={`${
+                    t.visible ? 'animate-enter' : 'animate-leave'
+                  } max-w-md w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5 dark:ring-white dark:ring-opacity-10`}
+                >
+                  <div className="flex-1 w-0 p-4">
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0 pt-0.5">
+                        <svg className="h-10 w-10 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div className="ml-3 flex-1">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                          Pembayaran Berhasil!
+                        </p>
+                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                          Kursus telah ditambahkan ke profil Anda.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex border-l border-gray-200 dark:border-gray-700">
+                    <button
+                      onClick={() => toast.dismiss(t.id)}
+                      className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-green-600 hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    >
+                      Tutup
+                    </button>
+                  </div>
+                </div>
+              ), { duration: 4000 }
+            );
+        };
+
         if (itemsToPurchase && itemsToPurchase.length > 0) {
-            // Jika checkout dari keranjang
             dispatch(addCourses(itemsToPurchase));
             const idsToRemove = itemsToPurchase.map(item => item.id);
             dispatch(removeItems(idsToRemove));
-            alert("Pembayaran berhasil! Kursus telah ditambahkan ke profil Anda.");
+            showSuccessToast();
             navigate('/profile?tab=courses');
         } else if (product) {
-            // Jika checkout dari halaman detail produk
             const singleItem = [{ id: product.id, qty: 1 }];
             dispatch(addCourses(singleItem));
-            // Hapus item ini dari keranjang jika ada
             dispatch(removeItems([product.id]));
-            alert("Pembayaran berhasil! Kursus telah ditambahkan ke profil Anda.");
+            showSuccessToast();
             navigate('/profile?tab=courses');
         } else {
-            alert("Terjadi kesalahan. Tidak ada produk untuk dibeli.");
+            toast.error("Terjadi kesalahan. Tidak ada produk untuk dibeli.");
             navigate('/cart');
         }
     };
