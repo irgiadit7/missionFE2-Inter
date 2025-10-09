@@ -129,7 +129,7 @@ const MonthlyTargetChart = ({ data, isDarkMode }) => {
     );
 };
 
-// --- [START] KODE YANG DIPERBARUI UNTUK STATISTIK ---
+
 const StatisticsChart = ({ data, isDarkMode }) => {
     const [activeTab, setActiveTab] = useState('Overview');
     
@@ -166,19 +166,19 @@ const StatisticsChart = ({ data, isDarkMode }) => {
     const areaPath = `${linePath} V ${svgHeight} H 0 Z`;
 
     return (
-        <div className={`p-6 rounded-lg shadow-md ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-            <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
+        <div className={`p-4 sm:p-6 rounded-lg shadow-md ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className="flex flex-col md:flex-row justify-between md:items-start gap-4 mb-4">
                 <div>
                     <h3 className="text-lg font-bold">Statistik</h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Target yang telah Anda tetapkan untuk setiap bulan</p>
                 </div>
-                <div className="flex flex-wrap items-center gap-4 text-sm">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 text-sm w-full md:w-auto">
                     <div className={`flex items-center gap-1 p-1 rounded-lg border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                         {['Overview', 'Sales', 'Revenue'].map(tab => (
                             <button 
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
-                                className={`px-3 py-1 rounded-md font-semibold transition-colors ${
+                                className={`px-3 py-1 rounded-md font-semibold transition-colors text-xs sm:text-sm ${
                                     activeTab === tab 
                                     ? 'bg-green-500 text-white'
                                     : 'text-gray-500 hover:text-black dark:hover:text-white'
@@ -188,7 +188,7 @@ const StatisticsChart = ({ data, isDarkMode }) => {
                             </button>
                         ))}
                     </div>
-                    <div className={`flex items-center gap-3 p-2 rounded-lg border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                    <div className={`flex items-center justify-center gap-2 p-2 rounded-lg border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                         <CalendarIcon />
                         <DatePickerButton date={startDate} onChange={(e) => setStartDate(new Date(e.target.value))} />
                         <span className="text-gray-400">-</span>
@@ -212,7 +212,6 @@ const StatisticsChart = ({ data, isDarkMode }) => {
         </div>
     );
 };
-// --- [END] KODE YANG DIPERBARUI UNTUK STATISTIK ---
 
 
 const DashboardPage = () => {
@@ -220,7 +219,7 @@ const DashboardPage = () => {
 
     return (
         <AdminLayout>
-            <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold mb-6">Dashboard</h1>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">

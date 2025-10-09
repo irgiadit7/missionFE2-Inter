@@ -11,12 +11,14 @@ const DashboardIcon = () => <svg className="w-6 h-6" fill="none" stroke="current
 const ArrowLeftIcon = () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
 const SunIcon = (props) => ( <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> );
 const MoonIcon = (props) => ( <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> );
+const MenuIcon = () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>;
 
 
 const AdminLayout = ({ children }) => {
     const { isDarkMode, setIsDarkMode } = useContext(DarkMode);
     const [username, setUsername] = useState('');
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for mobile sidebar
     const profileTimeoutRef = useRef(null);
 
     useEffect(() => {
@@ -49,8 +51,9 @@ const AdminLayout = ({ children }) => {
     return (
         <>
             <style>{animationStyles}</style>
-            <div className={`min-h-screen flex ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'}`}>
-                <aside className={`w-64 flex-shrink-0 p-4 border-r ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+            <div className={`min-h-screen flex ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-800'}`}>
+                {/* --- Sidebar for Desktop --- */}
+                <aside className={`w-64 flex-shrink-0 p-4 border-r ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} hidden md:block`}>
                     <div className="px-2 mb-8">
                         <Link to="/" className="inline-block mb-4 text-gray-500 hover:text-green-500" aria-label="Kembali ke Beranda">
                             <ArrowLeftIcon />
@@ -71,8 +74,17 @@ const AdminLayout = ({ children }) => {
                     </nav>
                 </aside>
 
-                <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
-                    <header className="flex justify-end items-center mb-6">
+                {/* --- Main Content --- */}
+                <div className="flex-1 flex flex-col">
+                    <header className={`flex justify-between items-center p-4 border-b md:justify-end ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'} md:border-b-0`}>
+                        <div className="md:hidden flex items-center gap-4">
+                            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+                                <MenuIcon />
+                            </button>
+                             <h1 className="text-xl font-extrabold">
+                                <span className="animate-gradient-flow">videobelajar</span>
+                            </h1>
+                        </div>
                         <div className="flex items-center gap-4">
                              <div className="flex items-center gap-2">
                                 <SunIcon className={`w-5 h-5 ${isDarkMode ? 'text-gray-500' : 'text-yellow-500'}`} />
@@ -94,8 +106,39 @@ const AdminLayout = ({ children }) => {
                             </div>
                         </div>
                     </header>
-                    {children}
-                </main>
+                    <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+                        {children}
+                    </main>
+                </div>
+
+                {/* --- Sidebar for Mobile (Off-canvas) --- */}
+                {isSidebarOpen && (
+                    <div className="md:hidden fixed inset-0 z-30">
+                        {/* Backdrop */}
+                        <div className="absolute inset-0 bg-black opacity-50" onClick={() => setIsSidebarOpen(false)}></div>
+                        {/* Sidebar Content */}
+                        <aside className={`absolute top-0 left-0 w-64 h-full p-4 border-r ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+                            <div className="px-2 mb-8">
+                                <Link to="/" className="inline-block mb-4 text-gray-500 hover:text-green-500" aria-label="Kembali ke Beranda" onClick={() => setIsSidebarOpen(false)}>
+                                    <ArrowLeftIcon />
+                                </Link>
+                                <h1 className="text-2xl font-extrabold">
+                                    <span className="animate-gradient-flow">videobelajar</span>
+                                </h1>
+                            </div>
+                             <nav className="space-y-2">
+                                <NavLink to="/admin/products" end className={getLinkClass} onClick={() => setIsSidebarOpen(false)}>
+                                    <DashboardIcon />
+                                    <span>Dashboard</span>
+                                </NavLink>
+                                <NavLink to="/admin/products/manage" className={getLinkClass} onClick={() => setIsSidebarOpen(false)}>
+                                    <ProductIcon />
+                                    <span>Manajemen Produk</span>
+                                </NavLink>
+                            </nav>
+                        </aside>
+                    </div>
+                )}
             </div>
         </>
     );
