@@ -105,7 +105,9 @@ const CartPage = () => {
                                     <img src={item.image} alt={item.title} className="w-32 h-20 object-cover rounded-md mb-4 sm:mb-0 sm:mr-6" />
                                     <div className="flex-grow text-center sm:text-left">
                                         <h2 className="font-bold">{item.title}</h2>
-                                        <p className="text-sm text-green-600 font-semibold">Rp {item.price}k</p>
+                                        <p className="text-sm text-green-600 font-semibold">
+                                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.price * 1000)}
+                                        </p>
                                     </div>
                                     <div className="flex items-center gap-4 mt-4 sm:mt-0">
                                         <div className={`flex items-center border rounded-md ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
@@ -129,7 +131,9 @@ const CartPage = () => {
                                 <div className={`border-t my-4 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}></div>
                                 <div className="flex justify-between font-bold text-lg mb-6">
                                     <span>Total ({selectedItems.length} item)</span>
-                                    <span>Rp {totalPrice.toFixed(3)}k</span>
+                                    <span>
+                                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalPrice * 1000)}
+                                    </span>
                                 </div>
                                 <button 
                                     onClick={handleCheckout}
