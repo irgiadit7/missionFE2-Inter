@@ -13,7 +13,7 @@ const Header = ({ simple = false }) => {
     const [openMenu, setOpenMenu] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
-    const [userRole, setUserRole] = useState(null); // State untuk menyimpan peran pengguna
+    const [userRole, setUserRole] = useState(null);
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const profileTimeoutRef = useRef(null);
     const menuTimeoutRef = useRef(null);
@@ -26,18 +26,18 @@ const Header = ({ simple = false }) => {
         if (token) {
             setIsLoggedIn(true);
             const storedUser = localStorage.getItem("user");
-            const role = localStorage.getItem("role"); // Ambil role dari localStorage
+            const role = localStorage.getItem("role");
             if (storedUser) {
                 setUsername(storedUser);
             }
             if (role) {
-                setUserRole(role); // Simpan role ke state
+                setUserRole(role);
             }
         }
     }, []);
 
     const handleLogout = () => {
-        localStorage.clear(); // Menghapus semua item dari localStorage
+        localStorage.clear();
         window.location.href = "/";
     };
     
@@ -91,14 +91,12 @@ const Header = ({ simple = false }) => {
             <header className={`sticky top-0 z-50 shadow-md ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
                 <div className="container mx-auto flex justify-between items-center p-4">
                     <Link to="/" className="text-2xl font-extrabold"><span className="animate-gradient-flow">videobelajar</span></Link>
-                    
                     <div className="hidden md:flex items-center space-x-6">
                         <nav className="flex items-center space-x-6" onMouseLeave={handleMenuMouseLeave}>
                             <div onMouseEnter={() => handleMenuMouseEnter('program')}><button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'program' ? 'text-yellow-500' : ''}`}>Program</button></div>
                             <div onMouseEnter={() => handleMenuMouseEnter('corporate')}><button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'corporate' ? 'text-yellow-500' : ''}`}>Corporate</button></div>
                             <div onMouseEnter={() => handleMenuMouseEnter('about')}><button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'about' ? 'text-yellow-500' : ''}`}>About</button></div>
                         </nav>
-                        
                         <div className="flex items-center space-x-4">
                             {isLoggedIn && (
                                 <Link to="/cart" className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
@@ -110,7 +108,6 @@ const Header = ({ simple = false }) => {
                                     )}
                                 </Link>
                             )}
-
                             {isLoggedIn ? (
                                 <div className="relative" onMouseEnter={handleProfileMouseEnter} onMouseLeave={handleProfileMouseLeave}>
                                     <div className="flex items-center gap-3 cursor-pointer">
@@ -148,7 +145,6 @@ const Header = ({ simple = false }) => {
                             </div>
                         </div>
                     </div>
-                    
                     <div className="flex items-center md:hidden">
                         {isLoggedIn && (
                             <Link to="/cart" className="relative p-2 mr-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
@@ -165,7 +161,6 @@ const Header = ({ simple = false }) => {
                         </button>
                     </div>
                 </div>
-
                 {openMenu && !isMobileMenuOpen && ( 
                     <div className={`absolute left-0 top-full w-full shadow-lg ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`} onMouseEnter={() => handleMenuMouseEnter(openMenu)} onMouseLeave={handleMenuMouseLeave}>
                         <div className="container mx-auto p-8">
@@ -184,11 +179,10 @@ const Header = ({ simple = false }) => {
                         </div>
                     </div>
                 )}
-                
                 <div className={`md:hidden absolute top-full left-0 w-full shadow-lg transition-all duration-300 ease-in-out z-40 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} ${isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                     <div className={`p-4 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
                         <nav className="space-y-2 mb-4">
-                            {/* ... mobile nav items ... */}
+                            {/* ... (kode menu mobile lainnya) ... */}
                         </nav>
                         <div className="border-t pt-4 space-y-3">
                             {isLoggedIn ? (
