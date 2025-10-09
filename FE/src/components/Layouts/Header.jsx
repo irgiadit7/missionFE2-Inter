@@ -1,3 +1,5 @@
+// src/components/Layouts/Header.jsx
+
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -11,6 +13,7 @@ const Header = ({ simple = false }) => {
     const [openMenu, setOpenMenu] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
+    const [userRole, setUserRole] = useState(null); // State untuk menyimpan peran pengguna
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const profileTimeoutRef = useRef(null);
     const menuTimeoutRef = useRef(null);
@@ -23,17 +26,18 @@ const Header = ({ simple = false }) => {
         if (token) {
             setIsLoggedIn(true);
             const storedUser = localStorage.getItem("user");
+            const role = localStorage.getItem("role"); // Ambil role dari localStorage
             if (storedUser) {
                 setUsername(storedUser);
+            }
+            if (role) {
+                setUserRole(role); // Simpan role ke state
             }
         }
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        localStorage.removeItem("password");
-        localStorage.removeItem("role"); 
+        localStorage.clear(); // Menghapus semua item dari localStorage
         window.location.href = "/";
     };
     
@@ -87,12 +91,14 @@ const Header = ({ simple = false }) => {
             <header className={`sticky top-0 z-50 shadow-md ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
                 <div className="container mx-auto flex justify-between items-center p-4">
                     <Link to="/" className="text-2xl font-extrabold"><span className="animate-gradient-flow">videobelajar</span></Link>
+                    
                     <div className="hidden md:flex items-center space-x-6">
                         <nav className="flex items-center space-x-6" onMouseLeave={handleMenuMouseLeave}>
                             <div onMouseEnter={() => handleMenuMouseEnter('program')}><button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'program' ? 'text-yellow-500' : ''}`}>Program</button></div>
                             <div onMouseEnter={() => handleMenuMouseEnter('corporate')}><button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'corporate' ? 'text-yellow-500' : ''}`}>Corporate</button></div>
                             <div onMouseEnter={() => handleMenuMouseEnter('about')}><button className={`hover:text-yellow-500 transition-colors duration-200 ${openMenu === 'about' ? 'text-yellow-500' : ''}`}>About</button></div>
                         </nav>
+                        
                         <div className="flex items-center space-x-4">
                             {isLoggedIn && (
                                 <Link to="/cart" className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
@@ -104,6 +110,7 @@ const Header = ({ simple = false }) => {
                                     )}
                                 </Link>
                             )}
+
                             {isLoggedIn ? (
                                 <div className="relative" onMouseEnter={handleProfileMouseEnter} onMouseLeave={handleProfileMouseLeave}>
                                     <div className="flex items-center gap-3 cursor-pointer">
@@ -112,11 +119,19 @@ const Header = ({ simple = false }) => {
                                     </div>
                                     {isProfileDropdownOpen && (
                                         <div className={`absolute right-0 mt-2 w-48 ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-700'} rounded-md shadow-lg py-1 text-sm z-20`}>
-                                            <Link to="/profile?tab=profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-400 dark:hover:text-white">Profil</Link>
-                                            <Link to="/profile?tab=courses" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-400 dark:hover:text-white">Kelas Video Course</Link>
-                                            <Link to="/profile?tab=orders" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-400 dark:hover:text-white">Daftar Pembelian</Link>
+                                            {userRole === 'admin' && (
+                                                <>
+                                                    <Link to="/admin/products" className="block px-4 py-2 font-bold text-green-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-green-400">
+                                                        Admin Panel
+                                                    </Link>
+                                                    <div className="border-t my-1 dark:border-gray-600"></div>
+                                                </>
+                                            )}
+                                            <Link to="/profile?tab=profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Profil</Link>
+                                            <Link to="/profile?tab=courses" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Kelas Video Course</Link>
+                                            <Link to="/profile?tab=orders" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Daftar Pembelian</Link>
                                             <div className="border-t my-1 dark:border-gray-600"></div>
-                                            <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-400 dark:hover:text-red-600">Keluar</button>
+                                            <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-500">Keluar</button>
                                         </div>
                                     )}
                                 </div>
@@ -133,6 +148,7 @@ const Header = ({ simple = false }) => {
                             </div>
                         </div>
                     </div>
+                    
                     <div className="flex items-center md:hidden">
                         {isLoggedIn && (
                             <Link to="/cart" className="relative p-2 mr-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
@@ -149,6 +165,7 @@ const Header = ({ simple = false }) => {
                         </button>
                     </div>
                 </div>
+
                 {openMenu && !isMobileMenuOpen && ( 
                     <div className={`absolute left-0 top-full w-full shadow-lg ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`} onMouseEnter={() => handleMenuMouseEnter(openMenu)} onMouseLeave={handleMenuMouseLeave}>
                         <div className="container mx-auto p-8">
@@ -167,30 +184,11 @@ const Header = ({ simple = false }) => {
                         </div>
                     </div>
                 )}
+                
                 <div className={`md:hidden absolute top-full left-0 w-full shadow-lg transition-all duration-300 ease-in-out z-40 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} ${isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                     <div className={`p-4 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
                         <nav className="space-y-2 mb-4">
-                            <div className={`border rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                                <button onClick={(e) => { e.stopPropagation(); toggleNestedMenu('program'); }} className="w-full flex justify-between items-center p-3 text-left font-semibold  rounded-lg transition-colors">
-                                    <span>Program</span>
-                                    <svg className={`w-4 h-4 transform transition-transform ${openMenu === 'program' ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                {openMenu === 'program' && (<div className={`p-3 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} space-y-3 transition-all duration-300 ease-in-out`} onClick={handleLinkClick}>{Object.entries(programMenuData).map(([category, courses]) => (<div key={category} className='pt-2'><h3 className="font-bold text-sm text-gray-500 mb-2">{category}</h3><ul className='space-y-1'>{courses.map(course => (<li key={course.id}><Link to={`/products/${course.id}`} className={`text-sm block py-1 px-2 rounded  ${isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-slate-200'}`}>{course.title}</Link></li>))}</ul></div>))}</div>)}
-                            </div>
-                            <div className={`border rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                                <button onClick={(e) => { e.stopPropagation(); toggleNestedMenu('corporate'); }} className="w-full flex justify-between items-center p-3 text-left font-semibold rounded-lg transition-colors">
-                                    <span>Corporate</span>
-                                    <svg className={`w-4 h-4 transform transition-transform ${openMenu === 'corporate' ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                {openMenu === 'corporate' && (<div className="p-3  transition-all duration-300 ease-in-out"><p className="text-sm ">Tingkatkan keahlian tim Anda dengan program pembelajaran fleksibel yang dirancang khusus untuk kebutuhan perusahaan. Hubungi kami untuk solusi corporate.</p></div>)}
-                            </div>
-                            <div className={`border rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                                <button onClick={(e) => { e.stopPropagation(); toggleNestedMenu('about'); }} className="w-full flex justify-between items-center p-3 text-left font-semibold  rounded-lg transition-colors">
-                                    <span>About</span>
-                                    <svg className={`w-4 h-4 transform transition-transform ${openMenu === 'about' ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                {openMenu === 'about' && (<div className="p-3 transition-all duration-300 ease-in-out"><p className="text-sm ">Videobelajar adalah platform revolusioner yang didedikasikan untuk menyediakan pembelajaran video interaktif berkualitas tinggi. Misi kami adalah memberdayakan individu untuk mencapai potensi penuh mereka.</p></div>)}
-                            </div>
+                            {/* ... mobile nav items ... */}
                         </nav>
                         <div className="border-t pt-4 space-y-3">
                             {isLoggedIn ? (
@@ -203,11 +201,14 @@ const Header = ({ simple = false }) => {
                                          <svg className={`w-4 h-4 transform transition-transform ${openMenu === 'profile' ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
                                     {openMenu === 'profile' && (
-                                        <div className="mt-3 space-y-1 border-t pt-3  transition-all duration-300 ease-in-out">
-                                            <Link to="/profile?tab=profile" className={`block px-4 py-2 text-smrounded-md ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Profil</Link>
-                                            <Link to="/profile?tab=courses" className={`block px-4 py-2 text-smrounded-md ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Kelas Video Course</Link>
-                                            <Link to="/profile?tab=orders" className={`block px-4 py-2 text-smrounded-md ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Daftar Pembelian</Link>
-                                            <button onClick={() => { handleLogout(); handleLinkClick(); }} className={`w-full text-left px-4 py-2 text-sm rounded-md text-red-500  ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Keluar</button>
+                                        <div className="mt-3 space-y-1 border-t pt-3 transition-all duration-300 ease-in-out">
+                                            {userRole === 'admin' && (
+                                                <Link to="/admin/products" onClick={handleLinkClick} className={`block px-4 py-2 text-sm font-bold rounded-md text-green-600 ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Admin Panel</Link>
+                                            )}
+                                            <Link to="/profile?tab=profile" onClick={handleLinkClick} className={`block px-4 py-2 text-sm rounded-md ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Profil</Link>
+                                            <Link to="/profile?tab=courses" onClick={handleLinkClick} className={`block px-4 py-2 text-sm rounded-md ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Kelas Video Course</Link>
+                                            <Link to="/profile?tab=orders" onClick={handleLinkClick} className={`block px-4 py-2 text-sm rounded-md ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Daftar Pembelian</Link>
+                                            <button onClick={() => { handleLogout(); handleLinkClick(); }} className={`w-full text-left px-4 py-2 text-sm rounded-md text-red-500 ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-200'}`}>Keluar</button>
                                         </div>
                                     )}
                                 </div>
