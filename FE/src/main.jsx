@@ -1,3 +1,5 @@
+// src/main.jsx
+
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
@@ -22,13 +24,12 @@ import AddNewProductPage from './Pages/admin/AddNewProductPage.jsx';
 import EditProductPage from './Pages/admin/EditProductPage.jsx'; 
 import CartPage from './Pages/CartPage';
 import { Toaster } from 'react-hot-toast';
+import ProductManagementPage from './Pages/admin/ProductManagementPage.jsx'; // Impor halaman baru
 
 const router = createBrowserRouter([
   {
-    // 2. Jadikan RootLayout sebagai elemen utama
     element: <RootLayout />,
     errorElement: <ErrorPage />,
-    // 3. Pindahkan semua halaman menjadi children
     children: [
       {
         path: "/",
@@ -74,7 +75,15 @@ const router = createBrowserRouter([
           </AdminProtectedRoute>
         ),
       },
-            {
+      {
+        path: "/admin/products/manage",
+        element: (
+          <AdminProtectedRoute>
+            <ProductManagementPage />
+          </AdminProtectedRoute>
+        ),
+      },
+      {
         path: "/admin/products/new",
         element: (
           <AdminProtectedRoute>
@@ -82,7 +91,7 @@ const router = createBrowserRouter([
           </AdminProtectedRoute>
         ),
       },
-         {
+      {
         path: "/admin/products/edit/:id",
         element: (
           <AdminProtectedRoute>
