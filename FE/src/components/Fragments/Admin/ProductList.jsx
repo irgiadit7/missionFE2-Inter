@@ -41,7 +41,7 @@ const ProductList = () => {
     };
 
     return (
-        <div className={`rounded-lg shadow-lg p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+        <div className={`rounded-lg shadow-lg p-4 sm:p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
                 {/* --- Kolom Pencarian --- */}
                 <div className="relative w-full sm:w-auto">
@@ -64,46 +64,75 @@ const ProductList = () => {
                 </Link>
             </div>
             
-            {/* --- Tabel Modern --- */}
+            {/* --- Responsive List/Table --- */}
             <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left table-auto">
-                    <thead className={`border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                        <tr>
-                            <th className="p-4 w-[50%]">Judul</th>
-                            <th className="p-4">Kategori</th>
-                            <th className="p-4">Harga</th>
-                            <th className="p-4 text-right">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredCourses.map(course => (
-                            <tr key={course.id} className={`border-b transition-colors ${isDarkMode ? 'border-gray-700 hover:bg-gray-700/50' : 'border-gray-200 hover:bg-gray-50'}`}>
-                                <td className="p-4">
-                                    <div className="flex items-center gap-4">
-                                        <img src={course.image} alt={course.title} className="w-16 h-10 object-cover rounded-md" />
-                                        <span className="font-semibold">{course.title}</span>
+                {/* --- Table Header for Desktop --- */}
+                <div className={`hidden md:grid grid-cols-12 gap-4 p-4 border-b font-semibold ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                    <div className="col-span-6">Judul</div>
+                    <div className="col-span-2">Kategori</div>
+                    <div className="col-span-2">Harga</div>
+                    <div className="col-span-2 text-right">Aksi</div>
+                </div>
+
+                {/* --- Product List --- */}
+                <div className="space-y-4 md:space-y-0">
+                    {filteredCourses.map(course => (
+                        <div key={course.id} className={`md:grid md:grid-cols-12 md:gap-4 items-center p-4 border-b transition-colors ${isDarkMode ? 'border-gray-700 hover:bg-gray-700/50' : 'border-gray-200 hover:bg-gray-50'} rounded-lg md:rounded-none`}>
+                            
+                            {/* --- Kolom Judul (Mobile & Desktop) --- */}
+                            <div className="md:col-span-6 flex items-center gap-4">
+                                <img src={course.image} alt={course.title} className="w-16 h-10 object-cover rounded-md flex-shrink-0" />
+                                <span className="font-semibold">{course.title}</span>
+                            </div>
+
+                            {/* --- Info Tambahan untuk Mobile --- */}
+                            <div className="md:hidden flex justify-between items-center mt-4 pt-4 border-t dark:border-gray-600">
+                                <div className="space-y-1 text-sm">
+                                    <div>
+                                        <span className="font-semibold text-gray-500 dark:text-gray-400">Kategori: </span>
+                                        <span className={`px-2 py-1 rounded-full text-xs font-semibold capitalize ${getCategoryClass(course.category)}`}>
+                                            {course.category.replace('-', ' ')}
+                                        </span>
                                     </div>
-                                </td>
-                                <td className="p-4">
-                                    <span className={`px-2 py-1 rounded-full text-xs font-semibold capitalize ${getCategoryClass(course.category)}`}>
-                                        {course.category.replace('-', ' ')}
-                                    </span>
-                                </td>
-                                <td className="p-4 font-semibold">Rp {course.price}k</td>
-                                <td className="p-4 text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <Link to={`/admin/products/edit/${course.id}`} className="p-2 text-blue-500 rounded-full hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors">
-                                            <EditIcon />
-                                        </Link>
-                                        <button onClick={() => handleDelete(course.id, course.title)} className="p-2 text-red-500 rounded-full hover:bg-red-100 dark:hover:bg-gray-700 transition-colors">
-                                            <DeleteIcon />
-                                        </button>
+                                    <div>
+                                        <span className="font-semibold text-gray-500 dark:text-gray-400">Harga: </span>
+                                        <span className="font-semibold">Rp {course.price}k</span>
                                     </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Link to={`/admin/products/edit/${course.id}`} className="p-2 text-blue-500 rounded-full hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors">
+                                        <EditIcon />
+                                    </Link>
+                                    <button onClick={() => handleDelete(course.id, course.title)} className="p-2 text-red-500 rounded-full hover:bg-red-100 dark:hover:bg-gray-700 transition-colors">
+                                        <DeleteIcon />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* --- Kolom Kategori (Desktop) --- */}
+                            <div className="hidden md:block md:col-span-2">
+                                <span className={`px-2 py-1 rounded-full text-xs font-semibold capitalize ${getCategoryClass(course.category)}`}>
+                                    {course.category.replace('-', ' ')}
+                                </span>
+                            </div>
+
+                            {/* --- Kolom Harga (Desktop) --- */}
+                            <div className="hidden md:block md:col-span-2 font-semibold">
+                                Rp {course.price}k
+                            </div>
+
+                            {/* --- Kolom Aksi (Desktop) --- */}
+                            <div className="hidden md:flex md:col-span-2 justify-end gap-2">
+                                <Link to={`/admin/products/edit/${course.id}`} className="p-2 text-blue-500 rounded-full hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors">
+                                    <EditIcon />
+                                </Link>
+                                <button onClick={() => handleDelete(course.id, course.title)} className="p-2 text-red-500 rounded-full hover:bg-red-100 dark:hover:bg-gray-700 transition-colors">
+                                    <DeleteIcon />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
              {filteredCourses.length === 0 && (
                 <div className="text-center py-10">
