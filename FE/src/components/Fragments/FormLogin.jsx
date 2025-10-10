@@ -1,3 +1,5 @@
+// src/components/Fragments/FormLogin.jsx
+
 import { login } from "../../services/auth.service";
 import Button from "../Elements/Button";
 import InputForm from "../Elements/Input/Index";
@@ -19,7 +21,7 @@ const FormLogin = () => {
             localStorage.setItem('token', 'admin-fake-token'); // Buat token palsu untuk admin
             localStorage.setItem('user', username);
             localStorage.setItem('role', 'admin'); // Set peran sebagai 'admin'
-            window.location.href = "/admin/products"; // Arahkan ke dasbor admin
+            window.location.href = "/"; // Arahkan ke halaman utama
             return; // Hentikan eksekusi lebih lanjut
         }
         
