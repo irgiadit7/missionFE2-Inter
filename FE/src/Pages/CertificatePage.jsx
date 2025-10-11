@@ -40,7 +40,6 @@ const CertificatePage = () => {
     const displayName = username.toUpperCase() || "PESERTA VIDEO COURSE";
 
     return (
-        // Padding utama diperkecil di mobile
         <div className={`min-h-screen ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} p-4 md:p-8 print:p-0`}>
             
             <div className='max-w-4xl mx-auto'>
@@ -50,7 +49,7 @@ const CertificatePage = () => {
                     <Link to={`/learn/${id}`} className="bg-gray-500 text-white py-2 px-3 md:px-4 rounded-lg hover:bg-gray-600 text-sm md:text-base">Kembali</Link>
                 </div>
 
-                {/* Sertifikat Card - Padding dan ukuran font disesuaikan */}
+                {/* Sertifikat Card */}
                 <div id="certificate" className={`bg-white border-8 border-yellow-500 shadow-2xl p-6 md:p-12 text-center`}>
                     <h1 className="text-2xl md:text-3xl font-serif font-bold text-yellow-600 mb-2">SERTIFIKAT PENCAPAIAN</h1>
                     <p className="text-base md:text-lg mb-4 md:mb-6">Diberikan kepada</p>

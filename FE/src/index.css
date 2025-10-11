@@ -1,19 +1,13 @@
-/* == Styling Scrollbar Kustom (Final & Adaptif) == */
-
-/* Pengaturan dasar */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
 }
-
-/* Secara eksplisit menghilangkan track di SEMUA mode */
 ::-webkit-scrollbar-track {
   background: transparent;
-  background-color: transparent !important; /* Memaksa track untuk transparan */
+  background-color: transparent !important; 
   border: none;
 }
 
-/* Handle untuk Light Mode (Default) */
 ::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
@@ -22,7 +16,6 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* Handle khusus untuk Dark Mode */
 .dark ::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.2);
 }
@@ -41,7 +34,6 @@
     background: url('/path/to/your/section3-image.webp') center center/cover no-repeat;
 }
 
-/* Path gambar yang benar di folder public Anda */
 .hero {
     background-image: url('/images/HeroImage.jpg');
     background-size: cover;
@@ -54,7 +46,6 @@
     background-position: center;
 }
 
-/* Styling Scrollbar Kustom untuk Chat AI */
 .chat-body-scrollbar::-webkit-scrollbar {
   width: 6px;
 }

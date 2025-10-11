@@ -4,7 +4,7 @@ import { DarkMode } from '../../context/DarkMode';
 
 const Footer = () => {
     const { isDarkMode } = useContext(DarkMode);
-    const [openAccordion, setOpenAccordion] = useState(null); // State untuk mengontrol akordion
+    const [openAccordion, setOpenAccordion] = useState(null); 
 
     const animationStyles = `
         .animate-gradient-flow {
@@ -30,7 +30,7 @@ const Footer = () => {
     const linkClasses = isDarkMode ? 'hover:text-yellow-400' : 'hover:text-yellow-500';
     const borderClasses = isDarkMode ? 'border-gray-700' : 'border-gray-200';
 
-    // Data untuk menu akordion mobile, sekarang menyertakan "Kategori"
+ 
     const accordionData = [
         {
             title: 'Kategori',
@@ -66,7 +66,7 @@ const Footer = () => {
             
             <footer className={`py-12 px-8 ${footerClasses}`}>
                 <div className="container mx-auto">
-                    {/* --- LAYOUT DESKTOP (disembunyikan di mobile) --- */}
+                    {/* --- LAYOUT DESKTOP --- */}
                     <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
                         <div className="md:col-span-2">
                             <Link to="/" className="text-2xl font-extrabold mb-4 inline-block"><span className="animate-gradient-flow">videobelajar</span></Link>
@@ -102,9 +102,8 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    {/* --- LAYOUT MOBILE (disembunyikan di desktop) --- */}
+                    {/* --- LAYOUT MOBILE --- */}
                     <div className="md:hidden text-center mb-10">
-                        {/* Info Brand */}
                         <div className="mb-8">
                              <Link to="/" className="text-2xl font-extrabold mb-4 inline-block"><span className="animate-gradient-flow">videobelajar</span></Link>
                             <p className={`mb-4 font-semibold text-base ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Gali Potensi Anda Melalui Pembelajaran Video di harisenin.id!</p>

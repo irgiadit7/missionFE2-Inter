@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CtaSection = () => {
     return (
         <div className="container mx-auto mb-16 mt-4 px-4">

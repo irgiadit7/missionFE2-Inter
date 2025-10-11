@@ -7,7 +7,6 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { dummyOrders } from '../data/courses'; // Data pesanan masih statis untuk saat ini
 
-// --- ICONS (Simple SVG components for demonstration) ---
 const UserIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
 );
@@ -104,7 +103,6 @@ const OrderHistoryContent = ({ isDarkMode }) => {
 };
 
 const MyCoursesContent = ({ isDarkMode }) => {
-    // Ambil data kursus yang dimiliki pengguna dari Redux
     const myCourseIds = useSelector((state) => state.myCourses.data);
     // Ambil data semua produk untuk mendapatkan detail lengkap (judul, gambar, dll.)
     const allProducts = useSelector((state) => state.products.data);

@@ -4,7 +4,7 @@ import { courseData } from '../../data/courses';
 const productsSlice = createSlice({
     name: 'products',
     initialState: {
-        data: courseData, // Muat data awal dari file data kita
+        data: courseData, 
     },
     reducers: {
         addProduct: (state, action) => {

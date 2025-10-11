@@ -5,7 +5,7 @@ import ChatAssistant from '../Fragments/ChatAssistant';
 const RootLayout = () => {
   const location = useLocation();
   
-  // State untuk navbar dan chat sekarang dikelola di sini
+  // State untuk navbar dan chat asisten
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -13,7 +13,6 @@ const RootLayout = () => {
   const handleToggleMobileMenu = () => {
     const newMenuState = !isMobileMenuOpen;
     setIsMobileMenuOpen(newMenuState);
-    // Jika navbar akan dibuka, pastikan chat tertutup
     if (newMenuState) {
       setIsChatOpen(false);
     }
@@ -23,7 +22,6 @@ const RootLayout = () => {
   const handleToggleChat = () => {
     const newChatState = !isChatOpen;
     setIsChatOpen(newChatState);
-    // Jika chat akan dibuka, pastikan navbar mobile tertutup
     if (newChatState) {
       setIsMobileMenuOpen(false);
     }

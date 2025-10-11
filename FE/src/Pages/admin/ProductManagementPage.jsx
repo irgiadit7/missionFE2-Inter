@@ -1,6 +1,3 @@
-// src/Pages/admin/ProductManagementPage.jsx
-
-import React from 'react';
 import AdminLayout from '../../components/Layouts/AdminLayout';
 import ProductList from '../../components/Fragments/Admin/ProductList';
 

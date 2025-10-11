@@ -1,5 +1,3 @@
-// src/main.jsx
-
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
@@ -12,7 +10,6 @@ import DetailProductPages from './Pages/detailProduct.jsx';
 import {Provider} from "react-redux";
 import store from "./redux/store"
 import DarkModeContextProvider from './context/DarkMode.jsx';
-import { TotalPriceProvider } from './context/TotalPriceContext.jsx';
 import HomePage from './Pages/homePage.jsx';
 import PaymentPage from './Pages/PaymentPage.jsx';
 import CoursePlayerPage from './Pages/CoursePlayerPage.jsx';
@@ -24,7 +21,7 @@ import AddNewProductPage from './Pages/admin/AddNewProductPage.jsx';
 import EditProductPage from './Pages/admin/EditProductPage.jsx'; 
 import CartPage from './Pages/CartPage';
 import { Toaster } from 'react-hot-toast';
-import ProductManagementPage from './Pages/admin/ProductManagementPage.jsx'; // Impor halaman baru
+import ProductManagementPage from './Pages/admin/ProductManagementPage.jsx'; 
 
 const router = createBrowserRouter([
   {

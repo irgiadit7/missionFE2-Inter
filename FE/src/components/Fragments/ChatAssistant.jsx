@@ -8,10 +8,8 @@ const quickReplies = [
     { label: 'Apa benefitnya?', value: 'Apa saja benefit belajar di sini?' },
 ];
 
-// Terima isChatOpen (menggantikan isOpen) dan handleToggleChat dari props
 const ChatAssistant = ({ isChatOpen, handleToggleChat }) => { 
     const { isDarkMode } = useContext(DarkMode);
-    // Hapus state isOpen dari sini
 
     const [messages, setMessages] = useState([
         { from: 'bot', text: 'Halo! Saya asisten AI dari videobelajar. Pilih salah satu opsi di bawah atau ketik pertanyaanmu.' }
@@ -21,7 +19,6 @@ const ChatAssistant = ({ isChatOpen, handleToggleChat }) => {
     const [showQuickReplies, setShowQuickReplies] = useState(true);
     const chatBodyRef = useRef(null);
 
-    // useEffect yang sebelumnya memantau isMobileMenuOpen sudah tidak diperlukan di sini
     
     useEffect(() => {
         if (chatBodyRef.current) {
@@ -30,7 +27,6 @@ const ChatAssistant = ({ isChatOpen, handleToggleChat }) => {
     }, [messages]);
 
     const getGeminiResponse = async (prompt) => {
-        // ... (fungsi ini tidak berubah)
         return new Promise(resolve => {
             setTimeout(() => {
                 const lowerCasePrompt = prompt.toLowerCase();
@@ -52,7 +48,6 @@ const ChatAssistant = ({ isChatOpen, handleToggleChat }) => {
     };
 
     const sendMessage = async (messageText) => {
-        // ... (fungsi ini tidak berubah)
         if (isLoading) return;
         setShowQuickReplies(false);
         const userMessage = { from: 'user', text: messageText };
@@ -79,12 +74,12 @@ const ChatAssistant = ({ isChatOpen, handleToggleChat }) => {
         sendMessage(value);
     };
 
-    // Fungsi toggleChat lokal dihapus
+
     
     return (
         <>
             <button
-                onClick={handleToggleChat} // Gunakan fungsi dari props
+                onClick={handleToggleChat}
                 className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-green-500 text-white p-4 md:p-5 rounded-full shadow-xl hover:bg-green-600 transition-all duration-300 transform hover:scale-110 z-50"
                 aria-label="Buka Chat"
             >
@@ -101,7 +96,7 @@ const ChatAssistant = ({ isChatOpen, handleToggleChat }) => {
                         </button>
                     </div>
 
-                    {/* Sisa dari JSX tidak ada perubahan */}
+
                     <div ref={chatBodyRef} className="flex-1 p-3 overflow-y-auto chat-body-scrollbar">
                         {messages.map((msg, index) => (
                             <div key={index} className={`mb-2 flex ${msg.from === 'bot' ? 'justify-start' : 'justify-end'}`}>

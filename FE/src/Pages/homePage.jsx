@@ -5,7 +5,7 @@ import CoursesSection from '../components/Fragments/CoursesSection';
 import CtaSection from '../components/Fragments/CtaSection';
 import Footer from '../components/Layouts/Footer';
 import { DarkMode } from '../context/DarkMode';
-import ChatAssistant from '../components/Fragments/ChatAssistant'; // <-- 1. Import komponen
+import ChatAssistant from '../components/Fragments/ChatAssistant'; 
 
 const HomePage = () => {
     const { isDarkMode } = useContext(DarkMode);
@@ -19,7 +19,7 @@ const HomePage = () => {
                 <CtaSection />
             </main>
             <Footer />
-            <ChatAssistant /> {/* <-- 2. Tambahkan komponen di sini */}
+            <ChatAssistant /> 
         </div>
     );
 };

@@ -1,5 +1,3 @@
-// src/hooks/useLogin.jsx
-
 import { useState, useEffect } from "react";
 import { getUsername } from "../services/auth.service";
 

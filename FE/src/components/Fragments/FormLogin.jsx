@@ -1,5 +1,3 @@
-// src/components/Fragments/FormLogin.jsx
-
 import { login } from "../../services/auth.service";
 import Button from "../Elements/Button";
 import InputForm from "../Elements/Input/Index";
@@ -16,22 +14,21 @@ const FormLogin = () => {
         const username = event.target.username.value;
         const password = event.target.password.value;
 
-        // --- LOGIKA AUTENTIKASI ADMIN ---
+        //admin token
         if (username === 'IrgiAdit' && password === 'IrgiAdit7') {
-            localStorage.setItem('token', 'admin-fake-token'); // Buat token palsu untuk admin
+            localStorage.setItem('token', 'admin-fake-token'); 
             localStorage.setItem('user', username);
-            localStorage.setItem('role', 'admin'); // Set peran sebagai 'admin'
-            window.location.href = "/"; // Arahkan ke halaman utama
-            return; // Hentikan eksekusi lebih lanjut
+            localStorage.setItem('role', 'admin');
+            window.location.href = "/"; 
+            return; 
         }
         
-        // --- LOGIKA UNTUK CUSTOMER ---
         const data = { username, password };
         login(data, (success, res) => {
             if (success) {
                 localStorage.setItem("user", data.username);
                 localStorage.setItem("token", res);
-                localStorage.setItem("role", "customer"); // Set peran sebagai 'customer'
+                localStorage.setItem("role", "customer"); 
                 window.location.href = "/";
             } else {
                 setLoginFailed("Login gagal. Periksa kembali username dan password Anda.");
@@ -55,14 +52,14 @@ const FormLogin = () => {
         </svg>
     );
     
-    // Mendefinisikan class untuk light & dark mode secara terpisah
+
     const daftarBtnClasses = isDarkMode
         ? "bg-gray-800 border-green-500 text-green-500 hover:bg-gray-700"
         : "bg-white border-green-600 text-green-600 hover:bg-green-600 hover:text-white";
 
     const googleBtnClasses = isDarkMode
         ? "bg-gray-800 border-gray-600 hover:bg-gray-700"
-        : "bg-white border-gray-300 hover:bg-gray-50"; // Hover di light mode menjadi abu-abu
+        : "bg-white border-gray-300 hover:bg-gray-50"; 
     
     return (
         <form onSubmit={handleLogin}>

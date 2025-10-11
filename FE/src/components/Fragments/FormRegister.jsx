@@ -16,7 +16,6 @@ const FormRegister = () => {
         </svg>
     );
 
-    // Menyamakan style dengan FormLogin
     const masukBtnClasses = isDarkMode
         ? "bg-gray-800 border-green-500 text-green-500 hover:bg-gray-700"
         : "bg-white border-green-600 text-green-600 hover:bg-green-600 hover:text-white";

@@ -1,4 +1,3 @@
-// src/components/Layouts/Header.jsx
 
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';

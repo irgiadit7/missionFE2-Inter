@@ -266,7 +266,6 @@ export const allCoursesData = [
 ];
 
 
-// Data untuk halaman profil
 export const dummyOrders = [
     { id: 1, invoice: 'INV/2025/001', course: 'Big 4 Auditor Financial Analyst', price: '300.000', status: 'Selesai', date: '10 Jun 2025, 14:17' },
     { id: 2, invoice: 'INV/2025/002', course: 'Digital Marketing Fundamental', price: '350.000', status: 'Belum Dibayar', date: '11 Jun 2025, 10:30' },
